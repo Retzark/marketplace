@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "ESNext",
+    "jsx": "react-jsx",
+    "strict": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "noEmitOnError": true,
+    "sourceMap": true,
+    "isolatedModules": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "allowJs": false,  // Keep this to false to avoid compiling JS files
+    "checkJs": false   // Turn this off to avoid redundant checks
+  },
+  "include": [
+    "src/**/*.ts",     // Include only TypeScript files in src
+    "src/**/*.tsx"     // Include only TSX files in src
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react";
-import Login from "./modals/Login.jsx";
-import UserMenu from "./UserMenu.jsx";
-import useAppStore from "../store/useAppStore.js";
-import { Link, NavLink } from "react-router-dom";
+import Login from "@/components/modals/Login";
+import UserMenu from "@/components/UserMenu";
+import useAppStore from "@/store/useAppStore";
+import { NavLink } from "react-router-dom";
 
-const MenuButton = ({ isOpen, toggleMenu }) => (
+interface MenuButtonProps {
+  isOpen: boolean;
+  toggleMenu: () => void;
+}
+
+const MenuButton: React.FC<MenuButtonProps> = ({ isOpen, toggleMenu }) => (
   <button
     type="button"
     className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
@@ -56,7 +61,7 @@ const NavigationLinks = () => (
       className={({ isActive }) =>
         isActive
           ? "text-primary"
-          : "text-gray-300 hover:bg-gray-700 hover:text-white"
+          : "text-gray-300 hover:bg-gray-700 hover:text-white font-poppins"
       }
       end
       aria-current={({ isActive }) => (isActive ? "page" : undefined)}
@@ -114,10 +119,6 @@ const Navbar = () => {
       await fetchSettings();
     })();
   }, [fetchSettings]);
-
-  useEffect(() => {
-    console.log("Updated settings:", settings);
-  }, [settings]);
 
   return (
     <nav className="bg-black">

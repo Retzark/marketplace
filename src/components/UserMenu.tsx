@@ -1,5 +1,5 @@
 import { useState } from "react";
-import useUserStore from "../store/userStore.js";
+import useUserStore from "../store/userStore";
 
 // eslint-disable-next-line react/prop-types
 const UserMenu = ({ setIsLoginModalOpen }) => {

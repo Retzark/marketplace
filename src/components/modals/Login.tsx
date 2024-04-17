@@ -1,8 +1,12 @@
 import { useState } from "react";
-import useUserStore from "../../store/userStore.js";
+import useUserStore from "@/store/userStore";
 
-// eslint-disable-next-line react/prop-types
-const Login = ({ isOpen, onClose }) => {
+export interface LoginProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const Login: React.FC<LoginProps> = ({ isOpen, onClose }) => {
   const [username, setUsername] = useState("");
   const setUser = useUserStore((state) => state.setUser);
 
@@ -19,6 +23,7 @@ const Login = ({ isOpen, onClose }) => {
       "Posting",
       (response) => {
         if (response.success) {
+          console.log(response);
           // Assuming the user object you want to store
           const user = { username };
           setUser(user); // Update Zustand store and localStorage with user data

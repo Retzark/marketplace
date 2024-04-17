@@ -1,5 +1,3 @@
-// src/services/apiService.js
-
 import axios from "axios";
 
 const baseURL = "https://market.retzark.com/api";
@@ -14,8 +12,6 @@ const apiService = {
       throw error; // Re-throwing the error to handle it in the calling function
     }
   },
-
-  // You can add more API calls here
 };
 
 export default apiService;

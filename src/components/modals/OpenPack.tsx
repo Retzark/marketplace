@@ -1,13 +1,31 @@
 import { useState } from "react";
+import usePacksStore from "@/store/usePacksStore";
 
 const OpenPack = ({ isOpen, onClose }) => {
-  const [number, setNumber] = useState(1); // Default to 1 to avoid zero
+  const [number, setNumber] = useState(1);
+  const [isValid, setIsValid] = useState(true); // State to track if input is valid
+  const requestOpenPacks = usePacksStore((state) => state.requestOpenPacks);
 
   if (!isOpen) return null;
 
-  const handleSubmit = (event) => {
+  const handleChange = (e) => {
+    const value = parseInt(e.target.value, 10);
+    if (value >= 1) {
+      setNumber(value);
+      setIsValid(true);
+    } else {
+      setIsValid(false);
+    }
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    onClose(); // Optionally close the modal on submit
+    if (!isValid) {
+      alert("Please enter a valid number of packs.");
+      return;
+    }
+    await requestOpenPacks("DATA", 1);
+    onClose(); // Close modal on valid submission
   };
 
   return (
@@ -29,9 +47,7 @@ const OpenPack = ({ isOpen, onClose }) => {
               id="numberInput"
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               value={number}
-              onChange={(e) =>
-                setNumber(Math.max(1, parseInt(e.target.value, 10) || 1))
-              }
+              onChange={handleChange}
               min="1"
             />
             <div className="mt-4 flex justify-end space-x-3">
@@ -45,6 +61,7 @@ const OpenPack = ({ isOpen, onClose }) => {
               <button
                 type="submit"
                 className="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700"
+                disabled={!isValid}
               >
                 Submit
               </button>

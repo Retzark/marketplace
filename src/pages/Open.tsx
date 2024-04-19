@@ -13,7 +13,7 @@ const Open = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleCloseModal = () => {
-    console.log("Closing modal...");
+    // usePacksStore.requestOpenPacks();
     setIsModalOpen(false);
   };
 
@@ -31,12 +31,13 @@ const Open = () => {
       };
       let method = "findOne";
 
-      if (Array.isArray(symbols) && symbols.length > 1) {
+      if (Array.isArray(symbols)) {
         method = "find";
         query.symbol = { $in: symbols };
       } else {
         query.symbol = symbols;
       }
+      console.log(method);
 
       const request = {
         method,

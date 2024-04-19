@@ -4,7 +4,7 @@ import sidechainApi from "@/api/sidechainApi";
 
 // This hook fetches market data for NFTs from a sidechain API.
 const useFetchNFTMarketData = () => {
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<unknown>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 

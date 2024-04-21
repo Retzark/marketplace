@@ -24,8 +24,8 @@ const OpenPack = ({ isOpen, onClose }) => {
       alert("Please enter a valid number of packs.");
       return;
     }
-    await requestOpenPacks("DATA", 1);
-    onClose(); // Close modal on valid submission
+    await requestOpenPacks({packSymbol : "DATA" , packs : 1});
+    onClose();
   };
 
   return (

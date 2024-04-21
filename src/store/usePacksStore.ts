@@ -5,6 +5,7 @@ const usePacksStore = create((set, get) => ({
   requestOpenPacks: async ({ packSymbol, packs = 1 }) => {
     const sidechainId = "ssc-mainnet-hive"; // Replace with your actual sidechain ID
 
+    console.log(packSymbol)
     const operations = [
       [
         "custom_json",
@@ -28,7 +29,7 @@ const usePacksStore = create((set, get) => ({
     try {
       // Use the other store's function
       const broadcastOps = useStore.getState().requestBroadcastOps;
-      await broadcastOps("gacbaluyot", operations, "Active"); // console.log("Packs opened successfully:", result.data);
+      await broadcastOps("gacbaluyot", operations,  "Active"); // console.log("Packs opened successfully:", result.data);
       // Optionally manage state or trigger UI updates here
     } catch (error) {
       console.error("Failed to open packs:", error);

@@ -18,7 +18,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const useTransactionStore = create((set, get) => ({
   validateTransaction: async (trxId) => {
     let error = false;
-    const trx = null;
+    let trx = null;
     let count = 0;
 
     console.log({ trxId });
@@ -32,9 +32,9 @@ const useTransactionStore = create((set, get) => ({
             txid: trxId,
           },
         };
+        console.log(request);
         // Simulate fetching a transaction
         trx = await sidechainApi.call(endpoint, request);
-        console.log({ result });
         // trx = await fetchTransaction(trxId);
       } catch (e) {
         console.log(e);
@@ -45,13 +45,10 @@ const useTransactionStore = create((set, get) => ({
 
     if (trx) {
       const logs = parseJSON(trx.logs);
-
       if (logs.errors) {
         error = true;
-        console.log(logs);
       } else if (trx.contract === "packmanager" && trx.action === "open") {
         const cards = logs.events.filter((e) => e.event === "issue");
-        console.log(cards);
         set({ cards }); // Update the state with the new cards
       }
     }

@@ -22,7 +22,7 @@ const requestKeychain = (fn, ...args) => {
 };
 
 const useStore = create((set, get) => ({
-  requestBroadcastOps: async (username, operations, keyType = "Active") => {
+  requestBroadcastOps: async (username, operations, keyType) => {
     try {
       const keychainResponse = await requestKeychain(
         "requestBroadcast",
@@ -32,7 +32,7 @@ const useStore = create((set, get) => ({
       );
       await useTransactionStore
         .getState()
-        .validateTransaction(keychainResponse.result.tx_id);
+        .validateTransaction(keychainResponse.result.id);
     } catch (error) {
       console.error("API request failed:", error);
     }

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import useAppStore from "@/store/useAppStore";
 import sidechainApi from "@/api/sidechainApi";
 
-// This hook fetches market data for NFTs from a sidechain API.
 const useFetchNFTMarketData = () => {
   const [data, setData] = useState<unknown>(null);
   const [isLoading, setIsLoading] = useState(true);

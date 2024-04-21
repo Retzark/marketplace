@@ -1,8 +1,9 @@
-import { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import sidechainApi from "@/api/sidechainApi";
 import useAppStore from "@/store/useAppStore";
 import useUserStore from "@/store/userStore";
 import OpenPack from "@/components/modals/OpenPack";
+import LazyLoad from "react-lazyload";
 
 const Open = () => {
   const user = useUserStore((state) => state.user);
@@ -75,6 +76,23 @@ const Open = () => {
         OPEN PACK
       </button>
 
+      <div className="row">
+        <LazyLoad height="70vh" once>
+          <div
+            className="relative text-white text-center bg-no-repeat bg-cover bg-center"
+            style={{
+              backgroundImage: `url('/images/BANNER-HOMEPAGE.webp')`,
+              height: "70vh",
+            }}
+          >
+            <img
+              src="/images/banner-homepage-logo.webp"
+              alt="Logo"
+              className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-auto sm:w-48 md:w-64"
+            />
+          </div>
+        </LazyLoad>
+      </div>
       <OpenPack isOpen={isModalOpen} onClose={handleCloseModal}>
         <h2 className="text-lg">Open Card Details</h2>
         <p>Card details or actions can be placed here.</p>

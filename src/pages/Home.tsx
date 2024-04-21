@@ -1,4 +1,5 @@
 import LazyLoad from "react-lazyload";
+import NFTCardsList from "@/components/NFTCardsList";
 
 const Home = () => {
   return (
@@ -169,6 +170,14 @@ const Home = () => {
               Don’t have the card you need? Want to get rid of your duplicate
               legendary? Buy, sell, and trade with anyone, anywhere!
             </div>
+          </div>
+        </div>
+      </div>
+      <div className="row mt-60">
+        <div className="row mx-5 mb-10 h-full flex flex-row justify-center items-center">
+          {/* Image Container modified to center the text and use the full width */}
+          <div className="w-full flex justify-center items-center">
+            <NFTCardsList />
           </div>
         </div>
       </div>

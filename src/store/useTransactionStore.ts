@@ -16,8 +16,21 @@ const parseJSON = (json) => {
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const useTransactionStore = create((set, get) => ({
+  cards: [],
+  rareTypes: new Set(), // Initialize as empty set if not already done
+  epicTypes: new Set(), // Initialize as empty set if not already done
+
+  // Method to set cards directly
+  setCards: (newCards) => set({ cards: newCards }),
+
+  // Method to remove a card by index
+  removeCardByIndex: (index) =>
+    set((state) => ({
+      cards: state.cards.filter((_, cardIndex) => cardIndex !== index),
+    })),
+
   validateTransaction: async (trxId) => {
-    let error = false;
+    const error = false;
     let trx = null;
     let count = 0;
 
@@ -45,11 +58,24 @@ const useTransactionStore = create((set, get) => ({
 
     if (trx) {
       const logs = parseJSON(trx.logs);
-      if (logs.errors) {
-        error = true;
-      } else if (trx.contract === "packmanager" && trx.action === "open") {
-        const cards = logs.events.filter((e) => e.event === "issue");
-        set({ cards }); // Update the state with the new cards
+      if (
+        !logs.errors &&
+        trx.contract === "packmanager" &&
+        trx.action === "open"
+      ) {
+        const cards = logs.events
+          .filter((e) => e.event === "issue")
+          .map((event) => {
+            const { edition, foil, type } = event.data.properties;
+            return {
+              edition,
+              foil,
+              type,
+              image: `https://cdn.tribaldex.com/packmanager/${event.data.symbol}/${edition}_${type}_${foil}.png`,
+            };
+          });
+
+        set({ cards });
       }
     }
 

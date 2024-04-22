@@ -1,5 +1,6 @@
 import { useState } from "react";
 import useUserStore from "@/store/userStore";
+import apiService from "@/api/apiService";
 
 export interface LoginProps {
   isOpen: boolean;
@@ -23,9 +24,11 @@ const Login: React.FC<LoginProps> = ({ isOpen, onClose }) => {
       "Posting",
       (response) => {
         if (response.success) {
-          console.log(response);
           // Assuming the user object you want to store
           const user = { username };
+          // console.log({ data : {response.result, ts, username}});
+
+          apiService.login({ username, ts, sig: response.result });
           setUser(user); // Update Zustand store and localStorage with user data
           onClose(); // Close the modal
         } else {

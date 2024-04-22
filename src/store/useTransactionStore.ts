@@ -48,7 +48,7 @@ const useTransactionStore = create((set, get) => ({
         console.log(request);
         // Simulate fetching a transaction
         trx = await sidechainApi.call(endpoint, request);
-        // trx = await fetchTransaction(trxId);
+        // trx = await fetchTransaction(trxId);dfg
       } catch (e) {
         console.log(e);
         // console.error(e.message);
@@ -74,7 +74,6 @@ const useTransactionStore = create((set, get) => ({
               image: `https://cdn.tribaldex.com/packmanager/${event.data.symbol}/${edition}_${type}_${foil}.png`,
             };
           });
-
         set({ cards });
       }
     }

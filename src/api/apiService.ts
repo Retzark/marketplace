@@ -30,7 +30,6 @@ const apiService = {
     };
 
 
-
     try {
       // Create an Axios instance specifically for API requests
       const response = await axios.post(`https://market.retzark.com/api/purchases/start`, payload , {});

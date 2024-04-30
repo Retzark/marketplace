@@ -34,7 +34,6 @@ const useTransactionStore = create((set, get) => ({
     let trx = null;
     let count = 0;
 
-    console.log({ trxId });
     do {
       await sleep(3000);
       try {
@@ -45,16 +44,18 @@ const useTransactionStore = create((set, get) => ({
             txid: trxId,
           },
         };
-        console.log(request);
         // Simulate fetching a transaction
+        console.log(request)
         trx = await sidechainApi.call(endpoint, request);
+        console.log(trx);
+
         // trx = await fetchTransaction(trxId);dfg
       } catch (e) {
         console.log(e);
         // console.error(e.message);
       }
       count += 1;
-    } while (!trx && count < 10);
+    } while (!trx && count < 100);
 
     if (trx) {
       const logs = parseJSON(trx.logs);

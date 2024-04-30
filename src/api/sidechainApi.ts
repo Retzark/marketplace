@@ -28,6 +28,8 @@ const sidechainApi = {
       id: Date.now(),
       ...request,
     };
+
+
     try {
       const response = await axios.post<SidechainResponse>(
         `${sidechain_rpc}/${endpoint}`,

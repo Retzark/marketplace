@@ -1,8 +1,9 @@
-import React, { useCallback, useState, useEffect } from "react";
+import   { useCallback, useState, useEffect } from "react";
 import sidechainApi from "@/api/sidechainApi";
 import useAppStore from "@/store/useAppStore";
 import useUserStore from "@/store/userStore";
 import OpenPack from "@/components/modals/OpenPack";
+import TransferPack from "@/components/modals/TransferPack";
 import LazyLoad from "react-lazyload";
 
 const Open = () => {
@@ -11,11 +12,12 @@ const Open = () => {
     settings: state.settings,
     settingsReady: state.settingsReady,
   }));
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isOpenPackModalOpen, setIsOpenPackModalOpen] = useState(false);
+  const [isTransferPackModalOpen, setIsTransferPackModalOpen] = useState(false);
 
   const handleCloseModal = () => {
-    // usePacksStore.requestOpenPacks();
-    setIsModalOpen(false);
+    setIsOpenPackModalOpen(false);
+    setIsTransferPackModalOpen(false);
   };
 
   const fetchData = useCallback(async () => {
@@ -38,7 +40,6 @@ const Open = () => {
       } else {
         query.symbol = symbols;
       }
-      console.log(method);
 
       const request = {
         method,
@@ -63,41 +64,55 @@ const Open = () => {
   }, [fetchData, settingsReady]);
 
   const handleOpenPackClick = () => {
-    // Optionally fetch data here or just open the modal
-    setIsModalOpen(true);
+    setIsOpenPackModalOpen(true);
+  };
+
+  const handleTransferPackClick = () => {
+    setIsTransferPackModalOpen(true);
   };
 
   return (
-    <div>
-      <button
-        onClick={handleOpenPackClick}
-        className="px-3 py-2 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark"
-      >
-        OPEN PACK
-      </button>
+      <div>
+        <button
+            onClick={handleOpenPackClick}
+            className="px-3 py-2 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark"
+        >
+          OPEN PACK
+        </button>
 
-      <div className="row">
-        <LazyLoad height="70vh" once>
-          <div
-            className="relative text-white text-center bg-no-repeat bg-cover bg-center"
-            style={{
-              backgroundImage: `url('/images/BANNER-HOMEPAGE.webp')`,
-              height: "70vh",
-            }}
-          >
-            <img
-              src="/images/banner-homepage-logo.webp"
-              alt="Logo"
-              className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-auto sm:w-48 md:w-64"
-            />
-          </div>
-        </LazyLoad>
+        <button
+            onClick={handleTransferPackClick}
+            className="px-3 py-2 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark"
+        >
+          Transfer PACK
+        </button>
+
+        <div className="row">
+          <LazyLoad height="70vh" once>
+            <div
+                className="relative text-white text-center bg-no-repeat bg-cover bg-center"
+                style={{
+                  backgroundImage: `url('/images/BANNER-HOMEPAGE.webp')`,
+                  height: "70vh",
+                }}
+            >
+              <img
+                  src="/images/banner-homepage-logo.webp"
+                  alt="Logo"
+                  className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-auto sm:w-48 md:w-64"
+              />
+            </div>
+          </LazyLoad>
+        </div>
+        <OpenPack isOpen={isOpenPackModalOpen} onClose={handleCloseModal}>
+          <h2 className="text-lg">Open Card Details</h2>
+          <p>Card details or actions can be placed here.</p>
+        </OpenPack>
+        <TransferPack isOpen={isTransferPackModalOpen} onClose={handleCloseModal}>
+          <h2 className="text-lg">Transfer Card Details</h2>
+          <p>Card details or actions can be placed here for transferring.</p>
+        </TransferPack>
       </div>
-      <OpenPack isOpen={isModalOpen} onClose={handleCloseModal}>
-        <h2 className="text-lg">Open Card Details</h2>
-        <p>Card details or actions can be placed here.</p>
-      </OpenPack>
-    </div>
   );
 };
 

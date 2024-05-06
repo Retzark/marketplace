@@ -17,7 +17,7 @@ const Home = () => {
             <img
               src="/images/banner-homepage-logo.webp"
               alt="Logo"
-              className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-auto sm:w-48 md:w-64"
+              className="mx-auto block w-full h-auto sm:w-48 md:w-64"
             />
           </div>
         </LazyLoad>
@@ -133,10 +133,21 @@ const Home = () => {
               The Retzark Alpha card deck is a collection of 161 unique cards.
               Each pack contains 5 random cards from the Retzark Alpha card set.
             </div>
+            <div className="row mx-5 h-full flex flex-row justify-center items-center">
+              {/* Image Container modified to center the text and use the full width */}
+              <div className="w-full flex justify-center items-center">
+                <div className="text-9xl sm:text-6xl md:text-5xl text-secondary text-center">
+                  <button
+                    className="px-3 py-2 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark" // Assuming you have a darker variation for hover state
+                  >
+                    BUY CARDS
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
       <div className="row mt-72">
         <div className="row mx-5 mb-10 h-full flex flex-row justify-center items-center">
           {/* Image Container modified to center the text and use the full width */}
@@ -172,6 +183,19 @@ const Home = () => {
             </div>
           </div>
         </div>
+
+        <div className="row mx-5 h-full flex flex-row justify-center items-center">
+          {/* Image Container modified to center the text and use the full width */}
+          <div className="w-full flex justify-center items-center">
+            <div className="text-9xl sm:text-6xl md:text-5xl text-secondary text-center">
+              <button
+                className="px-3 py-2 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark" // Assuming you have a darker variation for hover state
+              >
+                VIEW MARKETPLACE
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
       <div className="row mt-60">
         <div className="row mx-5 mb-10 h-full flex flex-row justify-center items-center">
@@ -181,6 +205,61 @@ const Home = () => {
           </div>
         </div>
       </div>
+
+      <div className="row mt-60">
+        <div
+          className="relative text-white text-center bg-no-repeat bg-cover bg-center flex items-center justify-center"
+          style={{
+            backgroundImage: `url('/images/home-prophecy-background.webp')`,
+            height: "80vh",
+          }}
+        >
+          <div>
+            <div className="w-full flex justify-center items-center">
+              <div
+                className="text-9xl sm:text-9xl md:text-8xl text-white text-center"
+                style={{ fontFamily: '"CCElephantmenTall Regular"' }}
+              >
+                THE PROPHECHIES OF KRULL
+              </div>
+            </div>
+            <div className="w-full flex justify-center items-center">
+              <div
+                className="text-9xl sm:text-6xl md:text-5xl text-secondary text-center"
+                style={{ fontFamily: '"CCElephantmenTall Regular"' }}
+              >
+                THE WHITEPAPER YOU NEED TO READ.
+              </div>
+            </div>
+            <div className="w-full flex justify-center items-center mt-12">
+              <div
+                className="w-1/2 sm:text-2xl md:text-2xl text-white text-center"
+                style={{ fontFamily: '"Poppins"' }}
+              >
+                Peruse the ancient book of <b> Krull the dreamer </b> to learn
+                in depth information about Retzark.
+              </div>
+            </div>
+            <div className="w-full flex justify-center items-center">
+              <div className="text-9xl sm:text-6xl md:text-5xl text-secondary text-center">
+                <button
+                  className="px-3 py-2 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark" // Assuming you have a darker variation for hover state
+                >
+                  VIEW MARKETPLACE
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        className="relative text-white text-center bg-no-repeat bg-cover bg-center"
+        style={{
+          backgroundImage: `url('/images/subscribe-background-image.webp')`,
+          height: "80vh",
+        }}
+      ></div>
     </div>
   );
 };

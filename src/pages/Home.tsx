@@ -137,11 +137,13 @@ const Home = () => {
               {/* Image Container modified to center the text and use the full width */}
               <div className="w-full flex justify-center items-center">
                 <div className="text-9xl sm:text-6xl md:text-5xl text-secondary text-center">
-                  <button
-                    className="px-3 py-2 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark" // Assuming you have a darker variation for hover state
-                  >
-                    BUY CARDS
-                  </button>
+                  <a href="/packs">
+                    <button
+                      className="px-3 py-2 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark" // Assuming you have a darker variation for hover state
+                    >
+                      BUY CARDS
+                    </button>
+                  </a>
                 </div>
               </div>
             </div>
@@ -188,11 +190,13 @@ const Home = () => {
           {/* Image Container modified to center the text and use the full width */}
           <div className="w-full flex justify-center items-center">
             <div className="text-9xl sm:text-6xl md:text-5xl text-secondary text-center">
-              <button
-                className="px-3 py-2 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark" // Assuming you have a darker variation for hover state
-              >
-                VIEW MARKETPLACE
-              </button>
+              <a href="/marketplace">
+                <button
+                  className="px-3 py-2 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark" // Assuming you have a darker variation for hover state
+                >
+                  VIEW MARKETPLACE
+                </button>
+              </a>
             </div>
           </div>
         </div>
@@ -280,6 +284,55 @@ const Home = () => {
                 required
               />
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="row bg-black border-2 border-amber-50">
+        <div className="w-full flex justify-center items-center">
+          <div
+            className="text-9xl sm:text-9xl md:text-8xl text-white text-center mt-36"
+            style={{ fontFamily: '"CCElephantmenTall Regular"' }}
+          >
+            FIND RETZARK ON:
+          </div>
+        </div>
+        <div className="w-full flex justify-center mt-5 mb-12">
+          <div className="flex gap-4">
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Facebook
+            </a>
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              className="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded"
+            >
+              Instagram
+            </a>
+            <a
+              href="https://twitch.tv"
+              target="_blank"
+              className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Twitch
+            </a>
+            <a
+              href="https://youtube.com"
+              target="_blank"
+              className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+            >
+              YouTube
+            </a>
+          </div>
+        </div>
+        <div className="w-full flex justify-center mb-36">
+          <div className="text-white text-center text-sm">
+            Copyright © 2024 | Retzark Website | All Rights Reserved | Content
+            Protected
           </div>
         </div>
       </div>

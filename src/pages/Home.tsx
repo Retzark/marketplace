@@ -51,7 +51,7 @@ const Home = () => {
       <div className="row">
         <div className="mx-5 h-full flex flex-row">
           {/* Text Container */}
-          <div className="flex-1 px-0">
+          <div className="flex-1 px-0 mt-36">
             <div
               className="text-9xl sm:text-9xl md:text-8xl text-white"
               style={{ fontFamily: '"CCElephantmenTall Regular"' }}
@@ -257,9 +257,32 @@ const Home = () => {
         className="relative text-white text-center bg-no-repeat bg-cover bg-center"
         style={{
           backgroundImage: `url('/images/subscribe-background-image.webp')`,
-          height: "80vh",
+          height: "50vh",
         }}
-      ></div>
+      >
+        <div className="w-full flex flex-col justify-center items-center h-full">
+          <div
+            className="text-black text-9xl sm:text-9xl md:text-8xl text-center"
+            style={{ fontFamily: '"CCElephantmenTall Regular"' }}
+          >
+            FOLLOW THE SEER’S VISIONS
+          </div>
+
+          <div className="w-full flex justify-center items-center mt-10">
+            <div className="w-full px-4">
+              {" "}
+              {/* Added px-4 for some padding, adjust as needed */}
+              <input
+                type="text"
+                id="first_name"
+                className="bg-white-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="John"
+                required
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

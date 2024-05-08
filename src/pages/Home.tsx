@@ -246,11 +246,13 @@ const Home = () => {
             </div>
             <div className="w-full flex justify-center items-center">
               <div className="text-9xl sm:text-6xl md:text-5xl text-secondary text-center">
-                <button
-                  className="px-3 py-2 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark" // Assuming you have a darker variation for hover state
-                >
-                  VIEW MARKETPLACE
-                </button>
+                <a href="https://peakd.com/retzark/@retzark/the-prophecies-of-krull-retzark-white-paper">
+                  <button
+                    className="px-3 py-2 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark" // Assuming you have a darker variation for hover state
+                  >
+                    View Whitepaper
+                  </button>
+                </a>
               </div>
             </div>
           </div>
@@ -272,17 +274,18 @@ const Home = () => {
             FOLLOW THE SEER’S VISIONS
           </div>
 
-          <div className="w-full flex justify-center items-center mt-10">
-            <div className="w-full px-4">
-              {" "}
-              {/* Added px-4 for some padding, adjust as needed */}
+          <div className="w-full px-4 mt-10 mb-10 flex justify-center">
+            <div className="relative flex items-center w-full max-w-xl">
               <input
-                type="text"
-                id="first_name"
-                className="bg-white-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="John"
+                type="email"
+                id="email_address"
+                className="w-full border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block p-4 pr-12 h-20 bg-white light:bg-gray-700 light:border-gray-600 dark:placeholder-gray-400 light:text-white"
+                placeholder="Your Email"
                 required
               />
+              <button className="px-4 py-2 h-20 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark">
+                Subscribe
+              </button>
             </div>
           </div>
         </div>

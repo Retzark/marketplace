@@ -1,4 +1,3 @@
-import LazyLoad from "react-lazyload";
 import NFTCardsList from "@/components/NFTCardsList";
 
 const Home = () => {
@@ -6,21 +5,19 @@ const Home = () => {
     <div>
       {/* Row for the Hero Section */}
       <div className="row">
-        <LazyLoad height="70vh" once>
-          <div
-            className="relative text-white text-center bg-no-repeat bg-cover bg-center"
-            style={{
-              backgroundImage: `url('/images/BANNER-HOMEPAGE.webp')`,
-              height: "70vh",
-            }}
-          >
-            <img
-              src="/images/banner-homepage-logo.webp"
-              alt="Logo"
-              className="mx-auto block w-full h-auto sm:w-48 md:w-64"
-            />
-          </div>
-        </LazyLoad>
+        <div
+          className="relative text-white text-center bg-no-repeat bg-cover bg-center"
+          style={{
+            backgroundImage: `url('/images/BANNER-HOMEPAGE.webp')`,
+            height: "70vh",
+          }}
+        >
+          <img
+            src="/images/banner-homepage-logo.webp"
+            alt="Logo"
+            className="px-40  w-full sm:w-48 md:w-72"
+          />
+        </div>
       </div>
       {/* Row for the Promotional Section */}
       <div className="row">

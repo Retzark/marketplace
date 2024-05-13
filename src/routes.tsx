@@ -5,6 +5,7 @@ import Open from "@/pages/Open";
 import CardDetails from "@/pages/CardDetails";
 import Home from "@/pages/Home";
 import Packs from "@/pages/Packs";
+import Login from "@/pages/Login";
 
 const AppRoutes = () => (
   <Routes>
@@ -13,6 +14,7 @@ const AppRoutes = () => (
     <Route path="/packs" element={<Packs />} />
     <Route path="/marketplace" element={<Marketplace />} />
     <Route path="/open" element={<Open />} />
+    <Route path="/login" element={<Login />} />
     <Route path="/card/:id" element={<CardDetails />} />
     {/* Add route for card details */}
   </Routes>

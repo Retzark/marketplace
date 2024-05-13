@@ -123,7 +123,7 @@ const Navbar = () => {
   return (
     <nav className="bg-black">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-        <div className="relative flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-16">
           <div className="flex items-center justify-between flex-1 sm:hidden">
             <MenuButton
               isOpen={isMobileMenuOpen}

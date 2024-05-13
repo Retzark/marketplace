@@ -73,36 +73,31 @@ const Open = () => {
 
   return (
     <div>
-      <button
-        onClick={handleOpenPackClick}
-        className="px-3 py-2 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark"
-      >
-        OPEN PACK
-      </button>
-
-      <button
-        onClick={handleTransferPackClick}
-        className="px-3 py-2 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark"
-      >
-        Transfer PACK
-      </button>
-
       <div className="row">
         <LazyLoad height="70vh" once>
           <div
             className="relative text-white text-center bg-no-repeat bg-cover bg-center"
             style={{
-              backgroundImage: `url('/images/BANNER-HOMEPAGE.webp')`,
+              backgroundImage: `url('/images/open-pack-image.webp')`,
               height: "70vh",
             }}
-          >
-            <img
-              src="/images/banner-homepage-logo.webp"
-              alt="Logo"
-              className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-auto sm:w-48 md:w-64"
-            />
-          </div>
+          ></div>
         </LazyLoad>
+      </div>
+
+      <div className="flex justify-center items-center mt-20">
+        <button
+          onClick={handleOpenPackClick}
+          className="px-3 py-2 mr-3 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark"
+        >
+          OPEN PACK
+        </button>
+        <button
+          onClick={handleTransferPackClick}
+          className="px-3 py-2 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark"
+        >
+          Transfer PACK
+        </button>
       </div>
 
       <OpenPack isOpen={isOpenPackModalOpen} onClose={handleCloseModal}>

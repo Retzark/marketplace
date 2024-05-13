@@ -1,24 +1,33 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
 import useUserStore from "../store/userStore";
 
-// eslint-disable-next-line react/prop-types
-const UserMenu = ({ setIsLoginModalOpen }) => {
+const UserMenu = () => {
   const user = useUserStore((state) => state.user);
-
+  const setUser = useUserStore((state) => state.setUser);
+  const navigate = useNavigate(); // Get the navigate function
   const [showMenu, setShowMenu] = useState(false);
-  // Construct the avatar URL using the username
   const avatarUrl = user
     ? `https://images.hive.blog/u/${user.username}/avatar`
     : "";
 
   const toggleMenu = () => setShowMenu(!showMenu);
 
+  const handleLogout = () => {
+    localStorage.removeItem("username"); // Clear user from local storage
+    setUser(null); // Update user state to null
+    navigate("/"); // Redirect to home or another appropriate page after logout
+  };
+
+  const handleLogin = () => {
+    navigate("/login"); // Navigate to the login page
+  };
+
   if (!user) {
-    // User not logged in, show Login button instead
     return (
       <button
-        onClick={() => setIsLoginModalOpen(true)}
-        className="px-3 py-2 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark" // Assuming you have a darker variation for hover state
+        onClick={handleLogin} // Attach handleLogin to onClick event
+        className="px-3 py-2 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark"
       >
         Login
       </button>
@@ -38,6 +47,10 @@ const UserMenu = ({ setIsLoginModalOpen }) => {
           <a
             href="#"
             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            onClick={(event) => {
+              event.preventDefault(); // Prevent default anchor action
+              handleLogout();
+            }}
           >
             Logout
           </a>

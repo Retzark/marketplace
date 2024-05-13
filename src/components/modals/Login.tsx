@@ -29,8 +29,8 @@ const Login: React.FC<LoginProps> = ({ isOpen, onClose }) => {
           // console.log({ data : {response.result, ts, username}});
 
           apiService.login({ username, ts, sig: response.result });
-          setUser(user); // Update Zustand store and localStorage with user data
-          onClose(); // Close the modal
+          setUser(user);
+          onClose();
         } else {
           // Handle login failure
           alert("Login failed. Please try again.");

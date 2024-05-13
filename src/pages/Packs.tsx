@@ -2,7 +2,7 @@ import { useState } from "react";
 import BuyPacks from "@/components/modals/BuyPacks";
 
 const Packs = () => {
-  const [showModal, setShowModal] = useState(false); // State to manage modal visibility
+  const [showModal, setShowModal] = useState(false);
 
   const handleOpenModal = () => {
     setShowModal(true);
@@ -14,187 +14,112 @@ const Packs = () => {
 
   return (
     <div>
-      <div className="row">
-        <div
-          className="relative text-white text-center bg-no-repeat bg-cover bg-center flex items-center justify-center"
-          style={{
-            backgroundImage: `url('/images/BANNER-ALPHA-PACK.webp')`,
-            height: "70vh",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <div className="flex flex-col items-center justify-center w-full px-8">
-            <div
-              className="text-9xl sm:text-9xl md:text-8xl text-white"
-              style={{ fontFamily: '"CCElephantmenTall Regular"' }}
-            >
-              THE ALPHA PACK
-            </div>
-            <br />
-            <div
-              className="text-9xl sm:text-6xl md:text-5xl text-secondary"
-              style={{ fontFamily: '"CCElephantmenTall Regular"' }}
-            >
-              5 CARDS, YOURS TO KEEP
-            </div>
-            <br />
-            <div
-              className="text-3xl sm:text-6xl md:text-2xl text-white"
-              style={{
-                fontFamily: '"Poppins"',
-                maxWidth: "800px",
-                lineHeight: "1.2",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                display: "-webkit-box",
-                WebkitLineClamp: "2",
-                WebkitBoxOrient: "vertical",
-              }}
-            >
-              The Retzark Alpha card deck is a collection of 161 unique cards.
-              Each pack contains 5 random cards from the Retzark Alpha card set.
-            </div>
+      <div
+        className="flex items-center justify-center relative text-center bg-no-repeat bg-cover bg-center text-white h-screen sm:h-[70vh] sm:w-[100]"
+        style={{ backgroundImage: `url('/images/BANNER-ALPHA-PACK.webp')` }}
+      >
+        <div className="flex flex-col items-center justify-center w-full px-4 sm:px-8">
+          <div
+            className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl"
+            style={{ fontFamily: '"CCElephantmenTall Regular"' }}
+          >
+            THE ALPHA PACK
+          </div>
+          <br />
+          <div
+            className="text-2xl sm:text-3xl md:text-2xl lg:text-2xl xl:text-4xl text-secondary"
+            style={{ fontFamily: '"CCElephantmenTall Regular"' }}
+          >
+            5 CARDS, YOURS TO KEEP
+          </div>
+          <br />
+          <div
+            className="text-sm sm:text-lg md:text-2xl lg:text-3xl xl:text-2xl text-white max-w-lg sm:max-w-xl md:max-w-2xl lg:max-w-3xl"
+            style={{
+              fontFamily: '"Poppins"',
+              lineHeight: "1.2",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              display: "-webkit-box",
+              WebkitLineClamp: "2",
+              WebkitBoxOrient: "vertical",
+            }}
+          >
+            The Retzark Alpha card deck is a collection of 161 unique cards.
+            Each pack contains 5 random cards from the Retzark Alpha card set.
           </div>
         </div>
       </div>
 
-      {/*<div className="row my-4">*/}
-      {/*  <button onClick={handleOpenModal} className="btn btn-primary">*/}
-      {/*    Buy Packs*/}
-      {/*  </button>*/}
-      {/*</div>*/}
-
-      {/* Row with two columns for full-width cards */}
-
-      <div className="flex flex-row">
-        <div className="col-md-9">
-          <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
-            <h5 className="mb-4 text-xl font-medium text-gray-500 dark:text-gray-400">
-              Standard plan
-            </h5>
-            <div className="flex items-baseline text-gray-900 dark:text-white">
-              <span className="text-3xl font-semibold">$</span>
-              <span className="text-5xl font-extrabold tracking-tight">49</span>
-              <span className="ms-1 text-xl font-normal text-gray-500 dark:text-gray-400">
-                /month
-              </span>
-            </div>
-            <ul role="list" className="space-y-5 my-7">
-              <li className="flex items-center">
-                <svg
-                  className="flex-shrink-0 w-4 h-4 text-blue-700 dark:text-blue-500"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-                </svg>
-                <span className="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">
-                  2 team members
-                </span>
-              </li>
-              <li className="flex">
-                <svg
-                  className="flex-shrink-0 w-4 h-4 text-blue-700 dark:text-blue-500"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-                </svg>
-                <span className="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">
-                  20GB Cloud storage
-                </span>
-              </li>
-              <li className="flex">
-                <svg
-                  className="flex-shrink-0 w-4 h-4 text-blue-700 dark:text-blue-500"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-                </svg>
-                <span className="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">
-                  Integration help
-                </span>
-              </li>
-              <li className="flex line-through decoration-gray-500">
-                <svg
-                  className="flex-shrink-0 w-4 h-4 text-gray-400 dark:text-gray-500"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-                </svg>
-                <span className="text-base font-normal leading-tight text-gray-500 ms-3">
-                  Sketch Files
-                </span>
-              </li>
-              <li className="flex line-through decoration-gray-500">
-                <svg
-                  className="flex-shrink-0 w-4 h-4 text-gray-400 dark:text-gray-500"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-                </svg>
-                <span className="text-base font-normal leading-tight text-gray-500 ms-3">
-                  API Access
-                </span>
-              </li>
-              <li className="flex line-through decoration-gray-500">
-                <svg
-                  className="flex-shrink-0 w-4 h-4 text-gray-400 dark:text-gray-500"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-                </svg>
-                <span className="text-base font-normal leading-tight text-gray-500 ms-3">
-                  Complete documentation
-                </span>
-              </li>
-              <li className="flex line-through decoration-gray-500">
-                <svg
-                  className="flex-shrink-0 w-4 h-4 text-gray-400 dark:text-gray-500"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-                </svg>
-                <span className="text-base font-normal leading-tight text-gray-500 ms-3">
-                  24×7 phone & email support
-                </span>
-              </li>
-            </ul>
-            <button
-              type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-200 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-900 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex justify-center w-full text-center"
+      <div className="px-4 sm:px-8 md:px-16 lg:px-32 my-8">
+        <div className="flex flex-col md:flex-row -mx-2">
+          <div className="md:w-2/3 px-2 mb-4 md:mb-0">
+            <a
+              href="#"
+              className="flex flex-col md:flex-row  bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
             >
-              Choose plan
-            </button>
+              <img
+                className="w-full md:w-1/4 object-cover rounded-t-lg p-12 md:rounded-none md:rounded-l-lg md:h-auto"
+                src="/images/alpha-pack.webp"
+                alt="/"
+              />
+              <div className="flex flex-col w-full">
+                <h5 className="mb-2 mt-12 text-lg md:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                  ALPHA PACK
+                </h5>
+                <p className="mb-3 font-normal text-sm md:text-base text-gray-700 dark:text-gray-400">
+                  The ALPHA PACK set is now available!
+                </p>
+                <p className="mb-3 font-normal text-sm md:text-base text-gray-700 dark:text-gray-400">
+                  Each pack contains 5 random cards from the Retzark Alpha card
+                  set.
+                </p>
+                <p className="mb-3 font-bold text-sm md:text-base text-gray-700 dark:text-gray-400">
+                  Guaranteed to contain at least one card that is EPIC or
+                  better!
+                </p>
+
+                <p className="mb-3 font-bold text-sm md:text-base text-gray-700 dark:text-gray-400">
+                  Drop Rates:
+                </p>
+              </div>
+            </a>
           </div>
-        </div>
-        <div className="col-md-9">
-          <div
-            className="card rounded-lg p-3"
-            style={{ background: "#f0f0f0", width: "100%" }}
-          >
-            Smaller card content here... (full width of col-md-3)
+
+          <div className="md:w-1/3 px-2">
+            <div className="h-32 md:h-64 lg:h-80 xl:h-96">
+              <a
+                href="#"
+                className="flex flex-col md:flex-row items-center bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+              >
+                <div className="flex flex-col justify-between p-4 leading-normal w-full">
+                  <h5 className="mb-2 text-lg md:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                    Buy Alpha Packs
+                  </h5>
+                  <div className="flex space-x-2 mt-2">
+                    <button
+                      onClick={() => setShowModal(true)}
+                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-150 ease-in-out"
+                    >
+                      Buy 10 Packs
+                    </button>
+                    <button
+                      onClick={() => setShowModal(true)}
+                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-150 ease-in-out"
+                    >
+                      Buy 100 Packs
+                    </button>
+                    <button
+                      onClick={() => setShowModal(true)}
+                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-150 ease-in-out"
+                    >
+                      Buy 500 Packs
+                    </button>
+                    <hr />
+                  </div>
+                </div>
+              </a>
+            </div>
           </div>
         </div>
       </div>

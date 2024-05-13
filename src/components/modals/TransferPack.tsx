@@ -2,13 +2,21 @@ import { useState } from "react";
 import usePacksStore from "@/store/usePacksStore";
 
 const OpenPack = ({ isOpen, onClose }) => {
-  const [number, setNumber] = useState(1);
-  const [isValid, setIsValid] = useState(true);
-  const requestOpenPacks = usePacksStore((state) => state.requestOpenPacks);
+  const [number, setNumber] = useState(1); // Number of packs
+  const [username, setUsername] = useState(""); // Username
+  const [isValid, setIsValid] = useState(true); // Validity of the input
+  const requestTransferPack = usePacksStore(
+    (state) => state.requestTransferPack,
+  );
+  const [showModal, setShowModal] = useState(false); // Manage modal visibility
 
   if (!isOpen) return null;
 
-  const handleChange = (e) => {
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const handleNumberChange = (e) => {
     const value = parseInt(e.target.value, 10);
     if (value >= 1) {
       setNumber(value);
@@ -24,7 +32,7 @@ const OpenPack = ({ isOpen, onClose }) => {
       alert("Please enter a valid number of packs.");
       return;
     }
-    await requestOpenPacks({ packSymbol: "DATA", packs: number });
+    await requestTransferPack({ recipient: username, quantity: number }); // Pass both username and number
     setShowModal(true); // Open the modal after packs are opened
   };
 
@@ -43,16 +51,16 @@ const OpenPack = ({ isOpen, onClose }) => {
             </h2>
             <form onSubmit={handleSubmit}>
               <label
-                htmlFor="numberInput"
+                htmlFor="username"
                 className="block text-sm font-medium text-gray-700"
               >
                 Username
               </label>
               <input
                 type="text"
-                id="numberInput"
+                id="username"
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                onChange={handleChange}
+                onChange={handleUsernameChange}
               />
               <label
                 htmlFor="numberInput"
@@ -62,10 +70,10 @@ const OpenPack = ({ isOpen, onClose }) => {
               </label>
               <input
                 type="number"
-                id="numberInput"
+                id="quantity"
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 value={number}
-                onChange={handleChange}
+                onChange={handleNumberChange}
                 min="1"
               />
 

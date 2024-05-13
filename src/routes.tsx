@@ -16,7 +16,6 @@ const AppRoutes = () => (
     <Route path="/open" element={<Open />} />
     <Route path="/login" element={<Login />} />
     <Route path="/card/:id" element={<CardDetails />} />
-    {/* Add route for card details */}
   </Routes>
 );
 

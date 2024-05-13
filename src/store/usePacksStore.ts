@@ -5,6 +5,7 @@ import useAppStore from "@/store/useAppStore";
 import apiService from "@/api/apiService";
 
 const usePacksStore = create((set, get) => ({
+  purchaseData: null,
   requestOpenPacks: async ({ packSymbol, packs = 1 }) => {
     const { sidechain_id, nft_symbol } = useAppStore.getState().settings;
     const user = userStore.getState().user.username;
@@ -37,11 +38,17 @@ const usePacksStore = create((set, get) => ({
       console.error("Failed to open packs:", error);
     }
   },
-  purchaseData: null,
   startPurchase: async ({ paymentMethod, currency = "USD", items }) => {
     try {
       await apiService.startPurchase();
       // set({ purchaseData: response.data });
+    } catch (error) {
+      console.error("Failed to start purchase:", error);
+    }
+  },
+  requestTransferPack: async ({ recipient, quantity }) => {
+    try {
+      await apiService.startTransfer(recipient, quantity);
     } catch (error) {
       console.error("Failed to start purchase:", error);
     }

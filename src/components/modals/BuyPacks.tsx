@@ -1,6 +1,6 @@
-import useAppStore from "@/store/useAppStore"; // Adjust the path as necessary
+import useAppStore from "@/store/useAppStore";
 import { useEffect, useState } from "react";
-import usePacksStore from "@/store/usePacksStore"; // Import useEffect hook directly
+import usePacksStore from "@/store/usePacksStore";
 interface Currency {
   symbol: string;
   name: string;
@@ -74,13 +74,17 @@ const BuyPacksModal = ({ showModal, onClose }) => {
               <span className="text-black">X</span>
             </button>
           </div>
-          <div className="mt-2 align-center">
+          <div className="mt-2 justify-center">
             {settings.packs.map((pack, index) => (
               <div
                 key={index}
-                className="p-4 md:w-1/2 flex flex-col items-center border"
+                className="p-4 md:w-full flex flex-col items-center justify-center border text-center"
               >
-                <img src={pack.image} alt={`${pack.symbol} Icon`} />
+                <img
+                  src="/images/card-pack-home.webp"
+                  alt={`${pack.symbol} Icon`}
+                  className="justify-center w-80" // Ensures the image is centered if not already
+                />
                 <div className="symbol">{pack.symbol}</div>
                 <div className="cards">{pack.cards} cards inside</div>
                 <div className="price">${pack.price}</div>

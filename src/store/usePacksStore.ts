@@ -33,7 +33,7 @@ const usePacksStore = create((set, get) => ({
     try {
       // Use the other store's function
       const broadcastOps = useStore.getState().requestBroadcastOps;
-      await broadcastOps(user, operations, "Active"); // console.log("Packs opened successfully:", result.data);
+      await broadcastOps(user, operations, "Active");
     } catch (error) {
       console.error("Failed to open packs:", error);
     }

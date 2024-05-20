@@ -1,9 +1,21 @@
 import create from "zustand";
 import useTransactionStore from "@/store/useTransactionStore";
 
-const requestKeychain = (fn, ...args) => {
+type KeychainResponse = {
+  success: boolean;
+  msg: string;
+  cancel?: boolean;
+  result?: any;
+  error?: string;
+  message?: string;
+};
+
+const requestKeychain = (
+  fn: string,
+  ...args: any[]
+): Promise<KeychainResponse> => {
   return new Promise((resolve) => {
-    window.hive_keychain[fn](...args, (response) => {
+    (window as any).hive_keychain[fn](...args, (response: any) => {
       if (response.error === "user_cancel") {
         resolve({
           success: false,
@@ -20,7 +32,15 @@ const requestKeychain = (fn, ...args) => {
   });
 };
 
-const useStore = create((set, get) => ({
+interface StoreState {
+  requestBroadcastOps: (
+    username: string,
+    operations: any[],
+    keyType: string,
+  ) => Promise<void>;
+}
+
+const useStore = create<StoreState>((set, get) => ({
   requestBroadcastOps: async (username, operations, keyType) => {
     try {
       const keychainResponse = await requestKeychain(

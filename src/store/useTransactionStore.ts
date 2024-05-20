@@ -2,8 +2,8 @@ import create from "zustand";
 import sidechainApi from "@/api/sidechainApi";
 
 // Helper function to safely parse JSON
-const parseJSON = (json) => {
-  let result = {};
+const parseJSON = (json: string): Record<string, any> => {
+  let result: Record<string, any> = {};
   try {
     result = JSON.parse(json);
   } catch (error) {
@@ -13,12 +13,37 @@ const parseJSON = (json) => {
 };
 
 // Function to simulate sleep in async functions
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const useTransactionStore = create((set, get) => ({
+interface Card {
+  edition: string;
+  foil: string;
+  type: string;
+  image: string;
+}
+
+interface TransactionValidated {
+  trxId: string;
+  contract: string | null;
+  action: string | null;
+  payload: Record<string, any> | null;
+  error: boolean;
+}
+
+interface TransactionStoreState {
+  cards: Card[];
+  rareTypes: Set<string>;
+  epicTypes: Set<string>;
+  setCards: (newCards: Card[]) => void;
+  removeCardByIndex: (index: number) => void;
+  validateTransaction: (trxId: string) => Promise<void>;
+  transactionValidated?: TransactionValidated;
+}
+
+const useTransactionStore = create<TransactionStoreState>((set, get) => ({
   cards: [],
-  rareTypes: new Set(), // Initialize as empty set if not already done
-  epicTypes: new Set(), // Initialize as empty set if not already done
+  rareTypes: new Set<string>(), // Initialize as empty set if not already done
+  epicTypes: new Set<string>(), // Initialize as empty set if not already done
 
   // Method to set cards directly
   setCards: (newCards) => set({ cards: newCards }),
@@ -31,7 +56,7 @@ const useTransactionStore = create((set, get) => ({
 
   validateTransaction: async (trxId) => {
     const error = false;
-    let trx = null;
+    let trx: any = null;
     let count = 0;
 
     do {
@@ -45,14 +70,11 @@ const useTransactionStore = create((set, get) => ({
           },
         };
         // Simulate fetching a transaction
-        console.log(request)
+        console.log(request);
         trx = await sidechainApi.call(endpoint, request);
         console.log(trx);
-
-        // trx = await fetchTransaction(trxId);dfg
       } catch (e) {
-        console.log(e);
-        // console.error(e.message);
+        console.error(e);
       }
       count += 1;
     } while (!trx && count < 100);
@@ -65,8 +87,8 @@ const useTransactionStore = create((set, get) => ({
         trx.action === "open"
       ) {
         const cards = logs.events
-          .filter((e) => e.event === "issue")
-          .map((event) => {
+          .filter((e: any) => e.event === "issue")
+          .map((event: any) => {
             const { edition, foil, type } = event.data.properties;
             return {
               edition,
@@ -82,9 +104,9 @@ const useTransactionStore = create((set, get) => ({
     set({
       transactionValidated: {
         trxId,
-        contract: !trx ? null : trx.contract,
-        action: !trx ? null : trx.action,
-        payload: !trx ? null : parseJSON(trx.payload),
+        contract: trx ? trx.contract : null,
+        action: trx ? trx.action : null,
+        payload: trx ? parseJSON(trx.payload) : null,
         error,
       },
     });

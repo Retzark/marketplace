@@ -1,62 +1,129 @@
-import { useLocation } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
+import useAppStore from "@/store/useAppStore";
+import { useEffect, useState } from "react";
+import useMarketStore from "@/store/useMarketStore";
+import { Card, SellBookEntry } from "@/types";
+import BuyCard from "@/components/modals/BuyCard";
+import Loading from "@/components/Loading";
+import ListingsTable from "@/components/ListingsTable";
+import userStore from "@/store/userStore";
 
 const CardDetails = () => {
+  const { id } = useParams<{ id: string }>();
   const location = useLocation();
-  const card = location.state?.card;
+  const card = location.state?.card as Card;
+  const username = userStore.getState().user?.username;
+
+  const { settings } = useAppStore(); // Assuming user info is stored in useAppStore
+  const { fetchSellBook, requestBuy, requestCancel } = useMarketStore();
+  const [fetchedCard, setFetchedCard] = useState<Card | null>(null);
+  const [sellBookEntries, setSellBookEntries] = useState<SellBookEntry[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isListingsLoading, setIsListingsLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedEntry, setSelectedEntry] = useState<SellBookEntry | null>(
+    null,
+  );
+
+  useEffect(() => {
+    const fetchCardDetails = async () => {
+      if (!card) {
+        setFetchedCard(fetchedCard);
+      } else {
+        setFetchedCard(card);
+      }
+
+      if (settings) {
+        const query = {
+          "grouping.type": card?.grouping.type || fetchedCard?.grouping.type,
+          "grouping.foil": card?.grouping.foil || fetchedCard?.grouping.foil,
+          "grouping.edition":
+            card?.grouping.edition || fetchedCard?.grouping.edition,
+          priceSymbol: settings.currency,
+        };
+
+        const fetchedSellBookEntries = await fetchSellBook(query);
+        setSellBookEntries(fetchedSellBookEntries);
+        setIsListingsLoading(false);
+      }
+      setIsLoading(false);
+    };
+
+    fetchCardDetails();
+  }, [id, card, fetchSellBook, settings]);
+
+  const handleBuy = (entry: SellBookEntry) => {
+    setSelectedEntry(entry);
+    setIsModalOpen(true);
+  };
+
+  const confirmBuy = async () => {
+    if (selectedEntry) {
+      try {
+        await requestBuy({ nfts: [selectedEntry.nft_id.toString()] });
+        alert("Purchase successful!");
+      } catch (error) {
+        console.error("Purchase failed:", error);
+        alert("Purchase failed. Please try again.");
+      } finally {
+        setIsModalOpen(false);
+        setSelectedEntry(null);
+      }
+    }
+  };
+
+  const handleCancel = async (entry: SellBookEntry) => {
+    try {
+      await requestCancel({ nfts: [entry.nft_id.toString()] });
+      setSellBookEntries((prevEntries) =>
+        prevEntries.filter((e) => e.nft_id !== entry.nft_id),
+      );
+    } catch (error) {
+      console.error("Cancel failed:", error);
+      alert("Cancel failed. Please try again.");
+    }
+  };
+
+  if (!settings || isLoading) {
+    return <Loading />;
+  }
+
+  if (!fetchedCard) {
+    return <div className="text-center mt-8">No card details available.</div>;
+  }
 
   return (
     <div>
-      <div className="row">
+      <div className="w-full">
         <div
           className="relative flex justify-center text-white text-center bg-no-repeat bg-cover bg-center"
           style={{
             backgroundImage: `url('/images/marketplace-hero.webp')`,
             height: "70vh",
           }}
-        ></div>
-      </div>
-      <div className="flex flex-wrap -mx-1">
-        <div className="w-full md:w-9/12 px-1">
-          <a
-            href="#"
-            className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
-          >
-            <img
-              className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"
-              src={`https://cdn.tribaldex.com/packmanager/DATA/${card.grouping.edition}_${card.grouping.type}_${card.grouping.foil}.png`}
-              alt="Card Image"
-            />
-            <div className="flex flex-col justify-between p-4 leading-normal">
-              <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                <span className="text-muted">ID:</span> {card.grouping.type}
-              </h5>
-              <p className="mb-3 font-normal text-gray-700 dark:text-gray-400"></p>
-            </div>
-          </a>
-        </div>
-        <div className="w-full md:w-3/12 px-1">
-          <a
-            href="#"
-            className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
-          >
-            <img
-              className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"
-              src={`https://cdn.tribaldex.com/packmanager/DATA/${card.grouping.edition}_${card.grouping.type}_${card.grouping.foil}.png`}
-              alt="Card Image"
-            />
-            <div className="flex flex-col justify-between p-4 leading-normal">
-              <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                More Acquisitions in 2021
-              </h5>
-              <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                Additional notable technology acquisitions details.
-              </p>
-            </div>
-          </a>
+        />
+        <div className="container mx-auto px-4 mt-8">
+          <div className="flex flex-wrap mb-8"></div>
+          {isListingsLoading && <Loading />}
+          <ListingsTable
+            entries={sellBookEntries}
+            isLoading={isListingsLoading}
+            onBuy={handleBuy}
+            onCancel={handleCancel}
+            currentUsername={username || ""}
+          />
         </div>
       </div>
+      <BuyCard
+        isOpen={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
+        entry={selectedEntry}
+        onConfirm={confirmBuy}
+      />
     </div>
   );
 };
+
+// Mock function to simulate fetching card details by ID
 
 export default CardDetails;

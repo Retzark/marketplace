@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Card } from "@/types/Card";
-import useFetchNFTMarketData from "@/hooks/useFetchNFTMarketData"; // Assuming the correct import
+import useFetchNFTMarketData from "@/hooks/useFetchNFTMarketData";
+import { useNavigate } from "react-router-dom";
 
 const NFTCardsList = () => {
   const { data, isLoading, error } = useFetchNFTMarketData();
@@ -11,10 +11,11 @@ const NFTCardsList = () => {
 
   useEffect(() => {
     if (data) {
-      const filtered = selectedFilter
-        ? data.filter((item: Card) => item.grouping.foil === selectedFilter)
-        : data;
-      console.log({ filtered });
+      const filtered = data
+        .filter((item: Card) => item.count > 0) // Filter out cards with count zero
+        .filter((item: Card) =>
+          selectedFilter ? item.grouping.foil === selectedFilter : true,
+        );
       setFilteredData(filtered);
     }
   }, [data, selectedFilter]);
@@ -23,8 +24,8 @@ const NFTCardsList = () => {
     setSelectedFilter(e.target.value);
   };
 
-  const handleClick = (cardId: string, card: Card) => {
-    navigate(`/card/${cardId}`, { state: { card } });
+  const handleClick = (card: Card) => {
+    navigate(`/card/${card._id}`, { state: { card } });
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -49,7 +50,7 @@ const NFTCardsList = () => {
             {filteredData.map((card) => (
               <div
                 key={card._id}
-                onClick={() => handleClick(card._id, card)}
+                onClick={() => handleClick(card)}
                 className="card bg-white rounded-lg overflow-hidden shadow-md relative cursor-pointer"
               >
                 <div className="absolute top-0 right-0 bg-blue-500 text-white text-xs py-1 px-2 rounded-bl-lg rounded-tr-lg">

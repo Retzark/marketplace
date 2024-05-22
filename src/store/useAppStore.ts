@@ -12,6 +12,7 @@ const useAppStore = create<AppState>((set, get) => ({
       const response = await apiService.fetchSettings(); // Assume this returns a Settings object
       set({ settings: response, settingsReady: true });
     } catch (error) {
+      console.log(error);
       set({ error });
     }
   },

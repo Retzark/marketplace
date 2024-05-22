@@ -5,92 +5,97 @@ import Loading from "@/components/Loading";
 interface ListingsTableProps {
   entries: SellBookEntry[];
   isLoading: boolean;
-  onBuy: (entry: SellBookEntry) => void;
-  onCancel: (entry: SellBookEntry) => void;
-  currentUsername: string;
+  onSelect: (entry: SellBookEntry, isSelected: boolean) => void;
 }
 
 const ListingsTable: React.FC<ListingsTableProps> = ({
   entries,
   isLoading,
-  onBuy,
-  onCancel,
-  currentUsername,
+  onSelect,
 }) => {
   return (
     <div className="w-full mb-8">
-      <div className="bg-white border border-gray-200 rounded-lg shadow-md p-4">
-        <h3 className="text-lg font-bold mb-4">Listings</h3>
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
-            <thead>
-              <tr>
-                <th className="py-2 px-4 border">NFT ID</th>
-                <th className="py-2 px-4 border">Account</th>
-                <th className="py-2 px-4 border">Name</th>
-                <th className="py-2 px-4 border">Team</th>
-                <th className="py-2 px-4 border">Category</th>
-                <th className="py-2 px-4 border">Edition</th>
-                <th className="py-2 px-4 border">Foil</th>
-                <th className="py-2 px-4 border">Type</th>
-                <th className="py-2 px-4 border">Rarity</th>
-                <th className="py-2 px-4 border">Price</th>
-                <th className="py-2 px-4 border">Price Symbol</th>
-                <th className="py-2 px-4 border">Fee</th>
-                <th className="py-2 px-4 border">For Sale</th>
-                <th className="py-2 px-4 border">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {isLoading ? (
-                <tr>
-                  <td colSpan={14} className="text-center py-4">
-                    <Loading />
-                  </td>
-                </tr>
-              ) : (
-                entries.map((entry) => (
-                  <tr key={entry.nft_id}>
-                    <td className="py-2 px-4 border">{entry.nft_id}</td>
-                    <td className="py-2 px-4 border">@{entry.account}</td>
-                    <td className="py-2 px-4 border">{entry.name}</td>
-                    <td className="py-2 px-4 border">{entry.team}</td>
-                    <td className="py-2 px-4 border">{entry.category}</td>
-                    <td className="py-2 px-4 border">{entry.edition}</td>
-                    <td className="py-2 px-4 border">{entry.foil}</td>
-                    <td className="py-2 px-4 border">{entry.type}</td>
-                    <td className="py-2 px-4 border">{entry.rarity}</td>
-                    <td className="py-2 px-4 border">{entry.price}</td>
-                    <td className="py-2 px-4 border">{entry.priceSymbol}</td>
-                    <td className="py-2 px-4 border">{entry.fee}</td>
-                    <td className="py-2 px-4 border">
-                      {entry.for_sale ? "Yes" : "No"}
-                    </td>
-                    <td className="py-2 px-4 border space-x-2">
-                      {currentUsername !== entry.account && (
-                        <button
-                          onClick={() => onBuy(entry)}
-                          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                        >
-                          Buy
-                        </button>
-                      )}
-
-                      {currentUsername === entry.account && (
-                        <button
-                          onClick={() => onCancel(entry)}
-                          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                        >
-                          Cancel
-                        </button>
-                      )}
-                    </td>
+      <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg p-4">
+        <h3 className="text-lg font-bold text-white mb-4">LISTINGS</h3>
+        {isLoading ? (
+          <div className="text-center py-4">
+            <Loading />
+          </div>
+        ) : (
+          <div className="flex flex-col space-y-4">
+            <div className="hidden md:block">
+              <table className="min-w-full bg-gray-900 border border-gray-700 rounded-lg shadow-md">
+                <thead>
+                  <tr>
+                    <th className="px-4 py-2 text-white text-left"></th>
+                    <th className="px-4 py-2 text-white text-left">PRICE</th>
+                    <th className="px-4 py-2 text-white text-left">ASC LVL</th>
+                    <th className="px-4 py-2 text-white text-left">CARD ID</th>
+                    <th className="px-4 py-2 text-white text-left">SELLER</th>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+                </thead>
+                <tbody>
+                  {entries.map((entry) => (
+                    <tr key={entry.nft_id} className="text-white">
+                      <td className="border-t border-gray-700 px-4 py-2 text-left">
+                        <input
+                          type="checkbox"
+                          onChange={(e) => onSelect(entry, e.target.checked)}
+                        />
+                      </td>
+                      <td className="border-t border-gray-700 px-4 py-2 text-left">
+                        {entry.price} {entry.priceSymbol}
+                      </td>
+                      <td className="border-t border-gray-700 px-4 py-2 text-left">
+                        {/* Add asc level icons here */}
+                      </td>
+                      <td className="border-t border-gray-700 px-4 py-2 text-left">
+                        #{entry.nft_id}
+                      </td>
+                      <td className="border-t border-gray-700 px-4 py-2 text-left">
+                        @{entry.account}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="block md:hidden">
+              {entries.map((entry) => (
+                <div
+                  key={entry.nft_id}
+                  className="bg-gray-900 border border-gray-700 rounded-lg shadow-md p-4 flex flex-col space-y-2"
+                >
+                  <div className="flex justify-between text-white">
+                    <span className="font-bold">SELECT:</span>
+                    <input
+                      type="checkbox"
+                      onChange={(e) => onSelect(entry, e.target.checked)}
+                    />
+                  </div>
+                  <div className="flex justify-between text-white">
+                    <span className="font-bold">PRICE:</span>
+                    <span>
+                      {entry.price} {entry.priceSymbol}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-white">
+                    <span className="font-bold">ASC LVL:</span>
+                    <span>{/* Add asc level icons here */}</span>
+                  </div>
+                  <div className="flex justify-between text-white">
+                    <span className="font-bold">CARD ID:</span>
+                    <span>#{entry.nft_id}</span>
+                  </div>
+                  <div className="flex justify-between text-white">
+                    <span className="font-bold">SELLER:</span>
+                    <span>@{entry.account}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

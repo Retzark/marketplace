@@ -16,6 +16,7 @@ const useCardStore = create<CardStoreState>((set, get) => ({
     offset = 0,
     limit = 1000,
   ) => {
+    console.log(useAppStore.getState().settings);
     const { nft_symbol } = useAppStore.getState().settings;
     query.nft = query.nft || nft_symbol;
 

@@ -10,5 +10,10 @@ export interface Card {
   type: string;
   description: string; // Description of the card
   count: number; // A numeric value, possibly representing inventory count or similar
+  hp: number; // HP attribute
+  atk: number; // ATK attribute
+  spd: number; // SPD attribute
+  egy: number; // EGY attribute
+  rarity: string; // RARITY attribute
   grouping: Grouping; // Nested object containing grouping information
 }

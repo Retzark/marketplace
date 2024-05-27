@@ -16,8 +16,14 @@ const useCardStore = create<CardStoreState>((set, get) => ({
     offset = 0,
     limit = 1000,
   ) => {
-    console.log(useAppStore.getState().settings);
-    const { nft_symbol } = useAppStore.getState().settings;
+    const { settings } = useAppStore.getState();
+
+    // Guard against null settings
+    if (!settings) {
+      throw new Error("Settings not initialized");
+    }
+
+    const { nft_symbol } = settings;
     query.nft = query.nft || nft_symbol;
 
     const request = {
@@ -31,7 +37,6 @@ const useCardStore = create<CardStoreState>((set, get) => ({
       },
     };
 
-    // Assuming there's a function in useAppStore to handle contract requests
     return await sidechainApi.call("contracts", request);
   },
 }));

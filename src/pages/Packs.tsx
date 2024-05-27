@@ -1,15 +1,21 @@
-import { useState } from "react";
-import BuyPacks from "@/components/modals/BuyPacks";
+import React, { useState } from "react";
+import BuyPacksModal from "@/components/modals/BuyPacks";
 
 const Packs = () => {
   const [showModal, setShowModal] = useState(false);
+  const [selectedPack, setSelectedPack] = useState(null);
 
-  const handleOpenModal = () => {
+  const handleOpenModal = (pack) => {
+    setSelectedPack(pack);
     setShowModal(true);
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
+  };
+
+  const handleSelectPack = (pack) => {
+    setSelectedPack(pack);
   };
 
   return (
@@ -54,78 +60,197 @@ const Packs = () => {
       <div className="px-4 sm:px-8 md:px-16 lg:px-32 my-8">
         <div className="flex flex-col md:flex-row -mx-2">
           <div className="md:w-2/3 px-2 mb-4 md:mb-0">
-            <a
-              href="#"
-              className="flex flex-col md:flex-row  bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
-            >
+            <div className="flex flex-col md:flex-row bg-gray-800 border border-gray-700 rounded-lg shadow-lg p-6">
               <img
-                className="w-full md:w-1/4 object-cover rounded-t-lg p-12 md:rounded-none md:rounded-l-lg md:h-auto"
+                className="w-full md:w-1/3 object-cover rounded-t-lg md:rounded-none md:rounded-l-lg p-4"
                 src="/images/alpha-pack.webp"
-                alt="/"
+                alt="Alpha Pack"
               />
-              <div className="flex flex-col w-full">
-                <h5 className="mb-2 mt-12 text-lg md:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+              <div className="flex flex-col justify-between p-4 leading-normal text-white">
+                <h5
+                  className="text-2xl font-bold mb-4"
+                  style={{
+                    fontFamily: '"Poppins"',
+                    fontSize: "30px",
+                  }}
+                >
                   ALPHA PACK
                 </h5>
-                <p className="mb-3 font-normal text-sm md:text-base text-gray-700 dark:text-gray-400">
+                <div
+                  className="bg-gray-700 text-white px-4 py-2 rounded-full text-sm flex items-center justify-center"
+                  style={{
+                    fontFamily: '"CCElephantmenTall Regular"',
+                    height: "40px",
+                    fontSize: "24px",
+                    width: "300px",
+                    maxWidth: "100%", // Ensures responsiveness
+                  }}
+                >
+                  1,203,596 PACKS REMAINING
+                </div>
+
+                <p className="text-white mb-1">
                   The ALPHA PACK set is now available!
                 </p>
-                <p className="mb-3 font-normal text-sm md:text-base text-gray-700 dark:text-gray-400">
+                <p className="text-white mb-1">
                   Each pack contains 5 random cards from the Retzark Alpha card
                   set.
                 </p>
-                <p className="mb-3 font-bold text-sm md:text-base text-gray-700 dark:text-gray-400">
+                <p className="text-white font-bold mb-1">
                   Guaranteed to contain at least one card that is EPIC or
                   better!
                 </p>
+                <div className="text-white mb-1">
+                  <div className="font-bold mb-1">Drop Rates:</div>
+                  <div className="flex flex-wrap justify-start gap-2">
+                    <div
+                      className={`flex items-center bg-gray-700 text-white rounded-lg px-3 py-1 mr-1 mb-1`}
+                      style={{
+                        fontFamily: '"CCElephantmenTall Regular"',
+                        width: "100%",
+                        maxWidth: "180px",
+                        height: "40px",
+                        fontSize: "18px",
+                      }}
+                    >
+                      <span className="mr-1 flex-shrink-0">
+                        <img src="/images/legendary-badge.svg" alt="SPD Icon" />
+                      </span>
+                      <span> LEGENDARY: 0.25%</span>
+                    </div>
 
-                <p className="mb-3 font-bold text-sm md:text-base text-gray-700 dark:text-gray-400">
-                  Drop Rates:
-                </p>
+                    <div
+                      className={`flex items-center bg-gray-700 text-white rounded-lg px-3 py-1 mr-1 mb-1`}
+                      style={{
+                        fontFamily: '"CCElephantmenTall Regular"',
+                        width: "100%",
+                        maxWidth: "131px",
+                        height: "40px",
+                        fontSize: "18px",
+                      }}
+                    >
+                      <span className="mr-1 flex-shrink-0">
+                        <img src="/images/legendary-badge.svg" alt="SPD Icon" />
+                      </span>
+                      <span> EPIC: 5.75%</span>
+                    </div>
+
+                    <div
+                      className={`flex items-center bg-gray-700 text-white rounded-lg px-3 py-1 mr-1 mb-1`}
+                      style={{
+                        fontFamily: '"CCElephantmenTall Regular"',
+                        width: "100%",
+                        maxWidth: "131px",
+                        height: "40px",
+                        fontSize: "18px",
+                      }}
+                    >
+                      <span className="mr-1 flex-shrink-0">
+                        <img src="/images/legendary-badge.svg" alt="SPD Icon" />
+                      </span>
+                      <span> RARE: 34%</span>
+                    </div>
+
+                    <div
+                      className={`flex items-center bg-gray-700 text-white rounded-lg px-3 py-1 mr-1 mb-1`}
+                      style={{
+                        fontFamily: '"CCElephantmenTall Regular"',
+                        width: "100%",
+                        maxWidth: "152px",
+                        fontSize: "18px",
+                      }}
+                    >
+                      <span className="mr-1 flex-shrink-0">
+                        <img src="/images/legendary-badge.svg" alt="SPD Icon" />
+                      </span>
+                      <span> COMMON: 60%</span>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </a>
+            </div>
           </div>
 
           <div className="md:w-1/3 px-2">
             <div className="h-32 md:h-64 lg:h-80 xl:h-96">
-              <a
-                href="#"
-                className="flex flex-col md:flex-row items-center bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
-              >
-                <div className="flex flex-col justify-between p-4 leading-normal w-full">
-                  <h5 className="mb-2 text-lg md:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                    Buy Alpha Packs
-                  </h5>
-                  <div className="flex space-x-2 mt-2">
-                    <button
-                      onClick={() => setShowModal(true)}
-                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-150 ease-in-out"
-                    >
-                      Buy 10 Packs
-                    </button>
-                    <button
-                      onClick={() => setShowModal(true)}
-                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-150 ease-in-out"
-                    >
-                      Buy 100 Packs
-                    </button>
-                    <button
-                      onClick={() => setShowModal(true)}
-                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-150 ease-in-out"
-                    >
-                      Buy 500 Packs
-                    </button>
-                    <hr />
-                  </div>
+              <div className="flex flex-col bg-gray-800 border border-gray-700 rounded-lg shadow-lg p-6">
+                <h5 className="text-2xl font-bold text-white mb-4 text-left">
+                  BUY ALPHA PACKS
+                </h5>
+                <div className="flex flex-row space-x-2 mb-4">
+                  <button
+                    onClick={() => handleSelectPack("10")}
+                    className={`${
+                      selectedPack === "10"
+                        ? "bg-primary text-white"
+                        : "bg-gray-700 text-white"
+                    } font-bold py-2 px-4 rounded hover:bg-gray-600 transition duration-150 ease-in-out text-left`}
+                    style={{
+                      fontSize: "15px",
+                      borderRadius: "20px",
+                    }}
+                  >
+                    Buy 10 Packs
+                  </button>
+                  <button
+                    onClick={() => handleSelectPack("100")}
+                    className={`${
+                      selectedPack === "100"
+                        ? "bg-primary text-white"
+                        : "bg-gray-700 text-white"
+                    } font-bold py-2 px-4 rounded hover:bg-gray-600 transition duration-150 ease-in-out text-left`}
+                    style={{
+                      fontSize: "15px",
+                      borderRadius: "20px",
+                    }}
+                  >
+                    Buy 100 Packs
+                  </button>
+                  <button
+                    onClick={() => handleSelectPack("500")}
+                    className={`${
+                      selectedPack === "500"
+                        ? "bg-primary text-white"
+                        : "bg-gray-700 text-white"
+                    } font-bold py-2 px-4 rounded hover:bg-gray-600 transition duration-150 ease-in-out text-left`}
+                    style={{
+                      fontSize: "15px",
+                      borderRadius: "20px",
+                    }}
+                  >
+                    Buy 500 Packs
+                  </button>
                 </div>
-              </a>
+                <div className="w-full text-left text-white font-semibold mb-2">
+                  QTY: {selectedPack ? selectedPack : "130"}
+                </div>
+                <div className="text-lg text-white mb-4 text-left">
+                  TOTAL PRICE
+                </div>
+                <div className="flex items-center mb-4">
+                  <img
+                    src="/images/currency_logo.svg"
+                    alt="LB Icon"
+                    className="w-8 h-8 mr-2"
+                  />
+                  <div className="text-3xl font-bold text-white">0.083745</div>
+                </div>
+                <button className="bg-primary text-white font-bold py-2 px-4 rounded mt-4 flex items-center justify-center space-x-2">
+                  <img
+                    src="/images/buy-now.svg"
+                    className="w-7 h-7"
+                    alt="Ascension Level Icon"
+                  />
+                  <span>BUY NOW</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       {showModal && (
-        <BuyPacks showModal={showModal} onClose={handleCloseModal} />
+        <BuyPacksModal showModal={showModal} onClose={handleCloseModal} />
       )}
     </div>
   );

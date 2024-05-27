@@ -188,6 +188,8 @@ const useMarketStore = create<MarketStore>((set, get) => {
       offset = 0,
       limit = 1000,
     ) => {
+      console.log(useAppStore.getState().settings);
+
       const { nft_symbol } = useAppStore.getState().settings;
       const symbol = query.symbol || nft_symbol;
 

@@ -5,8 +5,7 @@ const Packs = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedPack, setSelectedPack] = useState(null);
 
-  const handleOpenModal = (pack) => {
-    setSelectedPack(pack);
+  const handleOpenModal = () => {
     setShowModal(true);
   };
 
@@ -130,7 +129,7 @@ const Packs = () => {
                       }}
                     >
                       <span className="mr-1 flex-shrink-0">
-                        <img src="/images/legendary-badge.svg" alt="SPD Icon" />
+                        <img src="/images/epic-badge.svg" alt="SPD Icon" />
                       </span>
                       <span> EPIC: 5.75%</span>
                     </div>
@@ -146,7 +145,7 @@ const Packs = () => {
                       }}
                     >
                       <span className="mr-1 flex-shrink-0">
-                        <img src="/images/legendary-badge.svg" alt="SPD Icon" />
+                        <img src="/images/rare-badge.svg" alt="SPD Icon" />
                       </span>
                       <span> RARE: 34%</span>
                     </div>
@@ -161,7 +160,7 @@ const Packs = () => {
                       }}
                     >
                       <span className="mr-1 flex-shrink-0">
-                        <img src="/images/legendary-badge.svg" alt="SPD Icon" />
+                        <img src="/images/common-badge.svg" alt="SPD Icon" />
                       </span>
                       <span> COMMON: 60%</span>
                     </div>
@@ -235,7 +234,10 @@ const Packs = () => {
                   />
                   <div className="text-3xl font-bold text-white">0.083745</div>
                 </div>
-                <button className="bg-primary text-white font-bold py-2 px-4 rounded mt-4 flex items-center justify-center space-x-2">
+                <button
+                  className="bg-primary text-white font-bold py-2 px-4 rounded mt-4 flex items-center justify-center space-x-2"
+                  onClick={handleOpenModal}
+                >
                   <img
                     src="/images/buy-now.svg"
                     className="w-7 h-7"

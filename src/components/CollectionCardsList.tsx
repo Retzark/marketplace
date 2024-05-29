@@ -4,6 +4,8 @@ import { Card } from "@/types/Card";
 import useFetchCollectionData from "@/hooks/useFetchCollectionData";
 import useMarketStore from "@/store/useMarketStore";
 
+const PAGE_SIZE = 15;
+
 const CollectionCardsList = () => {
   const { data, isLoading, error } = useFetchCollectionData();
   const [filteredData, setFilteredData] = useState<
@@ -13,6 +15,7 @@ const CollectionCardsList = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
   const [sellPrice, setSellPrice] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const navigate = useNavigate();
   const { requestSell } = useMarketStore();
 
@@ -44,6 +47,7 @@ const CollectionCardsList = () => {
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedFilter(e.target.value);
+    setCurrentPage(1); // Reset to the first page when filter changes
   };
 
   const handleClick = (card: Card) => {
@@ -78,12 +82,26 @@ const CollectionCardsList = () => {
     }
   };
 
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
+  // Calculate the indices for the current page
+  const indexOfLastItem = currentPage * PAGE_SIZE;
+  const indexOfFirstItem = indexOfLastItem - PAGE_SIZE;
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(filteredData.length / PAGE_SIZE); i++) {
+    pageNumbers.push(i);
+  }
+
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <div>
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen flex flex-col">
+      <div className="mx-auto px-10 flex-grow">
         <div className="mb-4">
           <select
             value={selectedFilter}
@@ -97,11 +115,11 @@ const CollectionCardsList = () => {
         </div>
         <div className="flex justify-center">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {filteredData.map(({ card, count }) => (
+            {currentItems.map(({ card, count }) => (
               <div
                 key={card._id}
                 onClick={() => handleClick(card)}
-                className="card bg-white rounded-lg overflow-hidden shadow-md relative cursor-pointer"
+                className="card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md relative cursor-pointer"
               >
                 <div className="absolute top-0 right-0 bg-blue-500 text-white text-xs py-1 px-2 rounded-bl-lg rounded-tr-lg">
                   {count}
@@ -119,6 +137,35 @@ const CollectionCardsList = () => {
             ))}
           </div>
         </div>
+      </div>
+      <div className="flex justify-center mt-10 mb-10 bg-black">
+        <nav className="inline-flex rounded-md shadow">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="px-4 py-2 border border-gray-700 bg-gray-800 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
+          >
+            Previous
+          </button>
+          {pageNumbers.map((number) => (
+            <button
+              key={number}
+              onClick={() => handlePageChange(number)}
+              className={`px-4 py-2 border border-gray-700 bg-gray-800 text-sm font-medium text-white ${
+                currentPage === number ? "bg-primary" : "hover:bg-gray-700"
+              }`}
+            >
+              {number}
+            </button>
+          ))}
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === pageNumbers.length}
+            className="px-4 py-2 border border-gray-700 bg-gray-800 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
+          >
+            Next
+          </button>
+        </nav>
       </div>
 
       {showModal && selectedCard && (

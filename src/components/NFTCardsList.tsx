@@ -1,57 +1,108 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card } from "@/types/Card";
 import useFetchNFTMarketData from "@/hooks/useFetchNFTMarketData";
-import { useNavigate } from "react-router-dom";
 
-const NFTCardsList = () => {
+interface NFTCardsListProps {
+  selectedFaction: string;
+  selectedRarity: string;
+  selectedGameStats: string;
+}
+
+const NFTCardsList: React.FC<NFTCardsListProps> = ({
+  selectedFaction,
+  selectedRarity,
+  selectedGameStats,
+}) => {
   const { data, isLoading, error } = useFetchNFTMarketData();
   const [filteredData, setFilteredData] = useState<Card[]>([]);
   const [selectedFilter, setSelectedFilter] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10); // Set the number of items per page
   const navigate = useNavigate();
 
   useEffect(() => {
     if (data) {
-      const filtered = data
-        .filter((item: Card) => item.count > 0) // Filter out cards with count zero
-        .filter((item: Card) =>
-          selectedFilter ? item.grouping.foil === selectedFilter : true,
+      let filtered = data.filter((item: Card) => item.count > 0); // Filter out cards with count zero
+
+      if (selectedFilter) {
+        filtered = filtered.filter(
+          (item: Card) => item.grouping.foil === selectedFilter,
         );
+      }
+      if (selectedFaction) {
+        filtered = filtered.filter(
+          (item: Card) => item.grouping.faction === selectedFaction,
+        );
+      }
+      if (selectedRarity) {
+        filtered = filtered.filter(
+          (item: Card) => item.grouping.rarity === selectedRarity,
+        );
+      }
+      if (selectedGameStats) {
+        filtered = filtered.filter(
+          (item: Card) => item.grouping.gameStats === selectedGameStats,
+        );
+      }
+
       setFilteredData(filtered);
     }
-  }, [data, selectedFilter]);
+  }, [
+    data,
+    selectedFilter,
+    selectedFaction,
+    selectedRarity,
+    selectedGameStats,
+  ]);
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedFilter(e.target.value);
+    setCurrentPage(1); // Reset to the first page when filter changes
   };
 
   const handleClick = (card: Card) => {
     navigate(`/card/${card._id}`, { state: { card } });
   };
 
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
+  // Calculate the indices for the current page
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(filteredData.length / itemsPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div>
-      <div className="container mx-auto px-4">
-        <div className="mb-4">
-          <select
-            value={selectedFilter}
-            onChange={handleFilterChange}
-            className="form-select block mt-1"
-          >
-            <option value="">All Types</option>
-            <option value="0">Regular</option>
-            <option value="1">Gold</option>
-          </select>
-        </div>
+      <div className="px-10">
+        {/*<div className="mb-4">*/}
+        {/*  <select*/}
+        {/*    value={selectedFilter}*/}
+        {/*    onChange={handleFilterChange}*/}
+        {/*    className="form-select block mt-1"*/}
+        {/*  >*/}
+        {/*    <option value="">All Types</option>*/}
+        {/*    <option value="0">Regular</option>*/}
+        {/*    <option value="1">Gold</option>*/}
+        {/*  </select>*/}
+        {/*</div>*/}
         <div className="flex justify-center">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {filteredData.map((card) => (
+            {currentItems.map((card) => (
               <div
                 key={card._id}
                 onClick={() => handleClick(card)}
-                className="card bg-white rounded-lg overflow-hidden shadow-md relative cursor-pointer"
+                className="card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md relative cursor-pointer"
               >
                 <div className="absolute top-0 right-0 bg-blue-500 text-white text-xs py-1 px-2 rounded-bl-lg rounded-tr-lg">
                   {card.count}
@@ -68,6 +119,35 @@ const NFTCardsList = () => {
               </div>
             ))}
           </div>
+        </div>
+        <div className="flex justify-center mt-20 mb-20 bg-black">
+          <nav className="inline-flex rounded-md shadow">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-4 py-2 border border-gray-700 bg-gray-800 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
+            >
+              Previous
+            </button>
+            {pageNumbers.map((number) => (
+              <button
+                key={number}
+                onClick={() => handlePageChange(number)}
+                className={`px-4 py-2 border border-gray-700 bg-gray-800 text-sm font-medium text-white ${
+                  currentPage === number ? "bg-primary" : "hover:bg-gray-700"
+                }`}
+              >
+                {number}
+              </button>
+            ))}
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === pageNumbers.length}
+              className="px-4 py-2 border border-gray-700 bg-gray-800 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
+            >
+              Next
+            </button>
+          </nav>
         </div>
       </div>
     </div>

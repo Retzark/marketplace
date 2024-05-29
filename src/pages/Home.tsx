@@ -46,7 +46,7 @@ const Home = () => {
       </div>
       {/* Row for the Main Content Section */}
       <div className="row">
-        <div className="mx-5 h-full flex flex-row">
+        <div className="mx-5 h-full flex flex-row px-10">
           {/* Text Container */}
           <div className="flex-1 px-0 mt-36">
             <div
@@ -64,8 +64,8 @@ const Home = () => {
             </div>
             <br />
             <div
-              className="text-3xl sm:text-6xl md:text-2xl text-white"
-              style={{ fontFamily: '"Poppins"' }}
+              className="text-2xl sm:text-2xl md:text-2xl text-white"
+              style={{ fontFamily: '"Poppins"', lineHeight: "1.8" }}
             >
               RETZARK lets you experience the ever expanding world of Arondaze
               in the form of a fast-paced, tactical card battler. Carefully
@@ -77,7 +77,7 @@ const Home = () => {
           </div>
 
           {/* Image Container */}
-          <div className="flex-1 flex justify-end px-0 items-center">
+          <div className="flex-1 flex justify-end  items-center">
             <img
               src="/images/game-board-home.webp"
               alt="Game Board"
@@ -87,7 +87,7 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="container mx-auto max-w-7xl px-5">
+      <div className="mx-auto px-10">
         {" "}
         {/* Ensuring the container is centered and has a maximum width */}
         {/* Single Row for Image and Text */}
@@ -95,7 +95,7 @@ const Home = () => {
           {" "}
           {/* Flex row to hold image and text side by side */}
           {/* Image Container */}
-          <div className="flex-1 flex justify-center items-center">
+          <div className="flex-1 flex">
             <img
               src="/images/card-pack-home.webp"
               alt="Game Board"
@@ -115,8 +115,8 @@ const Home = () => {
 
             {/* Sub Header */}
             <div
-              className="text-9xl sm:text-6xl md:text-5xl text-secondary text-center"
-              style={{ fontFamily: '"CCElephantmenTall Regular"' }}
+              className="text-9xl sm:text-6xl md:text-4xl text-secondary text-center mb-10 italic font-semibold"
+              style={{ fontFamily: '"Poppins"', fontSize: "48px" }}
             >
               5 CARDS, YOURS TO KEEP
             </div>
@@ -125,7 +125,7 @@ const Home = () => {
             {/* Description */}
             <div
               className="text-3xl sm:text-6xl md:text-2xl text-white text-center"
-              style={{ fontFamily: '"Poppins"' }}
+              style={{ fontFamily: '"Poppins"', lineHeight: "2.0" }}
             >
               The Retzark Alpha card deck is a collection of 161 unique cards.
               Each pack contains 5 random cards from the Retzark Alpha card set.
@@ -136,7 +136,14 @@ const Home = () => {
                 <div className="text-9xl sm:text-6xl md:text-5xl text-secondary text-center">
                   <a href="/packs">
                     <button
-                      className="px-3 py-2 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark" // Assuming you have a darker variation for hover state
+                      className="mt-10 px-10 py-3 rounded-md text-xl font-medium text-white bg-primary hover:bg-primary-dark shadow-[#1C465B] shadow-lg"
+                      style={{
+                        fontFamily: '"CCElephantmenTall Regular"',
+                        fontSize: "26px",
+                        width: "100%", // Makes the button take the full width of its container
+                        maxWidth: "400px", // Sets a maximum width to prevent it from becoming too wide
+                        minWidth: "326px",
+                      }}
                     >
                       BUY CARDS
                     </button>
@@ -163,8 +170,8 @@ const Home = () => {
           {/* Image Container modified to center the text and use the full width */}
           <div className="w-full flex justify-center items-center">
             <div
-              className="text-9xl sm:text-6xl md:text-5xl text-secondary text-center"
-              style={{ fontFamily: '"CCElephantmenTall Regular"' }}
+              className="text-9xl sm:text-6xl md:text-5xl text-secondary text-center italic font-semibold"
+              style={{ fontFamily: '"Poppins"' }}
             >
               BUY, SELL, TRADE!
             </div>
@@ -175,7 +182,7 @@ const Home = () => {
           <div className="w-1/2 flex justify-center items-center mt-12">
             <div
               className="text-3xl sm:text-2xl md:text-2xl text-white text-center"
-              style={{ fontFamily: '"Poppins"' }}
+              style={{ fontFamily: '"Poppins"', lineHeight: "2.0" }}
             >
               Don’t have the card you need? Want to get rid of your duplicate
               legendary? Buy, sell, and trade with anyone, anywhere!
@@ -189,7 +196,12 @@ const Home = () => {
             <div className="text-9xl sm:text-6xl md:text-5xl text-secondary text-center">
               <a href="/marketplace">
                 <button
-                  className="px-3 py-2 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark" // Assuming you have a darker variation for hover state
+                  className="mt-10 px-5 py-3 rounded-md text-xl font-medium text-white bg-primary hover:bg-primary-dark shadow-[#1C465B] shadow-lg"
+                  style={{
+                    fontFamily: '"CCElephantmenTall Regular"',
+                    lineHeight: "2.0",
+                    fontSize: "26px",
+                  }}
                 >
                   VIEW MARKETPLACE
                 </button>

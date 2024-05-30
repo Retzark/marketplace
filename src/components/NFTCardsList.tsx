@@ -9,6 +9,8 @@ interface NFTCardsListProps {
   selectedGameStats: string;
 }
 
+const randomNames = ["Yue", "Yax", "Brix", "Krizator", "Nivlef"];
+
 const NFTCardsList: React.FC<NFTCardsListProps> = ({
   selectedFaction,
   selectedRarity,
@@ -84,71 +86,66 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
 
   return (
     <div>
-      <div className="px-10">
-        {/*<div className="mb-4">*/}
-        {/*  <select*/}
-        {/*    value={selectedFilter}*/}
-        {/*    onChange={handleFilterChange}*/}
-        {/*    className="form-select block mt-1"*/}
-        {/*  >*/}
-        {/*    <option value="">All Types</option>*/}
-        {/*    <option value="0">Regular</option>*/}
-        {/*    <option value="1">Gold</option>*/}
-        {/*  </select>*/}
-        {/*</div>*/}
-        <div className="flex justify-center">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {currentItems.map((card) => (
-              <div
-                key={card._id}
-                onClick={() => handleClick(card)}
-                className="card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md relative cursor-pointer"
-              >
-                <div className="absolute top-0 right-0 bg-blue-500 text-white text-xs py-1 px-2 rounded-bl-lg rounded-tr-lg">
-                  {card.count}
-                </div>
-                <img
-                  src={`https://cdn.tribaldex.com/packmanager/DATA/${card.grouping.edition}_${card.grouping.type}_${card.grouping.foil}.png`}
-                  alt={card.name}
-                  className="w-full h-full object-cover"
-                />
-                <div className="p-3">
-                  <h3 className="text-md font-semibold">{card.name}</h3>
-                  <p className="text-sm mt-1">{card.description}</p>
-                </div>
+      <div className="flex justify-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          {currentItems.map((card, index) => (
+            <div
+              key={card._id}
+              onClick={() => handleClick(card)}
+              className="card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md relative cursor-pointer"
+            >
+              <div className="absolute top-0 left-0 bg-black text-white text-xs py-1 px-2 rounded-br-lg">
+                #{card._id.toString().padStart(8, "0")}
               </div>
-            ))}
-          </div>
+              <div className="absolute top-0 right-0 bg-red-600 text-white text-xs py-1 px-2 rounded-bl-lg">
+                HOT
+              </div>
+              <img
+                src={`https://cdn.tribaldex.com/packmanager/DATA/${card.grouping.edition}_${card.grouping.type}_${card.grouping.foil}.png`}
+                alt={card.name}
+                className="w-full object-cover"
+                style={{ height: "300px" }} // Adjust the height as per your original image size
+              />
+              <div className="text-center bg-gray-900 text-white py-2">
+                1,203,596 AVAILABLE
+              </div>
+              <div className="p-3 text-center">
+                <h3 className="text-md font-semibold text-white">
+                  {randomNames[index % randomNames.length]}
+                </h3>
+              </div>
+            </div>
+          ))}
         </div>
-        <div className="flex justify-center mt-20 mb-20 bg-black">
-          <nav className="inline-flex rounded-md shadow">
+      </div>
+      <div className="flex justify-center mt-20 mb-20 bg-black">
+        <nav className="inline-flex rounded-md shadow">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="px-4 py-2 border border-gray-800 bg-gray-800 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
+          >
+            Previous
+          </button>
+          {pageNumbers.map((number) => (
             <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="px-4 py-2 border border-gray-700 bg-gray-800 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
+              key={number}
+              onClick={() => handlePageChange(number)}
+              className={`px-4 py-2 border border-gray-800 bg-gray-800 text-sm font-medium text-white ${
+                currentPage === number ? "bg-primary" : "hover:bg-gray-700"
+              }`}
             >
-              Previous
+              {number}
             </button>
-            {pageNumbers.map((number) => (
-              <button
-                key={number}
-                onClick={() => handlePageChange(number)}
-                className={`px-4 py-2 border border-gray-700 bg-gray-800 text-sm font-medium text-white ${
-                  currentPage === number ? "bg-primary" : "hover:bg-gray-700"
-                }`}
-              >
-                {number}
-              </button>
-            ))}
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === pageNumbers.length}
-              className="px-4 py-2 border border-gray-700 bg-gray-800 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
-            >
-              Next
-            </button>
-          </nav>
-        </div>
+          ))}
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === pageNumbers.length}
+            className="px-4 py-2 border border-gray-800 bg-gray-800 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
+          >
+            Next
+          </button>
+        </nav>
       </div>
     </div>
   );

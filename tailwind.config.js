@@ -7,13 +7,9 @@ export default {
         primary: "#15C1A2",
         secondary: "#14C2A3",
         "custom-yellow": "#FFBF1C", // Adding custom color
-
-        // You can also add variations if needed
-        // 'primary-dark': '#...',
-        // 'primary-light': '#...',
       },
       fontFamily: {
-        elephantmen: ['"CCElephantmenGreat W10 Bold It"', "sans-serif"], // Backup font
+        elephantmen: ['"CCElephantmenTall Regular"', "sans-serif"], // Backup font
         poppins: ['"Poppins"', "sans-serif"], // Backup font
       },
     },

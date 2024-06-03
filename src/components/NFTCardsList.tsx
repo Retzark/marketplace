@@ -1,20 +1,20 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/types/Card";
 import useFetchNFTMarketData from "@/hooks/useFetchNFTMarketData";
 
 interface NFTCardsListProps {
-  selectedFaction: string;
-  selectedRarity: string;
-  selectedGameStats: string;
+  selectedFaction?: string;
+  selectedRarity?: string;
+  selectedGameStats?: string;
 }
 
 const randomNames = ["Yue", "Yax", "Brix", "Krizator", "Nivlef"];
 
 const NFTCardsList: React.FC<NFTCardsListProps> = ({
-  selectedFaction,
-  selectedRarity,
-  selectedGameStats,
+  selectedFaction = "",
+  selectedRarity = "",
+  selectedGameStats = "",
 }) => {
   const { data, isLoading, error } = useFetchNFTMarketData();
   const [filteredData, setFilteredData] = useState<Card[]>([]);
@@ -86,7 +86,7 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
 
   return (
     <div>
-      <div className="flex justify-center">
+      <div className="mx-10 h-full">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {currentItems.map((card, index) => (
             <div
@@ -103,8 +103,8 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
               <img
                 src={`https://cdn.tribaldex.com/packmanager/DATA/${card.grouping.edition}_${card.grouping.type}_${card.grouping.foil}.png`}
                 alt={card.name}
-                className="w-full object-cover"
-                style={{ height: "300px" }} // Adjust the height as per your original image size
+                className="w-full h-full object-cover"
+                style={{ height: "auto" }} // Adjust the height as per your original image size
               />
               <div className="text-center bg-gray-900 text-white py-2">
                 1,203,596 AVAILABLE

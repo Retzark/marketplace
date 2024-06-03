@@ -8,12 +8,16 @@ export default function App() {
   const settingsReady = useInitializeSettings();
 
   if (!settingsReady) {
-    return <Loading />;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-black">
+        <Loading />
+      </div>
+    );
   }
 
   return (
     <Router>
-      <div className="bg-black min-h-screen">
+      <div className="min-h-screen flex flex-col bg-black">
         <Navbar />
         <AppRoutes />
       </div>

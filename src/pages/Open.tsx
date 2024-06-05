@@ -1,9 +1,10 @@
-import { useCallback, useState, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import sidechainApi from "@/api/sidechainApi";
 import useAppStore from "@/store/useAppStore";
 import useUserStore from "@/store/userStore";
+import useTransactionStore from "@/store/useTransactionStore";
 import OpenPack from "@/components/modals/OpenPack";
-import TransferPack from "@/components/modals/TransferPack";
+import ViewCards from "@/components/modals/ViewCards";
 import LazyLoad from "react-lazyload";
 
 const Open = () => {
@@ -14,6 +15,14 @@ const Open = () => {
   }));
   const [isOpenPackModalOpen, setIsOpenPackModalOpen] = useState(false);
   const [isTransferPackModalOpen, setIsTransferPackModalOpen] = useState(false);
+  const [showViewCardsModal, setShowViewCardsModal] = useState(false); // State to control ViewCards modal visibility
+  const { cards, setCards, removeCardByIndex } = useTransactionStore(
+    (state) => ({
+      cards: state.cards,
+      setCards: state.setCards,
+      removeCardByIndex: state.removeCardByIndex,
+    }),
+  );
 
   const handleCloseModal = () => {
     setIsOpenPackModalOpen(false);
@@ -71,21 +80,36 @@ const Open = () => {
     setIsTransferPackModalOpen(true);
   };
 
+  const handleCardsOpened = (newCards) => {
+    setCards(newCards);
+    setShowViewCardsModal(true); // Show the ViewCards modal after cards are opened
+  };
+
+  const handleViewCardsModalClose = () => {
+    setShowViewCardsModal(false);
+  };
+
   return (
-    <div>
-      <div className="row">
+    <div className="flex flex-col min-h-screen">
+      <div className="grid grid-cols-1 flex-grow">
         <LazyLoad height="70vh" once>
           <div
-            className="relative text-white text-center bg-no-repeat bg-cover bg-center"
+            className="relative text-white text-center bg-no-repeat bg-cover bg-center flex justify-center items-center"
             style={{
               backgroundImage: `url('/images/open-pack-image.webp')`,
               height: "70vh",
             }}
-          ></div>
+          >
+            <img
+              src="/images/card_open.webp"
+              alt="Alpha Pack"
+              className="max-w-full h-auto"
+            />
+          </div>
         </LazyLoad>
       </div>
 
-      <div className="flex justify-center items-center mt-20">
+      <div className="flex justify-center items-center my-4">
         <button
           onClick={handleOpenPackClick}
           className="px-3 py-2 mr-3 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark"
@@ -96,19 +120,29 @@ const Open = () => {
           onClick={handleTransferPackClick}
           className="px-3 py-2 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark"
         >
-          Transfer PACK
+          TRANSFER PACK
         </button>
       </div>
 
-      <OpenPack isOpen={isOpenPackModalOpen} onClose={handleCloseModal}>
-        <h2 className="text-lg">Open Card Details</h2>
-        <p>Card details or actions can be placed here.</p>
-      </OpenPack>
+      <OpenPack
+        isOpen={isOpenPackModalOpen}
+        onClose={handleCloseModal}
+        onCardsOpened={handleCardsOpened}
+      />
+      <ViewCards
+        show={showViewCardsModal}
+        handleClose={handleViewCardsModalClose}
+        cards={cards}
+        removeCardByIndex={removeCardByIndex}
+      />
 
-      <TransferPack isOpen={isTransferPackModalOpen} onClose={handleCloseModal}>
-        <h2 className="text-lg">Transfer Card Details</h2>
-        <p>Card details or actions can be placed here for transferring.</p>
-      </TransferPack>
+      <footer className="w-full bg-yellow-500 h-1 mt-auto"></footer>
+
+      <style>{`
+        .parallax {
+          background-attachment: fixed;
+        }
+      `}</style>
     </div>
   );
 };

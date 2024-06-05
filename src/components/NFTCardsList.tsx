@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/types/Card";
 import useFetchNFTMarketData from "@/hooks/useFetchNFTMarketData";
+import Loading from "@/components/Loading";
 
 interface NFTCardsListProps {
   selectedFaction?: string;
@@ -81,7 +82,14 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
     pageNumbers.push(i);
   }
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-black">
+        <Loading />
+      </div>
+    );
+  }
+
   if (error) return <div>Error: {error.message}</div>;
 
   return (

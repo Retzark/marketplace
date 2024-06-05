@@ -48,32 +48,34 @@ const Packs = () => {
                 src="/images/alpha-pack.webp"
                 alt="Alpha Pack"
               />
-              <div className="flex flex-col justify-between p-2 sm:p-4 leading-normal text-white md:col-span-2">
-                <h5 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4 font-poppins">
+              <div className="flex flex-col p-2 sm:p-4 text-white md:col-span-2">
+                <h5 className="text-2xl sm:text-2xl font-bold mb-5 sm:mb-4 font-poppins">
                   ALPHA PACK
                 </h5>
-                <div className="flex mb-4 justify-center">
-                  <div className="bg-gray-700 text-white px-4 py-2 md:py-3 text-sm md:text-[24px] rounded-md flex items-center justify-center font-elephantmen">
+                <div className="flex mb-4 mt-4">
+                  <div className="bg-gray-700 text-white px-4 py-2 md:py-3 text-sm md:text-[24px] rounded-md flex font-elephantmen">
                     1,203,596 PACKS REMAINING
                   </div>
                 </div>
-                <p className="text-white text-sm sm:text-base mb-1">
+                <hr className="border-gray-400 border border-gray-400 rounded-md mt-8 mb-8" />
+                <p className="text-white text-sm sm:text-base mb-5">
                   The ALPHA PACK set is now available!
                 </p>
-                <p className="text-white text-sm sm:text-base mb-1">
+                <p className="text-white text-sm sm:text-base mb-5">
                   Each pack contains 5 random cards from the Retzark Alpha card
                   set.
                 </p>
-                <p className="text-white font-bold text-sm sm:text-base mb-1">
+                <p className="text-white text-sm sm:text-base mb-5">
                   Guaranteed to contain at least one card that is EPIC or
                   better!
                 </p>
-                <div className="text-white mb-1">
-                  <div className="font-bold text-sm sm:text-base mb-1">
+                <div className="text-white mb-1 md:mt-19 sm:mt-0 sm:col-span-2">
+                  <div className="font-bold text-sm sm:text-base mb-5">
                     Drop Rates:
                   </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
-                    <div className="flex items-center bg-gray-700 text-white rounded-lg px-2 sm:px-3 py-1 text-xs sm:text-sm md:text-base font-elephantmen whitespace-nowrap max-w-[150px]">
+                    <div className="flex justify-center items-center bg-gray-700 text-white rounded-lg px-2 sm:px-3 py-1 text-xs sm:text-sm md:text-base font-elephantmen whitespace-nowrap max-w-[1/4] h-12">
                       <img
                         src="/images/legendary-badge.svg"
                         alt="LEGENDARY"
@@ -81,7 +83,7 @@ const Packs = () => {
                       />
                       <span>LEGENDARY: 0.25%</span>
                     </div>
-                    <div className="flex items-center bg-gray-700 text-white rounded-lg px-2 sm:px-3 py-1 text-xs sm:text-sm md:text-base font-elephantmen whitespace-nowrap max-w-[150px]">
+                    <div className="flex justify-center items-center bg-gray-700 text-white rounded-lg px-2 sm:px-3 py-1 text-xs sm:text-sm md:text-base font-elephantmen whitespace-nowrap max-w-[1/4] h-12">
                       <img
                         src="/images/epic-badge.svg"
                         alt="EPIC"
@@ -89,7 +91,7 @@ const Packs = () => {
                       />
                       <span>EPIC: 5.75%</span>
                     </div>
-                    <div className="flex items-center bg-gray-700 text-white rounded-lg px-2 sm:px-3 py-1 text-xs sm:text-sm md:text-base font-elephantmen whitespace-nowrap max-w-[150px]">
+                    <div className="flex justify-center items-center bg-gray-700 text-white rounded-lg px-2 sm:px-3 py-1 text-xs sm:text-sm md:text-base font-elephantmen whitespace-nowrap max-w-[1/4] h-12">
                       <img
                         src="/images/rare-badge.svg"
                         alt="RARE"
@@ -97,7 +99,7 @@ const Packs = () => {
                       />
                       <span>RARE: 34%</span>
                     </div>
-                    <div className="flex items-center bg-gray-700 text-white rounded-lg px-2 sm:px-3 py-1 text-xs sm:text-sm md:text-base font-elephantmen whitespace-nowrap max-w-[150px]">
+                    <div className="flex justify-center items-center bg-gray-700 text-white rounded-lg px-2 sm:px-3 py-1 text-xs sm:text-sm md:text-base font-elephantmen whitespace-nowrap max-w-[1/4] h-12">
                       <img
                         src="/images/common-badge.svg"
                         alt="COMMON"
@@ -165,15 +167,15 @@ const Packs = () => {
                 </div>
               </div>
               <button
-                className="bg-primary text-white font-bold py-2 px-4 rounded mt-4 flex items-center justify-center space-x-2"
+                className="bg-primary text-white font-bold py-3 px-6 sm:py-2 sm:px-4 rounded mt-4 flex items-center justify-center space-x-2 w-full"
                 onClick={handleOpenModal}
               >
                 <img
                   src="/images/buy-now.svg"
-                  className="w-6 sm:w-7 h-6 sm:h-7"
+                  className="w-8 sm:w-10 h-8 sm:h-10"
                   alt="Buy Now"
                 />
-                <span>BUY NOW</span>
+                <span className="hidden sm:inline">BUY NOW</span>
               </button>
             </div>
           </div>

@@ -249,14 +249,14 @@ const CardDetails = () => {
         className="container mx-auto px-4"
         style={{ marginTop: "-390px", position: "relative", zIndex: 10 }}
       >
-        <div className="flex flex-wrap mb-8">
-          <div className="w-full md:w-3/4 mb-4 px-2">
-            <div className="flex flex-col items-center bg-gray-800 border border-gray-700 rounded-lg shadow-lg p-4 h-full">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <div className="md:col-span-2">
+            <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg p-4">
               <StatsAndMoveset card={fetchedCard} />
             </div>
           </div>
-          <div className="w-full md:w-1/4 mb-4 px-2">
-            <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg p-4 h-full">
+          <div>
+            <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg p-4">
               <img
                 className="object-cover w-full rounded-t-lg h-44 md:h-72 md:rounded-none md:rounded-t-lg"
                 src={`https://cdn.tribaldex.com/packmanager/DATA/${fetchedCard.grouping.edition}_${fetchedCard.grouping.type}_${fetchedCard.grouping.foil}.png`}
@@ -294,7 +294,7 @@ const CardDetails = () => {
           </div>
         </div>
 
-        <div className="w-3/4 px-2">
+        <div className="w-full">
           <ListingsTable
             entries={sellBookEntries}
             isLoading={isListingsLoading}
@@ -302,7 +302,7 @@ const CardDetails = () => {
           />
         </div>
 
-        <div className="w-3/4 px-2 mt-8">
+        <div className="w-full mt-8">
           <SaleHistoryTable entries={saleHistoryEntries} />
         </div>
 

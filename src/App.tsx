@@ -20,6 +20,7 @@ export default function App() {
       <div className="min-h-screen flex flex-col bg-black">
         <Navbar />
         <AppRoutes />
+        <div className="w-full h-1 bg-yellow-500 mt-8"></div>
       </div>
     </Router>
   );

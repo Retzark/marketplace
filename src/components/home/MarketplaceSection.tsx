@@ -5,7 +5,7 @@ const MarketplaceSection = () => {
         <div className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-elephantmen">
           THE MARKETPLACE
         </div>
-        <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-elephantmen text-secondary italic font-semibold">
+        <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-poppins text-secondary italic font-semibold">
           BUY, SELL, TRADE!
         </div>
         <div

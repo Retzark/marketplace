@@ -1,11 +1,9 @@
 import { useState } from "react";
 import usePacksStore from "@/store/usePacksStore";
-import ViewCards from "@/components/modals/ViewCards"; // Import the modal component
 
-const OpenPack = ({ isOpen, onClose }) => {
+const OpenPack = ({ isOpen, onClose, onCardsOpened }) => {
   const [number, setNumber] = useState(1);
   const [isValid, setIsValid] = useState(true);
-  const [showModal, setShowModal] = useState(false); // State to control modal visibility
   const requestOpenPacks = usePacksStore((state) => state.requestOpenPacks);
 
   if (!isOpen) return null;
@@ -26,13 +24,11 @@ const OpenPack = ({ isOpen, onClose }) => {
       alert("Please enter a valid number of packs.");
       return;
     }
-    await requestOpenPacks({ packSymbol: "DATA", packs: number });
-    setShowModal(true); // Open the modal after packs are opened
-  };
-
-  const handleModalClose = () => {
-    setShowModal(false);
-    onClose(); // Optional: Close the parent component as well
+    const newCards = await requestOpenPacks({
+      packSymbol: "DATA",
+      packs: number,
+    });
+    onCardsOpened(newCards); // Pass the new cards to the parent component
   };
 
   return (
@@ -78,9 +74,6 @@ const OpenPack = ({ isOpen, onClose }) => {
           </div>
         </div>
       </div>
-      {showModal && (
-        <ViewCards show={showModal} handleClose={handleModalClose} />
-      )}
     </>
   );
 };

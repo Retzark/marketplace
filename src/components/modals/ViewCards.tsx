@@ -1,12 +1,13 @@
 import React from "react";
-import useTransactionStore from "@/store/useTransactionStore";
 
-function ViewCards({ show, handleClose, rareTypes, epicTypes }) {
-  const { cards, removeCardByIndex } = useTransactionStore((state) => ({
-    cards: state.cards,
-    removeCardByIndex: state.removeCardByIndex,
-  }));
-
+function ViewCards({
+  show,
+  handleClose,
+  cards = [],
+  removeCardByIndex,
+  rareTypes,
+  epicTypes,
+}) {
   if (!show) return null;
 
   const handleCardClick = (index) => {
@@ -18,7 +19,7 @@ function ViewCards({ show, handleClose, rareTypes, epicTypes }) {
       <div className="flex justify-center items-center min-h-screen">
         <div className="fixed inset-0 bg-gray-600 bg-opacity-75"></div>
         <div className="bg-white p-5 rounded-lg shadow-xl max-w-6xl mx-auto overflow-hidden z-10">
-          {cards.length > 0 && (
+          {cards.length > 0 ? (
             <div className="-mx-2">
               <div className="flex flex-wrap">
                 {cards.map(({ type, edition, foil, image }, index) => (
@@ -45,6 +46,8 @@ function ViewCards({ show, handleClose, rareTypes, epicTypes }) {
                 ))}
               </div>
             </div>
+          ) : (
+            <p className="text-center">No cards to display</p>
           )}
 
           <div className="text-center mt-5">

@@ -54,8 +54,8 @@ const MenuButton: React.FC<MenuButtonProps> = ({ isOpen, toggleMenu }) => (
   </button>
 );
 
-const NavigationLinks = () => (
-  <div className="flex space-x-4">
+const NavigationLinks = ({ isMobile }: { isMobile: boolean }) => (
+  <div className={`flex ${isMobile ? "flex-col space-y-1" : "space-x-4"}`}>
     <NavLink
       to="/"
       className={({ isActive }) =>
@@ -66,7 +66,7 @@ const NavigationLinks = () => (
       end
       aria-current={({ isActive }) => (isActive ? "page" : undefined)}
     >
-      The Rundown
+      <span className="uppercase">The Rundown</span>
     </NavLink>
     <NavLink
       to="/cards"
@@ -77,7 +77,7 @@ const NavigationLinks = () => (
       }
       aria-current={({ isActive }) => (isActive ? "page" : undefined)}
     >
-      Cards
+      <span className="uppercase">Collection</span>
     </NavLink>
     <NavLink
       to="/blog"
@@ -88,7 +88,7 @@ const NavigationLinks = () => (
       }
       aria-current={({ isActive }) => (isActive ? "page" : undefined)}
     >
-      Blog
+      <span className="uppercase">Blog</span>
     </NavLink>
     <NavLink
       to="/marketplace"
@@ -99,26 +99,14 @@ const NavigationLinks = () => (
       }
       aria-current={({ isActive }) => (isActive ? "page" : undefined)}
     >
-      Marketplace
+      <span className="uppercase">Marketplace</span>
     </NavLink>
   </div>
 );
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-
-  const { fetchSettings, settings } = useAppStore((state) => ({
-    fetchSettings: state.fetchSettings,
-    settings: state.settings,
-  }));
-
-  useEffect(() => {
-    (async () => {
-      await fetchSettings();
-    })();
-  }, [fetchSettings]);
 
   return (
     <nav className="bg-black">
@@ -139,16 +127,16 @@ const Navbar = () => {
           </div>
           <div className="flex-1 flex justify-center items-center sm:items-stretch sm:justify-start lg:justify-center">
             <div className="hidden sm:block sm:ml-6">
-              <NavigationLinks />
+              <NavigationLinks isMobile={false} />
             </div>
           </div>
-          <UserMenu setIsLoginModalOpen={setIsLoginModalOpen} />
+          <UserMenu />
         </div>
       </div>
       {isMobileMenuOpen && (
         <div className="sm:hidden" id="mobile-menu">
           <div className="px-2 pt-2 pb-3 space-y-1">
-            <NavigationLinks />
+            <NavigationLinks isMobile={true} />
           </div>
         </div>
       )}

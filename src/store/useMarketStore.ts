@@ -4,6 +4,7 @@ import useAppStore from "@/store/useAppStore";
 import userStore from "@/store/userStore";
 import useCardStore from "@/store/useCardStore";
 import useStore from "@/store/index";
+import { arrayChunk } from "@/utils/arrayChunk";
 
 type JsonOperation = {
   required_auths: string[];
@@ -41,6 +42,7 @@ interface MarketStore {
     limit?: number,
   ) => Promise<any>;
   fetchSellBook: (query?: Record<string, any>) => Promise<any[]>;
+  fetchSellBookByIds: (ids: number[]) => Promise<any[]>;
 }
 
 const useMarketStore = create<MarketStore>((set, get) => {
@@ -123,6 +125,24 @@ const useMarketStore = create<MarketStore>((set, get) => {
     return results;
   };
 
+  const fetchSellBookByIds = async (ids: number[]): Promise<any[]> => {
+    try {
+      const chunkedIds = arrayChunk({ array: ids, size: 1000 });
+
+      const requests = chunkedIds.map((chunk) =>
+        get().getNFTSellBook({
+          nftId: { $in: chunk.map((i) => i.toString()) },
+        }),
+      );
+
+      const sellBook = await Promise.all(requests);
+      return sellBook.flat(Infinity);
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  };
+
   return {
     purchaseData: null,
     requestSell: async ({ nfts, price, priceSymbol }) => {
@@ -188,8 +208,6 @@ const useMarketStore = create<MarketStore>((set, get) => {
       offset = 0,
       limit = 1000,
     ) => {
-      console.log(useAppStore.getState().settings);
-
       const { nft_symbol } = useAppStore.getState().settings;
       const symbol = query.symbol || nft_symbol;
 
@@ -209,6 +227,7 @@ const useMarketStore = create<MarketStore>((set, get) => {
       return await sidechainApi.call("contracts", request);
     },
     fetchSellBook,
+    fetchSellBookByIds,
   };
 });
 

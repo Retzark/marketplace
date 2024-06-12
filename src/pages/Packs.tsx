@@ -1,9 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import BuyPacksModal from "@/components/modals/BuyPacks";
+import Cookies from "js-cookie";
+import useAppStore from "@/store/useAppStore";
 
 const Packs = () => {
   const [showModal, setShowModal] = useState(false);
-  const [selectedPack, setSelectedPack] = useState(null);
+  const [selectedPack, setSelectedPack] = useState<string | null>(null);
+  const [affiliate, setAffiliate] = useState<any>(null);
+  const { settings, settingsReady, error, fetchSettings } = useAppStore(
+    (state) => ({
+      settings: state.settings,
+      settingsReady: state.settingsReady,
+      error: state.error,
+      fetchSettings: state.fetchSettings,
+    }),
+  );
+  useEffect(() => {
+    const affiliateData = Cookies.get("affiliate");
+    if (affiliateData) {
+      setAffiliate(JSON.parse(affiliateData));
+    }
+  }, []);
 
   const handleOpenModal = () => {
     setShowModal(true);
@@ -13,7 +30,7 @@ const Packs = () => {
     setShowModal(false);
   };
 
-  const handleSelectPack = (pack) => {
+  const handleSelectPack = (pack: string) => {
     setSelectedPack(pack);
   };
 

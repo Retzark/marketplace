@@ -16,6 +16,7 @@ const BuyPacksModal = ({ showModal, onClose }) => {
       fetchSettings: state.fetchSettings,
     }),
   );
+
   const [currencies, setCurrencies] = useState<Currency[]>([]);
   const [currency, setCurrency] = useState<string>("HIVE");
   const [modalBusy, setModalBusy] = useState<boolean>(false);

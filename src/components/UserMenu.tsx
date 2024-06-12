@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
+import { useNavigate } from "react-router-dom";
 import useUserStore from "../store/userStore";
 
 const UserMenu = () => {
   const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
-  const navigate = useNavigate(); // Get the navigate function
+  const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
   const avatarUrl = user
     ? `https://images.hive.blog/u/${user.username}/avatar`
@@ -14,8 +14,9 @@ const UserMenu = () => {
   const toggleMenu = () => setShowMenu(!showMenu);
 
   const handleLogout = () => {
-    localStorage.removeItem("username"); // Clear user from local storage
-    setUser(null); // Update user state to null
+    localStorage.removeItem("username");
+    setUser(null);
+    setShowMenu(false); // Close menu
     navigate("/"); // Redirect to home or another appropriate page after logout
   };
 
@@ -23,10 +24,15 @@ const UserMenu = () => {
     navigate("/login"); // Navigate to the login page
   };
 
+  const handleProfile = () => {
+    setShowMenu(false); // Close menu
+    navigate("/profile"); // Navigate to the profile page
+  };
+
   if (!user) {
     return (
       <button
-        onClick={handleLogin} // Attach handleLogin to onClick event
+        onClick={handleLogin}
         className="px-3 py-2 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark"
       >
         Login
@@ -48,7 +54,17 @@ const UserMenu = () => {
             href="#"
             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             onClick={(event) => {
-              event.preventDefault(); // Prevent default anchor action
+              event.preventDefault();
+              handleProfile();
+            }}
+          >
+            Profile
+          </a>
+          <a
+            href="#"
+            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            onClick={(event) => {
+              event.preventDefault();
               handleLogout();
             }}
           >

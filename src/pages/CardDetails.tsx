@@ -110,38 +110,35 @@ const CardDetails = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isListingsLoading, setIsListingsLoading] = useState(true); // For listings loading
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [cardsData, setCardsData] = useState<any[]>([]);
-  const [saleHistoryEntries, setSaleHistoryEntries] = useState<SellBookEntry[]>(
-    [
-      {
-        buyer: "valkangel",
-        buyerAddress: "0xd5d3...ec55",
-        seller: "slayers214",
-        sellerAddress: "0xd343...e2f1",
-        price: "0.083655",
-        priceSymbol: "L3",
-        date: "Feb 05, 2024",
-        nft_id: "1",
-      },
-      {
-        buyer: "elite8000",
-        buyerAddress: "0xd5d3...ec55",
-        seller: "bruH07",
-        sellerAddress: "0xd343...e2f1",
-        price: "0.053655",
-        priceSymbol: "L3",
-        date: "Jan 01, 2024",
-        nft_id: "2",
-      },
-    ],
-  ); // Dummy sale history data
+  const [saleHistoryEntries] = useState<SellBookEntry[]>([
+    {
+      buyer: "valkangel",
+      buyerAddress: "0xd5d3...ec55",
+      seller: "slayers214",
+      sellerAddress: "0xd343...e2f1",
+      price: "0.083655",
+      priceSymbol: "L3",
+      date: "Feb 05, 2024",
+      nft_id: "1",
+    },
+    {
+      buyer: "elite8000",
+      buyerAddress: "0xd5d3...ec55",
+      seller: "bruH07",
+      sellerAddress: "0xd343...e2f1",
+      price: "0.053655",
+      priceSymbol: "L3",
+      date: "Jan 01, 2024",
+      nft_id: "2",
+    },
+  ]); // Dummy sale history data
 
   useEffect(() => {
     const fetchCardDetails = async () => {
       // Fetch the JSON data
       try {
         const data = await fetchCardsData();
-        setCardsData(data);
+        // setCardsData(data);
 
         // Find the card data from JSON
         const cardFromJson = data.find((c) => c.ID === parseInt(id));

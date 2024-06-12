@@ -6,6 +6,7 @@ import CardDetails from "@/pages/CardDetails";
 import Home from "@/pages/Home";
 import Packs from "@/pages/Packs";
 import Login from "@/pages/Login";
+import Profile from "@/pages/Profile";
 
 const AppRoutes = () => (
   <Routes>
@@ -16,6 +17,7 @@ const AppRoutes = () => (
     <Route path="/open" element={<Open />} />
     <Route path="/login" element={<Login />} />
     <Route path="/card/:id" element={<CardDetails />} />
+    <Route path="/profile" element={<Profile />} />
   </Routes>
 );
 

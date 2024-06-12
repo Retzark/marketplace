@@ -16,6 +16,8 @@ const Open = () => {
   const [isOpenPackModalOpen, setIsOpenPackModalOpen] = useState(false);
   const [isTransferPackModalOpen, setIsTransferPackModalOpen] = useState(false);
   const [showViewCardsModal, setShowViewCardsModal] = useState(false); // State to control ViewCards modal visibility
+  const [balance, setBalance] = useState(0);
+
   const { cards, setCards, removeCardByIndex } = useTransactionStore(
     (state) => ({
       cards: state.cards,
@@ -60,6 +62,8 @@ const Open = () => {
       };
 
       const response = await sidechainApi.call(endpoint, request);
+      console.log(response[0].symbol, response[0].balance);
+      setBalance(Math.floor(response[0].balance));
       console.log("API Response:", response);
     } catch (e) {
       console.error("Failed to fetch or process data:", e);
@@ -107,6 +111,12 @@ const Open = () => {
             />
           </div>
         </LazyLoad>
+        <div
+          className="text-center text-white font-elephantmen"
+          style={{ fontSize: "28px" }}
+        >
+          {balance}
+        </div>
       </div>
 
       <div className="flex justify-center items-center my-4">

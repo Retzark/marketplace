@@ -24,7 +24,7 @@ const CollectionCardsList = () => {
       const cardCountMap: { [key: string]: { card: Card; count: number } } = {};
 
       data.forEach((card) => {
-        const key = `${card.properties.edition}_${card.properties.type}_${card.properties.foil}`;
+        const key = `${card.edition}_${card.type}_${card.foil}`;
         if (cardCountMap[key]) {
           cardCountMap[key].count += 1;
         } else {
@@ -35,9 +35,7 @@ const CollectionCardsList = () => {
       const filtered = Object.values(cardCountMap);
       if (selectedFilter) {
         setFilteredData(
-          filtered.filter(
-            (item) => item.card.properties.foil === selectedFilter,
-          ),
+          filtered.filter((item) => item.card.foil === selectedFilter),
         );
       } else {
         setFilteredData(filtered);
@@ -125,7 +123,7 @@ const CollectionCardsList = () => {
                   {count}
                 </div>
                 <img
-                  src={`https://cdn.tribaldex.com/packmanager/DATA/${card.properties.edition}_${card.properties.type}_${card.properties.foil}.png`}
+                  src={`https://cdn.tribaldex.com/packmanager/DATA/${card.edition}_${card.type}_${card.foil}.png`}
                   alt={card.name}
                   className="w-full h-full object-cover"
                 />

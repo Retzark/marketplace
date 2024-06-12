@@ -120,7 +120,7 @@ const apiService = {
         ],
       ];
       const broadcastOps = useStore.getState().requestBroadcastOps;
-      await broadcastOps(username, operations, "Active"); // console.log("Packs opened successfully:", result.data);
+      await broadcastOps(username, operations, "Active");
     } catch (error) {
       console.log(error);
     }

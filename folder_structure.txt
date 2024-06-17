@@ -1,0 +1,120 @@
+.
+├── .env
+├── .env.example
+├── .eslintrc.cjs
+├── .gitignore
+├── README.md
+├── ecosystem.config.cjs
+├── index.html
+├── package-lock.json
+├── package.json
+├── postcss.config.js
+├── public
+│   ├── cards.json
+│   ├── images
+│   │   ├── BANNER-ALPHA-PACK.webp
+│   │   ├── BANNER-HOMEPAGE.webp
+│   │   ├── BANNER-OPEN.webp
+│   │   ├── ability_icon.svg
+│   │   ├── alpha-pack.webp
+│   │   ├── asc_lvl_gray.svg
+│   │   ├── asc_lvl_red.png
+│   │   ├── asc_lvl_red.svg
+│   │   ├── atk_icon.svg
+│   │   ├── banner-homepage-logo.webp
+│   │   ├── basic_attack_icon.svg
+│   │   ├── buy-now.svg
+│   │   ├── card-back-2.png
+│   │   ├── card-pack-home.webp
+│   │   ├── card_open.webp
+│   │   ├── common-badge.svg
+│   │   ├── currency_logo.svg
+│   │   ├── egy_icon.svg
+│   │   ├── epic-badge.svg
+│   │   ├── game-board-home.webp
+│   │   ├── home-prophecy-background.webp
+│   │   ├── hp_icon.svg
+│   │   ├── img.png
+│   │   ├── legendary-badge.svg
+│   │   ├── marketplace-hero.webp
+│   │   ├── open-pack-image.webp
+│   │   ├── open_cards.webp
+│   │   ├── pack_drop_rate.webp
+│   │   ├── rare-badge.svg
+│   │   ├── retzark_logo.png
+│   │   ├── spd_icon.svg
+│   │   ├── subscribe-background-image.webp
+│   ├── retzark.svg
+│   ├── vite.svg
+├── src
+│   ├── App.css
+│   ├── App.tsx
+│   ├── api
+│   │   ├── apiService.ts
+│   │   ├── sidechainApi.ts
+│   ├── assets
+│   │   ├── react.svg
+│   ├── components
+│   │   ├── CollectionCardsList.tsx
+│   │   ├── Hero.tsx
+│   │   ├── ListingsTable.tsx
+│   │   ├── Loading.tsx
+│   │   ├── NFTCardsList.tsx
+│   │   ├── Navbar.tsx
+│   │   ├── StatsAndMoveset.tsx
+│   │   ├── UserMenu.tsx
+│   │   ├── home
+│   │   │   ├── AlphaPackSection.tsx
+│   │   │   ├── FooterSection.tsx
+│   │   │   ├── HeroSection.tsx
+│   │   │   ├── MainContentSection.tsx
+│   │   │   ├── MarketplaceSection.tsx
+│   │   │   ├── PromotionalSection.tsx
+│   │   │   ├── PropheciesSection.tsx
+│   │   │   ├── SubscribeSection.tsx
+│   │   ├── modals
+│   │   │   ├── BuyCard.tsx
+│   │   │   ├── BuyPacks.tsx
+│   │   │   ├── Login.tsx
+│   │   │   ├── OpenPack.tsx
+│   │   │   ├── TransferPack.tsx
+│   │   │   ├── ViewCards.tsx
+│   ├── hooks
+│   │   ├── useFetchCollectionData.ts
+│   │   ├── useFetchNFTMarketData.ts
+│   │   ├── useInitializeSettings.ts
+│   ├── index.css
+│   ├── index.tsx
+│   ├── pages
+│   │   ├── CardDetails.tsx
+│   │   ├── Cards.tsx
+│   │   ├── Home.tsx
+│   │   ├── Login.tsx
+│   │   ├── Marketplace.tsx
+│   │   ├── Open.tsx
+│   │   ├── Packs.tsx
+│   │   ├── Profile.tsx
+│   ├── routes.tsx
+│   ├── store
+│   │   ├── index.ts
+│   │   ├── useAppStore.ts
+│   │   ├── useCardStore.ts
+│   │   ├── useMarketStore.ts
+│   │   ├── usePacksStore.ts
+│   │   ├── useTransactionStore.ts
+│   │   ├── userStore.ts
+│   ├── types
+│   │   ├── AppState.ts
+│   │   ├── Card.ts
+│   │   ├── Packs.ts
+│   │   ├── SellBookEntry.ts
+│   │   ├── Settings.ts
+│   │   ├── index.ts
+│   ├── utils
+│   │   ├── arrayChunk.ts
+│   │   ├── fetchCardData.ts
+│   │   ├── triplesec.js
+│   │   ├── web-crypto.js
+├── tailwind.config.js
+├── tsconfig.json
+├── vite.config.js

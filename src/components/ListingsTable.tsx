@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { SellBookEntry } from "@/types";
 import Loading from "@/components/Loading";
 
@@ -13,6 +13,46 @@ const ListingsTable: React.FC<ListingsTableProps> = ({
   isLoading,
   onSelect,
 }) => {
+  const [selectAll, setSelectAll] = useState(false);
+  const [selectedEntries, setSelectedEntries] = useState<Set<number>>(
+    new Set(),
+  );
+
+  useEffect(() => {
+    if (selectAll) {
+      const newSelectedEntries = new Set(entries.map((entry) => entry.nft_id));
+      setSelectedEntries(newSelectedEntries);
+      entries.forEach((entry) => onSelect(entry, true));
+    } else {
+      setSelectedEntries(new Set());
+      entries.forEach((entry) => onSelect(entry, false));
+    }
+  }, [selectAll, entries]);
+
+  const handleSelect = (entry: SellBookEntry, isSelected: boolean) => {
+    const newSelectedEntries = new Set(selectedEntries);
+    if (isSelected) {
+      newSelectedEntries.add(entry.nft_id);
+    } else {
+      newSelectedEntries.delete(entry.nft_id);
+    }
+    setSelectedEntries(newSelectedEntries);
+    onSelect(entry, isSelected);
+  };
+
+  const handleEntryCheckboxChange = (entry: SellBookEntry) => {
+    const isSelected = selectedEntries.has(entry.nft_id);
+    handleSelect(entry, !isSelected);
+  };
+
+  useEffect(() => {
+    if (selectedEntries.size === entries.length) {
+      setSelectAll(true);
+    } else if (selectedEntries.size === 0) {
+      setSelectAll(false);
+    }
+  }, [selectedEntries, entries.length]);
+
   return (
     <div className="w-full mb-8">
       <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg p-4">
@@ -42,7 +82,14 @@ const ListingsTable: React.FC<ListingsTableProps> = ({
                         fontFamily: '"CCElephantmenTall Regular"',
                         fontSize: "24px",
                       }}
-                    ></th>
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selectAll}
+                        onChange={(e) => setSelectAll(e.target.checked)}
+                        className="form-checkbox h-5 w-5 text-green-500 border-gray-300 rounded focus:ring-0 focus:ring-offset-0"
+                      />
+                    </th>
                     <th
                       className="px-4 py-3 text-white text-left"
                       style={{
@@ -93,7 +140,8 @@ const ListingsTable: React.FC<ListingsTableProps> = ({
                       <td className="border-t border-gray-700 px-4 py-3 text-center">
                         <input
                           type="checkbox"
-                          onChange={(e) => onSelect(entry, e.target.checked)}
+                          checked={selectedEntries.has(entry.nft_id)}
+                          onChange={() => handleEntryCheckboxChange(entry)}
                           className="form-checkbox h-5 w-5 text-green-500 border-gray-300 rounded focus:ring-0 focus:ring-offset-0"
                         />
                       </td>
@@ -177,7 +225,8 @@ const ListingsTable: React.FC<ListingsTableProps> = ({
                     <span className="font-bold">SELECT:</span>
                     <input
                       type="checkbox"
-                      onChange={(e) => onSelect(entry, e.target.checked)}
+                      checked={selectedEntries.has(entry.nft_id)}
+                      onChange={() => handleEntryCheckboxChange(entry)}
                       className="form-checkbox h-5 w-5 text-green-500 border-gray-300 rounded focus:ring-0 focus:ring-offset-0"
                     />
                   </div>

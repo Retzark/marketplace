@@ -35,7 +35,7 @@ const usePacksStore = create((set, get) => ({
       const broadcastOps = useStore.getState().requestBroadcastOps;
       await broadcastOps(user, operations, "Active");
     } catch (error) {
-      console.error("Failed to open packs:", error);
+      console.error("Failed to rtyopen packs:", error);
     }
   },
   startPurchase: async ({ paymentMethod, currency = "USD", items }) => {

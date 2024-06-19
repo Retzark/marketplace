@@ -36,7 +36,7 @@ const StatsAndMoveset: React.FC<StatsAndMovesetProps> = ({ card }) => {
               <span className="mr-1 flex-shrink-0">
                 <img src="/images/hp_icon.svg" alt="HP Icon" />
               </span>
-              <span className="font-elephantmen text-2xl">HP: {card.hp}</span>
+              <span className="font-elephantmen text-xl">HP: {card.hp}</span>
             </div>
             <div
               className={`flex items-center ${badgeStyles.atk} rounded-lg px-3 py-1`}
@@ -47,7 +47,7 @@ const StatsAndMoveset: React.FC<StatsAndMovesetProps> = ({ card }) => {
               <span className="mr-1 flex-shrink-0">
                 <img src="/images/atk_icon.svg" alt="ATK Icon" />
               </span>
-              <span className="font-elephantmen text-2xl">ATK: {card.atk}</span>
+              <span className="font-elephantmen text-xl">ATK: {card.atk}</span>
             </div>
             <div
               className={`flex items-center ${badgeStyles.spd} rounded-lg px-3 py-1`}
@@ -58,7 +58,7 @@ const StatsAndMoveset: React.FC<StatsAndMovesetProps> = ({ card }) => {
               <span className="mr-1 flex-shrink-0">
                 <img src="/images/spd_icon.svg" alt="SPD Icon" />
               </span>
-              <span className="font-elephantmen text-2xl">SPD: {card.spd}</span>
+              <span className="font-elephantmen text-xl">SPD: {card.spd}</span>
             </div>
             <div
               className={`flex items-center ${badgeStyles.egy} rounded-lg px-3 py-1`}
@@ -69,7 +69,7 @@ const StatsAndMoveset: React.FC<StatsAndMovesetProps> = ({ card }) => {
               <span className="mr-1 flex-shrink-0">
                 <img src="/images/egy_icon.svg" alt="EGY Icon" />
               </span>
-              <span className="font-elephantmen text-2xl">EGY: {card.egy}</span>
+              <span className="font-elephantmen text-xl">EGY: {card.egy}</span>
             </div>
           </div>
           <hr />

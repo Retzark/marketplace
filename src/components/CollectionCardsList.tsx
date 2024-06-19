@@ -69,7 +69,6 @@ const CollectionCardsList = () => {
       const nfts = [selectedCard._id.toString()];
       const price = parseFloat(sellPrice);
       const priceSymbol = "SWAP.HIVE";
-
       try {
         await requestSell({ nfts, price, priceSymbol });
         handleCloseModal();

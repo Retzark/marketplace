@@ -1,7 +1,7 @@
 import { useState } from "react";
 import usePacksStore from "@/store/usePacksStore";
 
-const OpenPack = ({ isOpen, onClose }) => {
+const TransferPack = ({ isOpen, onClose }) => {
   const [number, setNumber] = useState(1); // Number of packs
   const [username, setUsername] = useState(""); // Username
   const [isValid, setIsValid] = useState(true); // Validity of the input
@@ -101,4 +101,4 @@ const OpenPack = ({ isOpen, onClose }) => {
   );
 };
 
-export default OpenPack;
+export default TransferPack;

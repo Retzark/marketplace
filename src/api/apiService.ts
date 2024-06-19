@@ -21,7 +21,6 @@ const apiService = {
   },
   async startPurchase() {
     const username = userStore.getState().user?.username;
-    console.log(username);
     const payload = {
       username: username,
       items: [{ symbol: "DATA", quantity: 1 }],
@@ -42,8 +41,8 @@ const apiService = {
       const { sidechain_id } = useAppStore.getState().settings;
       const amount = parseFloat(paymentInfo.payment_info.amount).toFixed(3);
 
-      // console.log(paymentInfo)
       if (paymentInfo.payment_info.type === "hive") {
+        console.log("Hive payment");
         operations = [
           [
             "transfer",

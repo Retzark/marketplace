@@ -1,17 +1,33 @@
 import React from "react";
 
-function ViewCards({
+interface Card {
+  type: string;
+  edition: string;
+  foil: boolean;
+  image: string;
+}
+
+interface ViewCardsProps {
+  show: boolean;
+  handleClose: () => void;
+  cards: Card[];
+  removeCardByIndex: (index: number) => void;
+  rareTypes?: Set<string>;
+  epicTypes?: Set<string>;
+}
+
+const ViewCards: React.FC<ViewCardsProps> = ({
   show,
   handleClose,
   cards = [],
   removeCardByIndex,
   rareTypes,
   epicTypes,
-}) {
+}) => {
   if (!show) return null;
 
-  const handleCardClick = (index) => {
-    removeCardByIndex(index); // Call Zustand store method to remove a card
+  const handleCardClick = (index: number) => {
+    removeCardByIndex(index);
   };
 
   return (
@@ -64,6 +80,6 @@ function ViewCards({
       </div>
     </div>
   );
-}
+};
 
 export default ViewCards;

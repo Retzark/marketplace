@@ -6,6 +6,7 @@ import useTransactionStore from "@/store/useTransactionStore";
 import OpenPack from "@/components/modals/OpenPack";
 import ViewCards from "@/components/modals/ViewCards";
 import LazyLoad from "react-lazyload";
+import TransferPack from "@/components/modals/TransferPack";
 
 const Open = () => {
   const user = useUserStore((state) => state.user);
@@ -62,7 +63,6 @@ const Open = () => {
       };
 
       const response = await sidechainApi.call(endpoint, request);
-      console.log(response[0].symbol, response[0].balance);
       setBalance(Math.floor(response[0].balance));
       console.log("API Response:", response);
     } catch (e) {
@@ -86,7 +86,7 @@ const Open = () => {
 
   const handleCardsOpened = (newCards) => {
     setCards(newCards);
-    setShowViewCardsModal(true); // Show the ViewCards modal after cards are opened
+    setShowViewCardsModal(true);
   };
 
   const handleViewCardsModalClose = () => {
@@ -111,12 +111,6 @@ const Open = () => {
             />
           </div>
         </LazyLoad>
-        <div
-          className="text-center text-white font-elephantmen"
-          style={{ fontSize: "28px" }}
-        >
-          {balance}
-        </div>
       </div>
 
       <div className="flex justify-center items-center my-4">
@@ -124,7 +118,7 @@ const Open = () => {
           onClick={handleOpenPackClick}
           className="px-3 py-2 mr-3 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark"
         >
-          OPEN PACK
+          OPEN PACK (x{balance})
         </button>
         <button
           onClick={handleTransferPackClick}
@@ -145,6 +139,8 @@ const Open = () => {
         cards={cards}
         removeCardByIndex={removeCardByIndex}
       />
+
+      <TransferPack isOpen={isTransferPackModalOpen}></TransferPack>
 
       <footer className="w-full bg-yellow-500 h-1 mt-auto"></footer>
 

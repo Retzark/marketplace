@@ -1,6 +1,6 @@
 const FooterSection = () => {
   return (
-    <div className="bg-black w-full overflow-hidden">
+    <div className="bg-[#09090] w-full overflow-hidden">
       <div className="text-center text-white mt-36 px-4">
         <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-elephantmen">
           FIND RETZARK ON:

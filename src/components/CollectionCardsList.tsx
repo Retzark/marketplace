@@ -35,7 +35,7 @@ const CollectionCardsList = () => {
       const filtered = Object.values(cardCountMap);
       if (selectedFilter) {
         setFilteredData(
-          filtered.filter((item) => item.card.foil === selectedFilter),
+          filtered.filter((item) => item.card.foil === selectedFilter)
         );
       } else {
         setFilteredData(filtered);
@@ -135,7 +135,7 @@ const CollectionCardsList = () => {
           </div>
         </div>
       </div>
-      <div className="flex justify-center mt-10 mb-10 bg-black">
+      <div className="flex justify-center mt-10 mb-10 bg-[#090909]">
         <nav className="inline-flex rounded-md shadow">
           <button
             onClick={() => handlePageChange(currentPage - 1)}

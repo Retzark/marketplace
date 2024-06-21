@@ -27,19 +27,30 @@ const ViewCards: React.FC<ViewCardsProps> = ({
   const [flipped, setFlipped] = useState<boolean[]>(
     Array(cards.length).fill(false),
   );
+  const [hasBeenFlipped, setHasBeenFlipped] = useState<boolean[]>(
+    Array(cards.length).fill(false),
+  );
 
   useEffect(() => {
     setFlipped(Array(cards.length).fill(false)); // Reset flipped state when cards change
+    setHasBeenFlipped(Array(cards.length).fill(false)); // Reset hasBeenFlipped state when cards change
   }, [cards]);
 
   if (!show) return null;
 
   const handleCardClick = (index: number) => {
-    setFlipped((prevFlipped) => {
-      const newFlipped = [...prevFlipped];
-      newFlipped[index] = !newFlipped[index];
-      return newFlipped;
-    });
+    if (!hasBeenFlipped[index]) {
+      setFlipped((prevFlipped) => {
+        const newFlipped = [...prevFlipped];
+        newFlipped[index] = !newFlipped[index];
+        return newFlipped;
+      });
+      setHasBeenFlipped((prevHasBeenFlipped) => {
+        const newHasBeenFlipped = [...prevHasBeenFlipped];
+        newHasBeenFlipped[index] = true;
+        return newHasBeenFlipped;
+      });
+    }
   };
 
   return (
@@ -78,7 +89,7 @@ const ViewCards: React.FC<ViewCardsProps> = ({
                         <img
                           src="/images/card-back.png"
                           alt="Card Back"
-                          className="h-full w-full object-cover rounded-md"
+                          className="h-full w-full rounded-md"
                         />
                       </div>
                       <div
@@ -96,7 +107,7 @@ const ViewCards: React.FC<ViewCardsProps> = ({
                         <img
                           src={image}
                           alt={`Type ${type}, Edition ${edition}, Foil ${foil}`}
-                          className="h-full w-full  rounded-md"
+                          className="h-full w-full rounded-md"
                         />
                       </div>
                     </div>

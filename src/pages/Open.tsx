@@ -30,6 +30,7 @@ const Open = () => {
   );
 
   const handleCloseModal = () => {
+    fetchBalance();
     setIsOpenPackModalOpen(false);
     setIsTransferPackModalOpen(false);
   };
@@ -104,7 +105,10 @@ const Open = () => {
         removeCardByIndex={removeCardByIndex}
       />
 
-      <TransferPack isOpen={isTransferPackModalOpen}></TransferPack>
+      <TransferPack
+        isOpen={isTransferPackModalOpen}
+        onClose={handleCloseModal}
+      ></TransferPack>
 
       <footer className="w-full bg-yellow-500 h-1 mt-auto"></footer>
 

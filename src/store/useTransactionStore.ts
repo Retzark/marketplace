@@ -34,6 +34,7 @@ interface TransactionStoreState {
   cards: Card[];
   rareTypes: Set<string>;
   epicTypes: Set<string>;
+  loading: boolean;
   setCards: (newCards: Card[]) => void;
   removeCardByIndex: (index: number) => void;
   validateTransaction: (trxId: string) => Promise<void>;
@@ -44,6 +45,7 @@ const useTransactionStore = create<TransactionStoreState>((set, get) => ({
   cards: [],
   rareTypes: new Set<string>(), // Initialize as empty set if not already done
   epicTypes: new Set<string>(), // Initialize as empty set if not already done
+  loading: false, // Initialize loading state
 
   // Method to set cards directly
   setCards: (newCards) => set({ cards: newCards }),
@@ -55,9 +57,10 @@ const useTransactionStore = create<TransactionStoreState>((set, get) => ({
     })),
 
   validateTransaction: async (trxId) => {
-    const error = false;
+    set({ loading: true }); // Set loading to true
     let trx: any = null;
     let count = 0;
+    let error = false;
 
     do {
       await sleep(3000);
@@ -75,6 +78,7 @@ const useTransactionStore = create<TransactionStoreState>((set, get) => ({
         console.log(trx);
       } catch (e) {
         console.error(e);
+        error = true;
       }
       count += 1;
     } while (!trx && count < 100);
@@ -109,6 +113,7 @@ const useTransactionStore = create<TransactionStoreState>((set, get) => ({
         payload: trx ? parseJSON(trx.payload) : null,
         error,
       },
+      loading: false, // Set loading to false
     });
   },
 }));

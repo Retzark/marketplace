@@ -3,7 +3,6 @@ import useStore from "@/store/index";
 import userStore from "@/store/userStore";
 import useAppStore from "@/store/useAppStore";
 import apiService from "@/api/apiService";
-import axios from "axios";
 
 const usePacksStore = create((set, get) => ({
   purchaseData: null,
@@ -30,13 +29,14 @@ const usePacksStore = create((set, get) => ({
         },
       ],
     ];
-    //
+
     try {
-      // Use the other store's function
       const broadcastOps = useStore.getState().requestBroadcastOps;
-      await broadcastOps(user, operations, "Active");
+      const txid = await broadcastOps(user, operations, "Active");
+      return txid; // Return the transaction ID
     } catch (error) {
-      console.error("Failed to rtyopen packs:", error);
+      console.error("Failed to open packs:", error);
+      throw error;
     }
   },
   startPurchase: async ({
@@ -58,7 +58,6 @@ const usePacksStore = create((set, get) => ({
         currency,
       };
 
-      // Create an Axios instance specifically for API requests
       const response = await axios.post(
         `https://market.retzark.com/api/purchases/start`,
         payload,
@@ -66,12 +65,10 @@ const usePacksStore = create((set, get) => ({
       let operations = [];
 
       const paymentInfo = response.data;
-
       const { sidechain_id } = useAppStore.getState().settings;
       const amount = parseFloat(paymentInfo.payment_info.amount).toFixed(3);
 
       if (paymentInfo.payment_info.type === "hive") {
-        console.log("Hive payment");
         operations = [
           [
             "transfer",
@@ -116,7 +113,7 @@ const usePacksStore = create((set, get) => ({
     try {
       await apiService.startTransfer(recipient, quantity);
     } catch (error) {
-      console.error("Failed to start purchase:", error);
+      console.error("Failed to transfer pack:", error);
     }
   },
 }));

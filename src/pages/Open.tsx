@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import sidechainApi from "@/api/sidechainApi";
 import useAppStore from "@/store/useAppStore";
 import useUserStore from "@/store/userStore";
 import useTransactionStore from "@/store/useTransactionStore";
@@ -108,13 +107,37 @@ const Open = () => {
       <TransferPack
         isOpen={isTransferPackModalOpen}
         onClose={handleCloseModal}
-      ></TransferPack>
+      />
 
       <footer className="w-full bg-yellow-500 h-1 mt-auto"></footer>
 
       <style>{`
         .parallax {
           background-attachment: fixed;
+        }
+        .flip-card {
+          perspective: 1000px;
+        }
+        .flip-card-inner {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          text-align: center;
+          transition: transform 0.6s;
+          transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+          transform: rotateY(180deg);
+        }
+        .flip-card-front,
+        .flip-card-back {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          backface-visibility: hidden;
+        }
+        .flip-card-back {
+          transform: rotateY(180deg);
         }
       `}</style>
     </div>

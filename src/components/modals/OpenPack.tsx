@@ -1,5 +1,6 @@
 import { useState, ChangeEvent, FormEvent } from "react";
 import usePacksStore from "@/store/usePacksStore";
+import useTransactionStore from "@/store/useTransactionStore";
 
 interface OpenPackProps {
   isOpen: boolean;
@@ -14,7 +15,11 @@ const OpenPack: React.FC<OpenPackProps> = ({
 }) => {
   const [number, setNumber] = useState<number>(1);
   const [isValid, setIsValid] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const requestOpenPacks = usePacksStore((state) => state.requestOpenPacks);
+  const fetchAndValidateTransaction = useTransactionStore(
+    (state) => state.fetchAndValidateTransaction,
+  );
 
   if (!isOpen) return null;
 
@@ -34,11 +39,21 @@ const OpenPack: React.FC<OpenPackProps> = ({
       alert("Please enter a valid number of packs.");
       return;
     }
-    const newCards = await requestOpenPacks({
-      packSymbol: "DATA",
-      packs: number,
-    });
-    onCardsOpened(newCards); // Pass the new cards to the parent component
+    setLoading(true);
+    try {
+      const transactionId = await requestOpenPacks({
+        packSymbol: "DATA",
+        packs: number,
+      });
+
+      const newCards = await fetchAndValidateTransaction(transactionId);
+      onCardsOpened(newCards); // Pass the new cards to the parent component
+    } catch (error) {
+      console.error("Failed to open packs:", error);
+      alert("Failed to open packs. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -62,21 +77,23 @@ const OpenPack: React.FC<OpenPackProps> = ({
               value={number}
               onChange={handleChange}
               min="1"
+              disabled={loading}
             />
             <div className="mt-4 flex justify-end space-x-3">
               <button
                 type="button"
                 onClick={onClose}
                 className="py-2 px-4 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
+                disabled={loading}
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 className="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700"
-                disabled={!isValid}
+                disabled={!isValid || loading}
               >
-                Submit
+                {loading ? "Opening..." : "Submit"}
               </button>
             </div>
           </form>

@@ -38,26 +38,25 @@ interface TransactionStoreState {
   setCards: (newCards: Card[]) => void;
   removeCardByIndex: (index: number) => void;
   validateTransaction: (trxId: string) => Promise<void>;
+  fetchAndValidateTransaction: (trxId: string) => Promise<Card[]>;
   transactionValidated?: TransactionValidated;
 }
 
 const useTransactionStore = create<TransactionStoreState>((set, get) => ({
   cards: [],
-  rareTypes: new Set<string>(), // Initialize as empty set if not already done
-  epicTypes: new Set<string>(), // Initialize as empty set if not already done
-  loading: false, // Initialize loading state
+  rareTypes: new Set<string>(),
+  epicTypes: new Set<string>(),
+  loading: false,
 
-  // Method to set cards directly
   setCards: (newCards) => set({ cards: newCards }),
 
-  // Method to remove a card by index
   removeCardByIndex: (index) =>
     set((state) => ({
       cards: state.cards.filter((_, cardIndex) => cardIndex !== index),
     })),
 
   validateTransaction: async (trxId) => {
-    set({ loading: true }); // Set loading to true
+    set({ loading: true });
     let trx: any = null;
     let count = 0;
     let error = false;
@@ -72,10 +71,7 @@ const useTransactionStore = create<TransactionStoreState>((set, get) => ({
             txid: trxId,
           },
         };
-        // Simulate fetching a transaction
-        console.log(request);
         trx = await sidechainApi.call(endpoint, request);
-        console.log(trx);
       } catch (e) {
         console.error(e);
         error = true;
@@ -113,8 +109,13 @@ const useTransactionStore = create<TransactionStoreState>((set, get) => ({
         payload: trx ? parseJSON(trx.payload) : null,
         error,
       },
-      loading: false, // Set loading to false
+      loading: false,
     });
+  },
+
+  fetchAndValidateTransaction: async (trxId) => {
+    await get().validateTransaction(trxId);
+    return get().cards;
   },
 }));
 

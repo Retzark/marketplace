@@ -37,7 +37,7 @@ interface StoreState {
     username: string,
     operations: any[],
     keyType: string,
-  ) => Promise<void>;
+  ) => Promise<string>; // Ensure it returns a string (txid)
 }
 
 const useStore = create<StoreState>((set, get) => ({
@@ -49,11 +49,12 @@ const useStore = create<StoreState>((set, get) => ({
         operations,
         keyType,
       );
-      await useTransactionStore
-        .getState()
-        .validateTransaction(keychainResponse.result.id);
+      const txid = keychainResponse.result.id;
+      await useTransactionStore.getState().validateTransaction(txid);
+      return txid; // Return the transaction ID
     } catch (error) {
       console.error("API request failed:", error);
+      throw error; // Ensure error is thrown so it can be handled upstream
     }
   },
 }));

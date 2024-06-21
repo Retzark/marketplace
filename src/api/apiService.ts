@@ -46,8 +46,8 @@ const apiService = {
               contractName: "tokens",
               contractAction: "transfer",
               contractPayload: {
-                nft_symbol,
-                recipient,
+                symbol: nft_symbol,
+                to: recipient,
                 quantity: quantity.toString(),
               },
             }),

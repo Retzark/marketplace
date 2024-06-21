@@ -43,7 +43,6 @@ const TransferPack: React.FC<TransferPackProps> = ({ isOpen, onClose }) => {
 
   const handleModalClose = () => {
     setShowModal(false);
-    onClose(); // Optional: Close the parent component as well
   };
 
   return (
@@ -85,7 +84,7 @@ const TransferPack: React.FC<TransferPackProps> = ({ isOpen, onClose }) => {
               <div className="mt-4 flex justify-end space-x-3">
                 <button
                   type="button"
-                  onClick={onClose}
+                  onClick={handleModalClose}
                   className="py-2 px-4 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
                 >
                   Cancel

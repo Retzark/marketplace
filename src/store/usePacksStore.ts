@@ -3,6 +3,7 @@ import useStore from "@/store/index";
 import userStore from "@/store/userStore";
 import useAppStore from "@/store/useAppStore";
 import apiService from "@/api/apiService";
+import axios from "axios";
 
 const usePacksStore = create((set, get) => ({
   purchaseData: null,

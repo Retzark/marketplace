@@ -7,6 +7,8 @@ const Packs = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedPack, setSelectedPack] = useState<string | null>(null);
   const [affiliate, setAffiliate] = useState<any>(null);
+  const [quantity, setQuantity] = useState<number>(1);
+
   const { settings, settingsReady, error, fetchSettings } = useAppStore(
     (state) => ({
       settings: state.settings,
@@ -15,6 +17,7 @@ const Packs = () => {
       fetchSettings: state.fetchSettings,
     }),
   );
+
   useEffect(() => {
     const affiliateData = Cookies.get("affiliate");
     if (affiliateData) {
@@ -32,6 +35,7 @@ const Packs = () => {
 
   const handleSelectPack = (pack: string) => {
     setSelectedPack(pack);
+    setQuantity(parseInt(pack, 10));
   };
 
   return (
@@ -71,7 +75,8 @@ const Packs = () => {
                 </h5>
                 <div className="flex mb-4 mt-4">
                   <div className="bg-gray-700 text-white px-4 py-2 md:py-3 text-sm md:text-[24px] rounded-md flex font-elephantmen">
-                    1,203,596 PACKS REMAINING
+                    {settings.packs[0].remaining.toLocaleString()} PACKS
+                    REMAINING
                   </div>
                 </div>
                 <hr className="border-gray-400 border border-gray-400 rounded-md mt-8 mb-8" />
@@ -200,7 +205,12 @@ const Packs = () => {
       </div>
 
       {showModal && (
-        <BuyPacksModal showModal={showModal} onClose={handleCloseModal} />
+        <BuyPacksModal
+          showModal={showModal}
+          onClose={handleCloseModal}
+          quantity={quantity}
+          setQuantity={setQuantity}
+        />
       )}
     </div>
   );

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useEffect } from "react";
 import sidechainApi from "@/api/sidechainApi";
 import useAppStore from "@/store/useAppStore";
 import useUserStore from "@/store/userStore";
@@ -7,6 +7,7 @@ import OpenPack from "@/components/modals/OpenPack";
 import ViewCards from "@/components/modals/ViewCards";
 import LazyLoad from "react-lazyload";
 import TransferPack from "@/components/modals/TransferPack";
+import useBalanceStore from "@/store/useBalanceStore";
 
 const Open = () => {
   const user = useUserStore((state) => state.user);
@@ -17,7 +18,8 @@ const Open = () => {
   const [isOpenPackModalOpen, setIsOpenPackModalOpen] = useState(false);
   const [isTransferPackModalOpen, setIsTransferPackModalOpen] = useState(false);
   const [showViewCardsModal, setShowViewCardsModal] = useState(false); // State to control ViewCards modal visibility
-  const [balance, setBalance] = useState(0);
+
+  const { balance, fetchBalance } = useBalanceStore();
 
   const { cards, setCards, removeCardByIndex } = useTransactionStore(
     (state) => ({
@@ -32,49 +34,11 @@ const Open = () => {
     setIsTransferPackModalOpen(false);
   };
 
-  const fetchData = useCallback(async () => {
-    if (!settingsReady || !settings || !settings.sidechain_rpc) {
-      return;
-    }
-
-    try {
-      const endpoint = "contracts";
-      const symbols = settings.packs.map((p) => p.symbol);
-      const query = {
-        account: user?.username,
-        symbol: { $in: symbols },
-      };
-      let method = "findOne";
-
-      if (Array.isArray(symbols)) {
-        method = "find";
-        query.symbol = { $in: symbols };
-      } else {
-        query.symbol = symbols;
-      }
-
-      const request = {
-        method,
-        params: {
-          contract: "tokens",
-          table: "balances",
-          query,
-        },
-      };
-
-      const response = await sidechainApi.call(endpoint, request);
-      setBalance(Math.floor(response[0].balance));
-      console.log("API Response:", response);
-    } catch (e) {
-      console.error("Failed to fetch or process data:", e);
-    }
-  }, [settings, settingsReady, user]);
-
   useEffect(() => {
     if (settingsReady) {
-      fetchData();
+      fetchBalance();
     }
-  }, [fetchData, settingsReady]);
+  }, [fetchBalance, settingsReady]);
 
   const handleOpenPackClick = () => {
     setIsOpenPackModalOpen(true);

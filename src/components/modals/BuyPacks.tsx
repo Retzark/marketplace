@@ -7,7 +7,19 @@ interface Currency {
   name: string;
 }
 
-const BuyPacksModal = ({ showModal, onClose }) => {
+interface BuyPacksModalProps {
+  showModal: boolean;
+  onClose: () => void;
+  quantity: number;
+  setQuantity: (quantity: number) => void;
+}
+
+const BuyPacksModal: React.FC<BuyPacksModalProps> = ({
+  showModal,
+  onClose,
+  quantity,
+  setQuantity,
+}) => {
   const { settings, settingsReady, error, fetchSettings } = useAppStore(
     (state) => ({
       settings: state.settings,
@@ -21,7 +33,6 @@ const BuyPacksModal = ({ showModal, onClose }) => {
   const [currency, setCurrency] = useState<string>("HIVE");
   const [modalBusy, setModalBusy] = useState<boolean>(false);
   const [symbol, setSymbol] = useState<string>("DATA");
-  const [quantity, setQuantity] = useState<number>(1);
 
   useEffect(() => {
     if (!settings && !error) {
@@ -53,9 +64,10 @@ const BuyPacksModal = ({ showModal, onClose }) => {
 
   const handleBuyPacks = () => {
     usePacksStore.getState().startPurchase({
-      payment_method: "crypto",
-      currency: "DATA",
-      items: [{ symbol: "DATA", quantity: 1 }],
+      paymentMethod: "crypto",
+      currency: currency,
+      items: [{ symbol: "DATA", quantity }],
+      quantity,
     });
   };
 
@@ -92,7 +104,7 @@ const BuyPacksModal = ({ showModal, onClose }) => {
                 <div className="cards text-white">
                   {pack.cards} cards inside
                 </div>
-                <div className="price text-white">${pack.price}</div>
+                <div className="price text-white">${pack.price * quantity}</div>
                 <div className="available text-white">
                   Available {pack.remaining.toLocaleString()} of{" "}
                   {pack.quantity.toLocaleString()}

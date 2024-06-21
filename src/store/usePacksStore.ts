@@ -3,6 +3,7 @@ import useStore from "@/store/index";
 import userStore from "@/store/userStore";
 import useAppStore from "@/store/useAppStore";
 import apiService from "@/api/apiService";
+import axios from "axios";
 
 const usePacksStore = create((set, get) => ({
   purchaseData: null,
@@ -38,10 +39,75 @@ const usePacksStore = create((set, get) => ({
       console.error("Failed to rtyopen packs:", error);
     }
   },
-  startPurchase: async ({ paymentMethod, currency = "USD", items }) => {
+  startPurchase: async ({
+    paymentMethod,
+    currency = "USD",
+    items,
+    quantity,
+  }) => {
     try {
-      await apiService.startPurchase();
-      // set({ purchaseData: response.data });
+      const username = userStore.getState().user?.username;
+
+      const payload = {
+        username: username,
+        items: items.map((item) => ({
+          ...item,
+          quantity,
+        })),
+        payment_method: paymentMethod,
+        currency,
+      };
+
+      // Create an Axios instance specifically for API requests
+      const response = await axios.post(
+        `https://market.retzark.com/api/purchases/start`,
+        payload,
+      );
+      let operations = [];
+
+      const paymentInfo = response.data;
+
+      const { sidechain_id } = useAppStore.getState().settings;
+      const amount = parseFloat(paymentInfo.payment_info.amount).toFixed(3);
+
+      if (paymentInfo.payment_info.type === "hive") {
+        console.log("Hive payment");
+        operations = [
+          [
+            "transfer",
+            {
+              from: username,
+              to: paymentInfo.payment_info.address,
+              amount: `${amount} ${paymentInfo.payment_info.currency}`,
+              memo: paymentInfo.payment_info.memo,
+            },
+          ],
+        ];
+      } else {
+        operations = [
+          [
+            "custom_json",
+            {
+              required_auths: [username],
+              required_posting_auths: [],
+              id: sidechain_id,
+              json: JSON.stringify({
+                contractName: "tokens",
+                contractAction: "transfer",
+                contractPayload: {
+                  symbol: paymentInfo.payment_info.currency,
+                  quantity: amount,
+                  to: paymentInfo.payment_info.address,
+                  memo: paymentInfo.payment_info.memo,
+                },
+              }),
+            },
+          ],
+        ];
+      }
+
+      const broadcastOps = useStore.getState().requestBroadcastOps;
+      await broadcastOps(username, operations, "Active");
     } catch (error) {
       console.error("Failed to start purchase:", error);
     }

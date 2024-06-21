@@ -1,22 +1,27 @@
-import { useState } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import usePacksStore from "@/store/usePacksStore";
 
-const TransferPack = ({ isOpen, onClose }) => {
-  const [number, setNumber] = useState(1); // Number of packs
-  const [username, setUsername] = useState(""); // Username
-  const [isValid, setIsValid] = useState(true); // Validity of the input
+interface TransferPackProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const TransferPack: React.FC<TransferPackProps> = ({ isOpen, onClose }) => {
+  const [number, setNumber] = useState<number>(1); // Number of packs
+  const [username, setUsername] = useState<string>(""); // Username
+  const [isValid, setIsValid] = useState<boolean>(true); // Validity of the input
   const requestTransferPack = usePacksStore(
     (state) => state.requestTransferPack,
   );
-  const [showModal, setShowModal] = useState(false); // Manage modal visibility
+  const [showModal, setShowModal] = useState<boolean>(false); // Manage modal visibility
 
   if (!isOpen) return null;
 
-  const handleUsernameChange = (e) => {
+  const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
   };
 
-  const handleNumberChange = (e) => {
+  const handleNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value, 10);
     if (value >= 1) {
       setNumber(value);
@@ -26,13 +31,13 @@ const TransferPack = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!isValid) {
       alert("Please enter a valid number of packs.");
       return;
     }
-    await requestTransferPack({ recipient: username, quantity: number }); // Pass both username and number
+    await requestTransferPack({ recipient: username, quantity: number });
     setShowModal(true); // Open the modal after packs are opened
   };
 

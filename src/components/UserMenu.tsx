@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useUserStore from "../store/userStore";
+import { Button } from "@chakra-ui/react";
 
 const UserMenu = () => {
   const user = useUserStore((state) => state.user);
@@ -31,12 +32,19 @@ const UserMenu = () => {
 
   if (!user) {
     return (
-      <button
+      <Button
+        bg="#15C1A2"
+        color="white"
+        _hover={{ bg: "#15C1A2d6" }}
+        size="lg"
+        shadow="md"
+        borderBottom="4px solid"
+        borderColor="#1C465B"
+        borderRadius="md"
         onClick={handleLogin}
-        className="px-3 py-2 rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark"
       >
-        Login
-      </button>
+        LOGIN
+      </Button>
     );
   }
 

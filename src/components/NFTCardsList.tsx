@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/types/Card";
 import useFetchNFTMarketData from "@/hooks/useFetchNFTMarketData";
 import Loading from "@/components/Loading";
+import { Badge, Box, Flex, Grid, Icon, Image, Text } from "@chakra-ui/react";
+import { RiFireFill } from "react-icons/ri";
 
 interface NFTCardsListProps {
   selectedFaction?: string;
@@ -30,22 +32,22 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
 
       if (selectedFilter) {
         filtered = filtered.filter(
-          (item: Card) => item.grouping.foil === selectedFilter,
+          (item: Card) => item.grouping.foil === selectedFilter
         );
       }
       if (selectedFaction) {
         filtered = filtered.filter(
-          (item: Card) => item.grouping.faction === selectedFaction,
+          (item: Card) => item.grouping.faction === selectedFaction
         );
       }
       if (selectedRarity) {
         filtered = filtered.filter(
-          (item: Card) => item.grouping.rarity === selectedRarity,
+          (item: Card) => item.grouping.rarity === selectedRarity
         );
       }
       if (selectedGameStats) {
         filtered = filtered.filter(
-          (item: Card) => item.grouping.gameStats === selectedGameStats,
+          (item: Card) => item.grouping.gameStats === selectedGameStats
         );
       }
 
@@ -90,43 +92,340 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
     );
   }
 
+  const badges = {
+    common: {
+      icon: "./images/common-badge.svg",
+    },
+    rare: {
+      icon: "./images/rare-badge.svg",
+    },
+    epic: {
+      icon: "./images/epic-badge.svg",
+    },
+    legendary: {
+      icon: "./images/legendary-badge.svg",
+    },
+  };
+
   if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <div>
-      <div className="mx-10 h-full">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+    <Box>
+      <Box px={{ base: "10px", sm: "20px", md: "30px", lg: "40px" }} py="20px">
+        <Text
+          fontFamily="Poppins"
+          fontWeight="bold"
+          fontSize={{
+            base: "12px",
+            sm: "12px",
+            md: "14px",
+            lg: "16px",
+            xl: "16px",
+            "2xl": "16px",
+          }}
+          color="white"
+        >
+          1,578,929 Total Cards
+        </Text>
+      </Box>
+      <Box px={{ base: "10px", sm: "20px", md: "30px", lg: "40px" }}>
+        <Grid
+          templateColumns={{
+            base: "repeat(2, 1fr)",
+            sm: "repeat(3, 1fr)",
+            md: "repeat(4, 1fr)",
+            lg: "repeat(4, 1fr)",
+            xl: "repeat(5, 1fr)",
+            "2xl": "repeat(5, 1fr)",
+          }}
+          gap={{
+            base: "1",
+            sm: "1",
+            md: "1",
+            lg: "2",
+            xl: "4",
+            "2xl": "6",
+          }}
+        >
           {currentItems.map((card, index) => (
-            <div
-              key={card._id}
-              onClick={() => handleClick(card)}
-              className="card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md relative cursor-pointer"
-            >
-              <div className="absolute top-0 left-0 bg-black text-white text-xs py-1 px-2 rounded-br-lg">
-                #{card._id.toString().padStart(8, "0")}
-              </div>
-              <div className="absolute top-0 right-0 bg-red-600 text-white text-xs py-1 px-2 rounded-bl-lg">
-                HOT
-              </div>
-              <img
-                src={`https://cdn.tribaldex.com/packmanager/DATA/${card.grouping.edition}_${card.grouping.type}_${card.grouping.foil}.png`}
-                alt={card.name}
-                className="w-full h-full object-cover"
-                style={{ height: "auto" }} // Adjust the height as per your original image size
-              />
-              <div className="text-center bg-gray-900 text-white py-2">
-                1,203,596 AVAILABLE
-              </div>
-              <div className="p-3 text-center">
-                <h3 className="text-md font-semibold text-white">
-                  {randomNames[index % randomNames.length]}
-                </h3>
-              </div>
-            </div>
+            <Fragment key={card._id}>
+              <Box
+                bgColor="#282C34"
+                onClick={() => handleClick(card)}
+                borderRadius="10px"
+                overflow="hidden"
+                cursor="pointer"
+              >
+                <Box position="relative" width="full" height="auto">
+                  <Image
+                    src={`https://cdn.tribaldex.com/packmanager/DATA/${card.grouping.edition}_${card.grouping.type}_${card.grouping.foil}.png`}
+                    objectFit="cover"
+                    alt={card.name}
+                    h="fit-content"
+                    borderTopRightRadius="7px"
+                    borderTopLeftRadius="7px"
+                  />
+
+                  <Flex
+                    position="absolute"
+                    top="2"
+                    left="2"
+                    mt={2}
+                    justifyContent="space-between"
+                    alignItems="start"
+                    width={{
+                      base: "93%",
+                      xxs: "91%",
+                      xs: "90%",
+                      sm: "92%",
+                      md: "92%",
+                      lg: "95%",
+                      xl: "95%",
+                      "2xl": "95%",
+                    }}
+                  >
+                    <Flex
+                      px={{
+                        base: "1",
+                        sm: "1",
+                        md: "1",
+                        lg: "3",
+                        xl: "3",
+                        "2xl": "3",
+                      }}
+                      py={{
+                        base: "1",
+                        sm: "1",
+                        md: "1",
+                        lg: "2",
+                        xl: "2",
+                        "2xl": "2",
+                      }}
+                      bgColor="#282C34"
+                      borderRadius={{
+                        base: "7px",
+                        sm: "7px",
+                        md: "7px",
+                        lg: "10px",
+                        xl: "10px",
+                        "2xl": "10px",
+                      }}
+                      alignItems="center"
+                    >
+                      {/* common: B5B5B5 , rare: FF9104,  epic: DA9466 , legendary: FF4D4D*/}
+                      <Text
+                        fontFamily="CCElephantmenTall Regular"
+                        color={
+                          [2, 6, 5].includes(index)
+                            ? "#B5B5B5"
+                            : [9].includes(index)
+                              ? "#FF9104"
+                              : [4].includes(index)
+                                ? "#FF4D4D"
+                                : "#DA9466"
+                        }
+                        fontSize={{
+                          base: "8px",
+                          sm: "12px",
+                          md: "12px",
+                          lg: "14px",
+                          xl: "16px",
+                          "2xl": "18px",
+                        }}
+                        letterSpacing="0.5px"
+                        display="flex"
+                      >
+                        <Image
+                          src={
+                            [2, 6, 5].includes(index)
+                              ? badges.rare.icon
+                              : [9].includes(index)
+                                ? badges.epic.icon
+                                : [4].includes(index)
+                                  ? badges.legendary.icon
+                                  : badges.common.icon
+                          }
+                          objectFit="contain"
+                          w={{
+                            base: "8px",
+                            sm: "8px",
+                            md: "10px",
+                            lg: "14px",
+                            xl: "16px",
+                            "2xl": "18px",
+                          }}
+                        />
+                        &nbsp;#
+                        {card._id.toString().padStart(8, "0")}
+                      </Text>
+                    </Flex>
+
+                    <Flex flexDirection="column" gap="1" alignItems="end">
+                      {[3, 8].includes(index) && (
+                        <Flex
+                          px={{
+                            base: "1",
+                            sm: "1",
+                            md: "1",
+                            lg: "3",
+                            xl: "3",
+                            "2xl": "3",
+                          }}
+                          py={{
+                            base: "1",
+                            sm: "1",
+                            md: "1",
+                            lg: "2",
+                            xl: "2",
+                            "2xl": "2",
+                          }}
+                          bgColor="#005BE4"
+                          borderRadius={{
+                            base: "7px",
+                            sm: "7px",
+                            md: "7px",
+                            lg: "10px",
+                            xl: "10px",
+                            "2xl": "10px",
+                          }}
+                          alignItems="center"
+                          width="fit-content"
+                        >
+                          <Text
+                            display="flex"
+                            alignItems="center"
+                            fontFamily="CCElephantmenTall Regular"
+                            color="white"
+                            fontSize={{
+                              base: "8px",
+                              sm: "8px",
+                              md: "10px",
+                              lg: "14px",
+                              xl: "16px",
+                              "2xl": "18px",
+                            }}
+                            letterSpacing="0.5px"
+                          >
+                            {/* <Icon as={RiFireFill} color="white" mt="-2px" /> */}
+                            <Image
+                              src="./images/limited-icon.svg"
+                              objectFit="contain"
+                              w={{
+                                base: "8px",
+                                sm: "8px",
+                                md: "10px",
+                                lg: "14px",
+                                xl: "16px",
+                                "2xl": "18px",
+                              }}
+                              mt="-1px"
+                            />
+                            &nbsp;LIMITED
+                          </Text>
+                        </Flex>
+                      )}
+                      {[1, 2, 3, 6, 8].includes(index) && (
+                        <Flex
+                          px={{
+                            base: "1",
+                            sm: "1",
+                            md: "1",
+                            lg: "3",
+                            xl: "3",
+                            "2xl": "3",
+                          }}
+                          py={{
+                            base: "1",
+                            sm: "1",
+                            md: "1",
+                            lg: "2",
+                            xl: "2",
+                            "2xl": "2",
+                          }}
+                          bgColor="#E40000"
+                          borderRadius={{
+                            base: "7px",
+                            sm: "7px",
+                            md: "7px",
+                            lg: "10px",
+                            xl: "10px",
+                            "2xl": "10px",
+                          }}
+                          alignItems="center"
+                          width="fit-content"
+                        >
+                          <Text
+                            display="flex"
+                            alignItems="center"
+                            fontFamily="CCElephantmenTall Regular"
+                            color="white"
+                            fontSize={{
+                              base: "8px",
+                              sm: "8px",
+                              md: "10px",
+                              lg: "14px",
+                              xl: "16px",
+                              "2xl": "18px",
+                            }}
+                            letterSpacing="0.5px"
+                          >
+                            <Icon as={RiFireFill} color="white" mt="-2px" />
+                            &nbsp;HOT
+                          </Text>
+                        </Flex>
+                      )}
+                    </Flex>
+                  </Flex>
+
+                  {/* Bottom overlay */}
+                  <Box position="absolute" bottom="2" left="2" mt={2}>
+                    <Box
+                      bgColor="rgba(58, 63, 73, 0.8)"
+                      px="4"
+                      py="1"
+                      borderRadius="7px"
+                    >
+                      <Text
+                        fontFamily="CCElephantmenTall Regular"
+                        fontSize={{
+                          base: "12px",
+                          sm: "12px",
+                          md: "14px",
+                          lg: "18px",
+                          xl: "18px",
+                          "2xl": "20px",
+                        }}
+                        color="white"
+                      >
+                        1,203,596 AVAILABLE
+                      </Text>
+                    </Box>
+                  </Box>
+                </Box>
+
+                <Box p="2" textAlign="center">
+                  <Text
+                    fontFamily="CCElephantmenTall Regular"
+                    color="white"
+                    fontSize={{
+                      base: "12px",
+                      sm: "14px",
+                      md: "18px",
+                      lg: "20px",
+                      xl: "22px",
+                      "2xl": "24px",
+                    }}
+                    textTransform="uppercase"
+                  >
+                    {randomNames[index % randomNames.length]}
+                  </Text>
+                </Box>
+              </Box>
+            </Fragment>
           ))}
-        </div>
-      </div>
-      <div className="flex justify-center mt-20 mb-20 bg-black">
+        </Grid>
+      </Box>
+      <Box className="flex justify-center mt-20 mb-20" bgColor="#090909">
         <nav className="inline-flex rounded-md shadow">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
@@ -154,8 +453,8 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
             Next
           </button>
         </nav>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

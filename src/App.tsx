@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import AppRoutes from "@/routes";
 import useInitializeSettings from "@/hooks/useInitializeSettings";
 import Loading from "@/components/Loading";
+import { Box, Flex } from "@chakra-ui/react";
 
 export default function App() {
   const settingsReady = useInitializeSettings();
@@ -17,11 +18,13 @@ export default function App() {
 
   return (
     <Router>
-      <div className="min-h-screen flex flex-col bg-black">
+      <Flex direction="column" minH="100vh" bgColor="#090909">
         <Navbar />
-        <AppRoutes />
-        <div className="w-full h-1 bg-yellow-500 mt-8"></div>
-      </div>
+        <Box flexGrow={1} mt="65px">
+          <AppRoutes />
+        </Box>
+        <Box className="w-full h-1 bg-yellow-500 mt-8"></Box>
+      </Flex>
     </Router>
   );
 }

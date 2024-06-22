@@ -2,12 +2,18 @@ import { useState, useEffect } from "react";
 import Login from "@/components/modals/Login";
 import UserMenu from "@/components/UserMenu";
 import useAppStore from "@/store/useAppStore";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
+import { Box } from "@chakra-ui/react";
 
 interface MenuButtonProps {
   isOpen: boolean;
   toggleMenu: () => void;
 }
+
+const useIsActive = (path: string) => {
+  const location = useLocation();
+  return location.pathname === path;
+};
 
 const MenuButton: React.FC<MenuButtonProps> = ({ isOpen, toggleMenu }) => (
   <button
@@ -55,53 +61,77 @@ const MenuButton: React.FC<MenuButtonProps> = ({ isOpen, toggleMenu }) => (
 );
 
 const NavigationLinks = ({ isMobile }: { isMobile: boolean }) => (
-  <div className={`flex ${isMobile ? "flex-col space-y-1" : "space-x-4"}`}>
+  <Box
+    display="flex"
+    justifyContent="space-evenly"
+    gap="4"
+    flexDirection={{
+      base: "column",
+      sm: "column",
+      md: "row",
+      lg: "row",
+      xl: "row",
+      "2xl": "row",
+    }}
+  >
     <NavLink
       to="/"
-      className={({ isActive }) =>
-        isActive
-          ? "text-primary"
-          : "text-gray-300 hover:bg-gray-700 hover:text-white font-poppins"
-      }
       end
       aria-current={({ isActive }) => (isActive ? "page" : undefined)}
     >
-      <span className="uppercase">The Rundown</span>
+      <Box
+        as="span"
+        className="uppercase"
+        fontFamily="Poppins"
+        fontWeight={useIsActive("/") ? 600 : 400}
+        color={useIsActive("/") ? "#15C1A2" : "white"}
+      >
+        The Rundown
+      </Box>
     </NavLink>
     <NavLink
       to="/cards"
-      className={({ isActive }) =>
-        isActive
-          ? "text-primary"
-          : "text-gray-300 hover:bg-gray-700 hover:text-white"
-      }
       aria-current={({ isActive }) => (isActive ? "page" : undefined)}
     >
-      <span className="uppercase">Collection</span>
+      <Box
+        as="span"
+        className="uppercase"
+        fontFamily="Poppins"
+        fontWeight={useIsActive("/cards") ? 600 : 400}
+        color={useIsActive("/cards") ? "#15C1A2" : "white"}
+      >
+        Collection
+      </Box>
     </NavLink>
     <NavLink
       to="/blog"
-      className={({ isActive }) =>
-        isActive
-          ? "text-primary"
-          : "text-gray-300 hover:bg-gray-700 hover:text-white"
-      }
       aria-current={({ isActive }) => (isActive ? "page" : undefined)}
     >
-      <span className="uppercase">Blog</span>
+      <Box
+        as="span"
+        className="uppercase"
+        fontFamily="Poppins"
+        fontWeight={useIsActive("/blog") ? 600 : 400}
+        color={useIsActive("/blog") ? "#15C1A2" : "white"}
+      >
+        Blog
+      </Box>
     </NavLink>
     <NavLink
       to="/marketplace"
-      className={({ isActive }) =>
-        isActive
-          ? "text-primary"
-          : "text-gray-300 hover:bg-gray-700 hover:text-white"
-      }
       aria-current={({ isActive }) => (isActive ? "page" : undefined)}
     >
-      <span className="uppercase">Marketplace</span>
+      <Box
+        as="span"
+        className="uppercase"
+        fontFamily="Poppins"
+        fontWeight={useIsActive("/marketplace") ? 600 : 400}
+        color={useIsActive("/marketplace") ? "#15C1A2" : "white"}
+      >
+        Marketplace
+      </Box>
     </NavLink>
-  </div>
+  </Box>
 );
 
 const Navbar = () => {
@@ -109,8 +139,8 @@ const Navbar = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   return (
-    <nav className="bg-black">
-      <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+    <nav className="bg-[#0B0B0B] w-[100%] h-[65px] fixed z-10">
+      <Box maxWidth="117rem" className="mx-auto px-2 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center justify-between flex-1 sm:hidden">
             <MenuButton
@@ -132,7 +162,7 @@ const Navbar = () => {
           </div>
           <UserMenu />
         </div>
-      </div>
+      </Box>
       {isMobileMenuOpen && (
         <div className="sm:hidden" id="mobile-menu">
           <div className="px-2 pt-2 pb-3 space-y-1">

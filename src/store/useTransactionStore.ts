@@ -89,6 +89,8 @@ const useTransactionStore = create<TransactionStoreState>((set, get) => ({
         const cards = logs.events
           .filter((e: any) => e.event === "issue")
           .map((event: any) => {
+            console.log(event.data);
+            console.log(event.data.properties);
             const { edition, foil, type } = event.data.properties;
             return {
               edition,

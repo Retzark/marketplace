@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { Box, Button, Flex, Grid, Image } from "@chakra-ui/react";
 import { Global } from "@emotion/react";
 
-// Define the Card interface
 interface Card {
   id: number;
   name: string;
@@ -11,7 +10,6 @@ interface Card {
   rarity: string;
 }
 
-// Sample cards data (replace with your actual card data)
 const sampleCards: Card[] = [
   {
     id: 1,
@@ -177,9 +175,10 @@ const CardPackOpener: FC = () => {
         transform: "rotateY(180deg)",
       },
       Legendary: {
-        boxShadow: "0 0 20px #FF4D4D",
+        boxShadow: "1px 1px 108px 0px #FF4D4D",
         transition: "transform 0.6s",
         transform: "rotateY(180deg)",
+        animation: "glow 1s infinite alternate;",
       },
       default: { boxShadow: "0 0 20px #DA9466", transform: "rotateY(180deg)" },
     };
@@ -251,13 +250,6 @@ const CardPackOpener: FC = () => {
                     cursor: "pointer",
                     transition: "transform 0.4s",
                   }}
-                  boxShadow={
-                    card.rarity === "Legendary"
-                      ? "0 0 20px #FF4D4D"
-                      : card.rarity === "Epic"
-                        ? "0 0 20px #FF9104"
-                        : ""
-                  }
                   transition="transform 0.4s"
                   borderRadius="7px"
                 >
@@ -267,7 +259,6 @@ const CardPackOpener: FC = () => {
                     height="100%"
                     bg="transparent"
                     borderRadius="7px"
-                    boxShadow="md"
                     sx={{
                       transformStyle: "preserve-3d",
                       transition: "transform 0.1s",
@@ -275,6 +266,17 @@ const CardPackOpener: FC = () => {
                         ? "rotateY(180deg)"
                         : "rotateY(0)",
                       ...getCardAnimation(card.rarity, actualIndex),
+                    }}
+                    _hover={{
+                      boxShadow:
+                        card.rarity === "Legendary"
+                          ? "0 0 20px #FF4D4D"
+                          : card.rarity === "Epic"
+                            ? "0 0 20px #FF9104"
+                            : card.rarity === "Rare"
+                              ? "0 0 20px #B5B5B5"
+                              : "",
+                      transition: "transform 0.4s",
                     }}
                   >
                     <Box
@@ -371,6 +373,15 @@ const CardPackOpener: FC = () => {
 
           @keyframes expandCircle {
             100% { opacity: 0; transform: scale(6); }
+          }
+          
+          @keyframes glow {
+            from {
+              box-shadow: 0 0 80px -10px #FF4D4D;
+            }
+            to {
+              box-shadow: 0 0 80px 10px #FF4D4D;
+            }
           }
 
           .circle {

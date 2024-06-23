@@ -1,5 +1,6 @@
 import React from "react";
 import { Card } from "@/types";
+import { Box, Divider, Flex, Grid, Image, Text } from "@chakra-ui/react";
 
 interface StatsAndMovesetProps {
   card: Card;
@@ -16,107 +17,251 @@ const badgeStyles = {
 
 const StatsAndMoveset: React.FC<StatsAndMovesetProps> = ({ card }) => {
   return (
-    <div className="flex flex-col bg-gray-900 p-6 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold text-white mb-4">STATS AND MOVESET</h2>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
-        <img
-          className="w-full lg:w-full rounded-lg p-4"
-          src={`https://cdn.tribaldex.com/packmanager/DATA/${card.grouping.edition}_${card.grouping.type}_${card.grouping.foil}.png`}
-          alt="Card Image"
-        />
-        <div className="lg:col-span-2 text-white">
-          <h2 className="text-3xl font-bold mb-4">{card.name}</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-            <div
-              className={`flex items-center ${badgeStyles.hp} rounded-lg px-3 py-1`}
-              style={{
-                height: "40px",
-              }}
+    <Box bgColor="#282C34" borderRadius="lg" p="6">
+      <Box display="flex" gap="8" alignItems="start">
+        <Box>
+          <Image
+            borderRadius="7px"
+            src={`https://cdn.tribaldex.com/packmanager/DATA/${card.grouping.edition}_${card.grouping.type}_${card.grouping.foil}.png`}
+            objectFit="contain"
+            alt="Card Image"
+            width="100%"
+            height="100%"
+          />
+        </Box>
+
+        <Box>
+          <Text
+            mt="-6px"
+            fontFamily="Poppins"
+            fontSize="22px"
+            fontWeight="bold"
+            color="white"
+          >
+            STATS AND MOVESET
+          </Text>
+          <Flex
+            mt="30px"
+            flexWrap="wrap"
+            gap={{
+              base: "4",
+              sm: "4",
+              md: "4",
+              lg: "4",
+              xl: "4",
+              "2xl": "4",
+            }}
+            mb="4"
+          >
+            <Box
+              bgColor="#3A3F49"
+              px="4"
+              py="2"
+              borderRadius="10px"
+              display="flex"
+              gap="2"
+              width="fit-content"
+              alignItems="center"
             >
-              <span className="mr-1 flex-shrink-0">
-                <img src="/images/hp_icon.svg" alt="HP Icon" />
-              </span>
-              <span className="font-elephantmen text-xl">HP: {card.hp}</span>
-            </div>
-            <div
-              className={`flex items-center ${badgeStyles.atk} rounded-lg px-3 py-1`}
-              style={{
-                height: "40px",
-              }}
+              <Image
+                src="/images/hp_icon.svg"
+                objectFit="contain"
+                alt="HP ICON"
+                width="16px"
+                height="16px"
+              />
+              <Text
+                fontFamily="CCElephantmenTall Regular"
+                fontSize="16px"
+                color="white"
+              >
+                HP: {card.hp}
+              </Text>
+            </Box>
+            <Box
+              bgColor="#3A3F49"
+              px="4"
+              py="2"
+              borderRadius="10px"
+              display="flex"
+              gap="2"
+              width="fit-content"
+              alignItems="center"
             >
-              <span className="mr-1 flex-shrink-0">
-                <img src="/images/atk_icon.svg" alt="ATK Icon" />
-              </span>
-              <span className="font-elephantmen text-xl">ATK: {card.atk}</span>
-            </div>
-            <div
-              className={`flex items-center ${badgeStyles.spd} rounded-lg px-3 py-1`}
-              style={{
-                height: "40px",
-              }}
+              <Image
+                src="/images/atk_icon.svg"
+                objectFit="contain"
+                alt="ATK ICON"
+                width="16px"
+                height="16px"
+              />
+              <Text
+                fontFamily="CCElephantmenTall Regular"
+                fontSize="16px"
+                color="white"
+              >
+                ATK: {card.atk}
+              </Text>
+            </Box>
+            <Box
+              bgColor="#3A3F49"
+              px="4"
+              py="2"
+              borderRadius="10px"
+              display="flex"
+              gap="2"
+              width="fit-content"
+              alignItems="center"
             >
-              <span className="mr-1 flex-shrink-0">
-                <img src="/images/spd_icon.svg" alt="SPD Icon" />
-              </span>
-              <span className="font-elephantmen text-xl">SPD: {card.spd}</span>
-            </div>
-            <div
-              className={`flex items-center ${badgeStyles.egy} rounded-lg px-3 py-1`}
-              style={{
-                height: "40px",
-              }}
+              <Image
+                src="/images/spd_icon.svg"
+                objectFit="contain"
+                alt="SPD ICON"
+                width="16px"
+                height="16px"
+              />
+              <Text
+                fontFamily="CCElephantmenTall Regular"
+                fontSize="16px"
+                color="white"
+              >
+                SPD: {card.spd}
+              </Text>
+            </Box>
+            <Box
+              bgColor="#3A3F49"
+              px="4"
+              py="2"
+              borderRadius="10px"
+              display="flex"
+              gap="2"
+              width="fit-content"
+              alignItems="center"
             >
-              <span className="mr-1 flex-shrink-0">
-                <img src="/images/egy_icon.svg" alt="EGY Icon" />
-              </span>
-              <span className="font-elephantmen text-xl">EGY: {card.egy}</span>
-            </div>
-          </div>
-          <hr />
-          <div className="mt-10">
-            <div
-              className={`flex items-center justify-center ${badgeStyles.basicAttack} rounded-lg px-3 py-1 mb-2`}
-              style={{
-                maxWidth: "200px", // Adjust this value as necessary
-                height: "40px",
-              }}
+              <Image
+                src="/images/egy_icon.svg"
+                objectFit="contain"
+                alt="EGY ICON"
+                width="16px"
+                height="16px"
+              />
+              <Text
+                fontFamily="CCElephantmenTall Regular"
+                fontSize="16px"
+                color="white"
+              >
+                EGY: {card.egy}
+              </Text>
+            </Box>
+            <Box
+              bgColor="#0031DD"
+              px="4"
+              py="2"
+              borderRadius="10px"
+              display="flex"
+              gap="2"
+              width="fit-content"
+              alignItems="center"
             >
-              <span className="mr-1 flex-shrink-0">
-                <img
+              <Image
+                src="/images/trn-icon.png"
+                objectFit="contain"
+                alt="TRN ICON"
+                width="16px"
+                height="16px"
+              />
+              <Text
+                fontFamily="CCElephantmenTall Regular"
+                fontSize="16px"
+                color="white"
+              >
+                TRN: 5
+              </Text>
+            </Box>
+          </Flex>
+          <Divider borderColor="#3A3F49" />
+          <Box mt="4">
+            <Box>
+              <Box
+                bgColor="#3A3F49"
+                px="4"
+                py="2"
+                borderRadius="10px"
+                display="flex"
+                gap="2"
+                width="fit-content"
+                alignItems="center"
+              >
+                <Image
                   src="/images/basic_attack_icon.svg"
+                  objectFit="contain"
                   alt="Basic Attack Icon"
+                  width="18px"
+                  height="18px"
                 />
-              </span>
-              <span className="font-elephantmen text-2xl text-center">
-                BASIC ATTACK
-              </span>
-            </div>
-            <p className="mb-4 mt-4 font-poppins">
-              Deal 1-4 damage to an enemy unit.
-            </p>
-            <div
-              className={`flex items-center justify-center ${badgeStyles.ability} rounded-lg px-3 py-1 mb-2`}
-              style={{
-                maxWidth: "120px", // Adjust this value as necessary
-                height: "40px",
-              }}
-            >
-              <span className="mr-1 flex-shrink-0">
-                <img src="/images/ability_icon.svg" alt="Ability Icon" />
-              </span>
-              <span className="font-elephantmen text-2xl text-center">
-                ABILITY
-              </span>
-            </div>
-            <p className="mb-4 mt-4 font-poppins">
-              Deal 5-7 damage to an enemy unit, then enter a stance which grants
-              evade for 2 turns. After successfully evading an attack, disables
-              2 random enemies for 1 turn.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+                <Text
+                  fontFamily="CCElephantmenTall Regular"
+                  fontSize="18px"
+                  color="white"
+                >
+                  BASIC ATTACK
+                </Text>
+              </Box>
+              <Box mt="4">
+                <Text
+                  fontFamily="Poppins"
+                  fontWeight="400"
+                  color="white"
+                  fontSize="14px"
+                >
+                  Deal 1-4 damage to an enemy unit.
+                </Text>
+              </Box>
+            </Box>
+
+            <Box mt="4">
+              <Box
+                bgColor="#3A3F49"
+                px="4"
+                py="2"
+                borderRadius="10px"
+                display="flex"
+                gap="2"
+                width="fit-content"
+                alignItems="center"
+              >
+                <Image
+                  src="/images/ability_icon.svg"
+                  objectFit="contain"
+                  alt="Ability Icon"
+                  width="18px"
+                  height="18px"
+                />
+                <Text
+                  fontFamily="CCElephantmenTall Regular"
+                  fontSize="18px"
+                  color="white"
+                >
+                  ABILITY
+                </Text>
+              </Box>
+              <Box mt="4">
+                <Text
+                  fontFamily="Poppins"
+                  fontWeight="400"
+                  color="white"
+                  fontSize="14px"
+                >
+                  Deal 5-7 damage to an enemy unit, then enter a stance which
+                  grants evade for 2 turns. After successfully evading an
+                  attack, disables 2 random enemies for 1 turn.
+                </Text>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

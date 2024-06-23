@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Card } from "@/types/Card";
 import useFetchNFTMarketData from "@/hooks/useFetchNFTMarketData";
 import Loading from "@/components/Loading";
-import { Badge, Box, Flex, Grid, Icon, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Grid, Icon, Image, Text } from "@chakra-ui/react";
 import { RiFireFill } from "react-icons/ri";
 
 interface NFTCardsListProps {
@@ -24,6 +24,7 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
   const [selectedFilter, setSelectedFilter] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10); // Set the number of items per page
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -78,6 +79,16 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  const handleMouseEnter = (index: number) => {
+    setHoveredIndex(index);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredIndex(null);
+  };
 
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(filteredData.length / itemsPerPage); i++) {
@@ -139,12 +150,12 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
             "2xl": "repeat(5, 1fr)",
           }}
           gap={{
-            base: "1",
-            sm: "1",
-            md: "1",
-            lg: "2",
+            base: "4",
+            sm: "4",
+            md: "4",
+            lg: "4",
             xl: "4",
-            "2xl": "6",
+            "2xl": "50px",
           }}
         >
           {currentItems.map((card, index) => (
@@ -155,6 +166,11 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
                 borderRadius="10px"
                 overflow="hidden"
                 cursor="pointer"
+                onMouseEnter={() => handleMouseEnter(index)}
+                onMouseLeave={() => handleMouseLeave()}
+                transition="transform 0.4s"
+                transform={hoveredIndex === index ? "scale(1.05)" : "scale(1)"}
+                boxShadow={hoveredIndex === index ? "0 0 65px -37px white" : ""}
               >
                 <Box position="relative" width="full" height="auto">
                   <Image
@@ -403,7 +419,33 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
                   </Box>
                 </Box>
 
-                <Box p="2" textAlign="center">
+                <Box
+                  display="flex"
+                  justifyContent="center"
+                  p="2"
+                  textAlign="center"
+                  bgColor={hoveredIndex === index ? "#12BFA0" : ""}
+                  transition="all 0.4s ease-out"
+                  transform={
+                    hoveredIndex === index ? "scale(1.05)" : "scale(1)"
+                  }
+                >
+                  {hoveredIndex === index && (
+                    <Image
+                      src="./images/currency_logo.svg"
+                      objectFit="contain"
+                      w={{
+                        base: "12px",
+                        sm: "14px",
+                        md: "18px",
+                        lg: "20px",
+                        xl: "22px",
+                        "2xl": "24px",
+                      }}
+                      mt="-1px"
+                    />
+                  )}
+                  &nbsp;
                   <Text
                     fontFamily="CCElephantmenTall Regular"
                     color="white"
@@ -416,8 +458,11 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
                       "2xl": "24px",
                     }}
                     textTransform="uppercase"
+                    transition="all 0.4s ease-out"
                   >
-                    {randomNames[index % randomNames.length]}
+                    {hoveredIndex === index
+                      ? "0.00090234"
+                      : randomNames[index % randomNames.length]}
                   </Text>
                 </Box>
               </Box>

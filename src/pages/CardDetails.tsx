@@ -7,6 +7,16 @@ import BuyCard from "@/components/modals/BuyCard"; // Adjust the import path as 
 import ListingsTable from "@/components/ListingsTable"; // Adjust the import path as necessary
 import StatsAndMoveset from "@/components/StatsAndMoveset";
 import { fetchCardsData } from "@/utils/fetchCardData"; // Adjust the import path as necessary
+import {
+  Box,
+  Button,
+  Divider,
+  Flex,
+  Icon,
+  Image,
+  Text,
+} from "@chakra-ui/react";
+import { RiFireFill } from "react-icons/ri";
 
 const Hero = () => (
   <div className="relative w-full">
@@ -207,7 +217,7 @@ const CardDetails = () => {
       alert("Cancellation successful!");
       // Optionally, update the state to remove the cancelled entry
       setSellBookEntries((prev) =>
-        prev.filter((e) => e.nft_id !== entry.nft_id),
+        prev.filter((e) => e.nft_id !== entry.nft_id)
       );
     } catch (error) {
       console.error("Cancellation failed:", error);
@@ -248,56 +258,167 @@ const CardDetails = () => {
       >
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           <div className="md:col-span-2">
-            <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg p-4">
-              <StatsAndMoveset card={fetchedCard} />
-            </div>
+            <StatsAndMoveset card={fetchedCard} />
           </div>
-          <div>
-            <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg p-4">
-              <img
-                className="object-cover w-full rounded-t-lg h-44 md:h-72 md:rounded-none md:rounded-t-lg"
+          <Box>
+            <Box bgColor="#282C34" borderRadius="lg" p="6">
+              <Image
                 src={`https://cdn.tribaldex.com/packmanager/DATA/${fetchedCard.grouping.edition}_${fetchedCard.grouping.type}_${fetchedCard.grouping.foil}.png`}
-                alt="Card Image"
+                objectFit="cover"
+                h="290px"
+                w="full"
+                borderRadius="lg"
               />
-              <div className="flex flex-col justify-between p-4 leading-normal text-white">
-                <h5 className="text-2xl font-bold mb-4">{fetchedCard.name}</h5>
-                <div className="flex mb-4">
-                  <span className="bg-red-600 text-white px-2 py-1 rounded-full text-sm font-semibold">
-                    {fetchedCard.rarity}
-                  </span>
-                </div>
-                <p className="text-xl font-bold">Total Price</p>
-                <p className="text-3xl font-semibold inline-flex items-center">
-                  <img
-                    src="/images/currency_logo.svg"
-                    className="w-7 h-7 mr-1"
-                    alt="Ascension Level Icon"
-                  />
-                  5.083655
-                </p>
-                <button
-                  className="bg-primary text-white font-bold py-2 px-4 rounded mt-4 flex items-center justify-center space-x-2"
-                  onClick={handleBuyNow}
+              <Box>
+                <Text
+                  as="h5"
+                  fontFamily="CCElephantmenTall Regular"
+                  fontSize="32px"
+                  color="white"
                 >
-                  <img
-                    src="/images/buy-now.svg"
-                    className="w-7 h-7"
-                    alt="Ascension Level Icon"
-                  />
-                  <span>BUY NOW</span>
-                </button>
-              </div>
-            </div>
-          </div>
+                  {fetchedCard.name}
+                </Text>
+                <Flex gap="2">
+                  <Box
+                    bgColor="#3A3F49"
+                    px="4"
+                    py="2"
+                    borderRadius="10px"
+                    display="flex"
+                    gap="1"
+                    width="fit-content"
+                    alignItems="center"
+                    mt="2"
+                  >
+                    <Image
+                      src="/images/legendary-badge.svg"
+                      objectFit="contain"
+                      alt="EGY ICON"
+                      width="16px"
+                      height="16px"
+                    />
+                    <Text
+                      fontFamily="CCElephantmenTall Regular"
+                      fontSize="16px"
+                      color="#FF4D4D"
+                    >
+                      LEGENDARY
+                    </Text>
+                  </Box>
+                  <Box
+                    bgColor="#E40000"
+                    px="4"
+                    py="2"
+                    borderRadius="10px"
+                    display="flex"
+                    gap="1"
+                    width="fit-content"
+                    alignItems="center"
+                    mt="2"
+                  >
+                    <Icon as={RiFireFill} color="white" mt="-2px" />
+                    <Text
+                      fontFamily="CCElephantmenTall Regular"
+                      fontSize="16px"
+                      color="white"
+                    >
+                      HOT
+                    </Text>
+                  </Box>
+                  <Box
+                    bgColor="#005BE4"
+                    px="4"
+                    py="2"
+                    borderRadius="10px"
+                    display="flex"
+                    gap="1"
+                    width="fit-content"
+                    alignItems="center"
+                    mt="2"
+                  >
+                    <Image
+                      src="/images/limited-icon.svg"
+                      objectFit="contain"
+                      alt="EGY ICON"
+                      width="16px"
+                      height="16px"
+                    />
+                    <Text
+                      fontFamily="CCElephantmenTall Regular"
+                      fontSize="16px"
+                      color="white"
+                    >
+                      LIMITED
+                    </Text>
+                  </Box>
+                </Flex>
+
+                <Divider borderColor="#3A3F49" my="4" />
+                <Box>
+                  <Text
+                    as="h5"
+                    fontFamily="Poppins"
+                    fontSize="16px"
+                    color="white"
+                    fontWeight="300"
+                  >
+                    TOTAL PRICE
+                  </Text>
+                  <Flex alignItems="center" gap="2">
+                    <Image
+                      src="/images/currency_logo.svg"
+                      objectFit="contain"
+                      alt="EGY ICON"
+                      width="32px"
+                      height="32px"
+                    />
+                    <Text
+                      fontFamily="Poppins"
+                      fontSize="32px"
+                      color="white"
+                      fontWeight="bold"
+                    >
+                      5.083655
+                    </Text>
+                  </Flex>
+                  <Button
+                    mt="6"
+                    w="full"
+                    p="6"
+                    bgColor="#12BFA0"
+                    fontFamily="CCElephantmenTall Regular"
+                    fontSize="24px"
+                    color="white"
+                    fontWeight="400"
+                    gap="4"
+                    _hover={{
+                      bgColor: "#12BFA0",
+                      opacity: "0.8",
+                      transform: "scale(1.05)",
+                    }}
+                  >
+                    <Image
+                      src="/images/buy-now.svg"
+                      objectFit="contain"
+                      alt="EGY ICON"
+                      width="24px"
+                      height="24px"
+                    />
+                    BUY NOW
+                  </Button>
+                </Box>
+              </Box>
+            </Box>
+          </Box>
         </div>
 
-        <div className="w-full">
+        <Box>
           <ListingsTable
             entries={sellBookEntries}
             isLoading={isListingsLoading}
             onSelect={handleSelect}
           />
-        </div>
+        </Box>
 
         <div className="w-full mt-8">
           <SaleHistoryTable entries={saleHistoryEntries} />

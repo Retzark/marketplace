@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "ESNext",
+    "target": "es6",
+    "module": "commonjs",
     "jsx": "react-jsx",
     "strict": true,
     "moduleResolution": "node",
@@ -17,12 +17,12 @@
     "isolatedModules": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
-    "allowJs": false,  // Keep this to false to avoid compiling JS files
-    "checkJs": false   // Turn this off to avoid redundant checks
+    "allowJs": false,
+    "checkJs": false
   },
   "include": [
-    "src/**/*.ts",     // Include only TypeScript files in src
-    "src/**/*.tsx"     // Include only TSX files in src
+    "src/**/*.ts",
+    "src/**/*.tsx"
   ],
   "exclude": [
     "node_modules",

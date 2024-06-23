@@ -115,7 +115,6 @@ In the project directory, you can run several scripts defined in the `package.js
 The project is organized as follows:
 
 ```
-.
 ├── .env
 ├── .env.example
 ├── .eslintrc.cjs
@@ -123,6 +122,7 @@ The project is organized as follows:
 ├── README.md
 ├── ecosystem.config.cjs
 ├── folder_structure.txt
+├── generateTree.ts
 ├── index.html
 ├── package-lock.json
 ├── package.json
@@ -130,6 +130,7 @@ The project is organized as follows:
 ├── public
 │   ├── cards.json
 │   ├── images
+│   │   ├── .DS_Store
 │   │   ├── BANNER-ALPHA-PACK.webp
 │   │   ├── BANNER-HOMEPAGE.webp
 │   │   ├── BANNER-OPEN.webp
@@ -143,6 +144,7 @@ The project is organized as follows:
 │   │   ├── basic_attack_icon.svg
 │   │   ├── buy-now.svg
 │   │   ├── card-back-2.png
+│   │   ├── card-back.png
 │   │   ├── card-pack-home.webp
 │   │   ├── card_open.webp
 │   │   ├── common-badge.svg
@@ -154,6 +156,7 @@ The project is organized as follows:
 │   │   ├── hp_icon.svg
 │   │   ├── img.png
 │   │   ├── legendary-badge.svg
+│   │   ├── limited-icon.svg
 │   │   ├── marketplace-hero.webp
 │   │   ├── open-pack-image.webp
 │   │   ├── open_cards.webp
@@ -161,17 +164,17 @@ The project is organized as follows:
 │   │   ├── rare-badge.svg
 │   │   ├── retzark_logo.png
 │   │   ├── spd_icon.svg
-│   │   ├── subscribe-background-image.webp
+│   │   └── subscribe-background-image.webp
 │   ├── retzark.svg
-│   ├── vite.svg
+│   └── vite.svg
 ├── src
 │   ├── App.css
 │   ├── App.tsx
 │   ├── api
 │   │   ├── apiService.ts
-│   │   ├── sidechainApi.ts
+│   │   └── sidechainApi.ts
 │   ├── assets
-│   │   ├── react.svg
+│   │   └── react.svg
 │   ├── components
 │   │   ├── CollectionCardsList.tsx
 │   │   ├── Hero.tsx
@@ -189,18 +192,18 @@ The project is organized as follows:
 │   │   │   ├── MarketplaceSection.tsx
 │   │   │   ├── PromotionalSection.tsx
 │   │   │   ├── PropheciesSection.tsx
-│   │   │   ├── SubscribeSection.tsx
-│   │   ├── modals
-│   │   │   ├── BuyCard.tsx
-│   │   │   ├── BuyPacks.tsx
-│   │   │   ├── Login.tsx
-│   │   │   ├── OpenPack.tsx
-│   │   │   ├── TransferPack.tsx
-│   │   │   ├── ViewCards.tsx
+│   │   │   └── SubscribeSection.tsx
+│   │   └── modals
+│   │       ├── BuyCard.tsx
+│   │       ├── BuyPacks.tsx
+│   │       ├── Login.tsx
+│   │       ├── OpenPack.tsx
+│   │       ├── TransferPack.tsx
+│   │       └── ViewCards.tsx
 │   ├── hooks
 │   │   ├── useFetchCollectionData.ts
 │   │   ├── useFetchNFTMarketData.ts
-│   │   ├── useInitializeSettings.ts
+│   │   └── useInitializeSettings.ts
 │   ├── index.css
 │   ├── index.tsx
 │   ├── pages
@@ -211,31 +214,35 @@ The project is organized as follows:
 │   │   ├── Marketplace.tsx
 │   │   ├── Open.tsx
 │   │   ├── Packs.tsx
-│   │   ├── Profile.tsx
+│   │   └── Profile.tsx
 │   ├── routes.tsx
 │   ├── store
 │   │   ├── index.ts
 │   │   ├── useAppStore.ts
+│   │   ├── useBalanceStore.ts
 │   │   ├── useCardStore.ts
 │   │   ├── useMarketStore.ts
 │   │   ├── usePacksStore.ts
 │   │   ├── useTransactionStore.ts
-│   │   ├── userStore.ts
+│   │   └── userStore.ts
+│   ├── theme
+│   │   └── index.tsx
 │   ├── types
 │   │   ├── AppState.ts
 │   │   ├── Card.ts
 │   │   ├── Packs.ts
 │   │   ├── SellBookEntry.ts
 │   │   ├── Settings.ts
-│   │   ├── index.ts
-│   ├── utils
-│   │   ├── arrayChunk.ts
-│   │   ├── fetchCardData.ts
-│   │   ├── triplesec.js
-│   │   ├── web-crypto.js
+│   │   └── index.ts
+│   └── utils
+│       ├── arrayChunk.ts
+│       ├── fetchCardData.ts
+│       ├── triplesec.js
+│       └── web-crypto.js
 ├── tailwind.config.js
 ├── tsconfig.json
 └── vite.config.js
+
 ```
 
 ## Environment Setup

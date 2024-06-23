@@ -173,7 +173,7 @@ const Packs = () => {
                 </button>
               </div>
               <div className="text-left text-white font-semibold mb-2 text-sm sm:text-base">
-                QTY: {selectedPack ? selectedPack : "130"}
+                QTY: {selectedPack ? selectedPack : "1"}
               </div>
               <div className="text-lg text-white mb-4 text-left">
                 TOTAL PRICE

@@ -1,77 +1,79 @@
 import { useState, useCallback, useEffect, FC } from "react";
-import { motion } from "framer-motion";
-import { Box, Button, Flex, Grid, Image } from "@chakra-ui/react";
+import { Box, Button, Flex, Image } from "@chakra-ui/react";
 import { Global } from "@emotion/react";
+import { fetchCardsData } from "@/utils/fetchCardData";
 
 interface Card {
-  id: number;
-  name: string;
-  imageUrl: string;
+  type: string;
+  edition: string;
+  foil: boolean;
+  image: string;
   rarity: string;
 }
 
-const sampleCards: Card[] = [
-  {
-    id: 1,
-    name: "Card 1",
-    imageUrl: "./images/YUE-BASIC-1.png",
-    rarity: "Common",
-  },
-  {
-    id: 5,
-    name: "Card 2",
-    imageUrl: "./images/YUE-BASIC-1.png",
-    rarity: "Rare",
-  },
-  {
-    id: 8,
-    name: "Card 3",
-    imageUrl: "./images/YUE-BASIC-1.png",
-    rarity: "Legendary",
-  },
-  {
-    id: 4,
-    name: "Card 4",
-    imageUrl: "./images/YUE-BASIC-1.png",
-    rarity: "Common",
-  },
-  {
-    id: 11,
-    name: "Card 5",
-    imageUrl: "./images/YUE-BASIC-1.png",
-    rarity: "Epic",
-  },
-  {
-    id: 23,
-    name: "Card 6",
-    imageUrl: "./images/YUE-BASIC-1.png",
-    rarity: "Common",
-  },
-  {
-    id: 34,
-    name: "Card 7",
-    imageUrl: "./images/YUE-BASIC-1.png",
-    rarity: "Common",
-  },
-];
+interface FetchedCard {
+  ID: number;
+  NAME: string;
+  HP: number;
+  ATK: number;
+  SPD: number;
+  EGY: number;
+  RARITY: string;
+}
 
-const CardPackOpener: FC = () => {
+interface ViewCardsProps {
+  show: boolean;
+  handleClose: () => void;
+  cards: Card[];
+  removeCardByIndex: (index: number) => void;
+}
+
+const CardPackOpener: FC<ViewCardsProps> = ({
+  show,
+  handleClose,
+  cards = [],
+}) => {
   const [isFlipped, setIsFlipped] = useState<boolean[]>(
-    new Array(sampleCards.length).fill(false)
+    new Array(cards.length).fill(false)
   );
   const [shakeCompleted, setShakeCompleted] = useState<boolean[]>(
-    new Array(sampleCards.length).fill(false)
+    new Array(cards.length).fill(false)
   );
   const [showCircle, setShowCircle] = useState<boolean[]>(
-    new Array(sampleCards.length).fill(false)
+    new Array(cards.length).fill(false)
   );
   const [showContrast, setShowContrast] = useState<boolean[]>(
-    new Array(sampleCards.length).fill(false)
+    new Array(cards.length).fill(false)
+  );
+  const [hasBeenFlipped, setHasBeenFlipped] = useState<boolean[]>(
+    Array(cards.length).fill(false)
   );
 
+  const [fetchedCards, setFetchedCards] = useState<FetchedCard[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchCardsData();
+        setFetchedCards(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    setIsFlipped(Array(cards.length).fill(false));
+    setHasBeenFlipped(Array(cards.length).fill(false));
+  }, [cards]);
+
   const handleOpenPack = useCallback(() => {
-    sampleCards.forEach((card, index) => {
-      setTimeout(() => handleCardAnimation(card, index), (index + 1) * 1000);
+    cards.forEach((card, index) => {
+      setTimeout(
+        () => handleCardAnimation(card, index, card.type),
+        (index + 1) * 1000
+      );
     });
   }, []);
 
@@ -95,28 +97,42 @@ const CardPackOpener: FC = () => {
     return () => window.removeEventListener("resize", updateColumns);
   }, []);
 
-  const handleCardAnimation = (card: Card, index: number) => {
-    if (card.rarity === "Legendary") {
+  const handleCardAnimation = (card: Card, index: number, type: string) => {
+    const cardDetails = fetchedCards.find((card) => card.ID === parseInt(type));
+    if (cardDetails?.RARITY?.toUpperCase() === "LEGENDARY") {
       setShakeCompleted((prev) => {
         const updated = [...prev];
         updated[index] = true;
         return updated;
       });
 
-      setTimeout(() => flipCard(card, index), 500);
+      setTimeout(() => flipCard(card, index, type), 500);
     } else {
-      flipCard(card, index);
+      flipCard(card, index, type);
     }
   };
 
-  const flipCard = (card: Card, index: number) => {
+  const flipCard = (card: Card, index: number, type: string) => {
+    const cardDetails = fetchedCards.find((card) => card.ID === parseInt(type));
     setIsFlipped((prevFlips) => {
       const flips = [...prevFlips];
       flips[index] = true;
       return flips;
     });
 
-    if (["Epic", "Legendary"].includes(card.rarity)) {
+    if (!hasBeenFlipped[index]) {
+      setHasBeenFlipped((prevHasBeenFlipped) => {
+        const newHasBeenFlipped = [...prevHasBeenFlipped];
+        newHasBeenFlipped[index] = true;
+        return newHasBeenFlipped;
+      });
+    }
+
+    if (
+      ["EPIC", "LEGENDARY"].includes(
+        cardDetails?.RARITY?.toUpperCase() as string
+      )
+    ) {
       showEffects(card, index);
     }
   };
@@ -153,13 +169,19 @@ const CardPackOpener: FC = () => {
 
   const handleCardClick = (index: number) => {
     if (!isFlipped[index]) {
-      const card = sampleCards[index];
-      handleCardAnimation(card, index);
+      const card = cards[index];
+      handleCardAnimation(card, index, card.type);
     }
   };
 
-  const getCardAnimation = (rarity: string, index: number) => {
-    if (shakeCompleted[index] && !isFlipped[index] && rarity === "Legendary") {
+  const getCardAnimation = (rarity: string, index: number, type: string) => {
+    const cardDetails = fetchedCards.find((card) => card.ID === parseInt(type));
+
+    if (
+      shakeCompleted[index] &&
+      !isFlipped[index] &&
+      cardDetails?.RARITY?.toUpperCase() === "Legendary"
+    ) {
       return { animation: "shake 0.4s" };
     }
 
@@ -180,7 +202,7 @@ const CardPackOpener: FC = () => {
         transform: "rotateY(180deg)",
         animation: "glow 1s infinite alternate;",
       },
-      default: { boxShadow: "0 0 20px #DA9466", transform: "rotateY(180deg)" },
+      default: { boxShadow: "", transform: "rotateY(180deg)" },
     };
 
     if (animations[rarity]) {
@@ -190,168 +212,130 @@ const CardPackOpener: FC = () => {
     }
   };
 
-  const renderCards = () => {
-    const rows = [];
-    const numRows = Math.ceil(sampleCards.length / columns);
-
-    for (let i = 0; i < numRows; i++) {
-      const startIndex = i * columns;
-      const endIndex = startIndex + columns;
-      const rowCards = sampleCards.slice(startIndex, endIndex);
-
-      rows.push(
-        <div
-          key={i}
-          style={{ display: "flex", justifyContent: "center", width: "100%" }}
+  const mappedCards = cards.map((card, index) => {
+    return (
+      <Box
+        position="relative"
+        width={{
+          base: "109px",
+          xxs: "109px",
+          xs: "169px",
+          sm: "162px",
+          md: "148px",
+          lg: "206px",
+          xl: "214px",
+          "2xl": "214px",
+        }}
+        height={{
+          base: "155px",
+          xxs: "155px",
+          xs: "230px",
+          sm: "230px",
+          md: "205px",
+          lg: "288px",
+          xl: "300px",
+          "2xl": "300px",
+        }}
+        sx={{ perspective: "1000px" }}
+        onClick={() => handleCardClick(index)}
+        _hover={{
+          transform: "scale(1.1)",
+          cursor: "pointer",
+          transition: "transform 0.4s",
+        }}
+        transition="transform 0.4s"
+        borderRadius="7px"
+      >
+        <Box
+          position="absolute"
+          width="100%"
+          height="100%"
+          bg="transparent"
+          borderRadius="7px"
+          sx={{
+            transformStyle: "preserve-3d",
+            transition: "transform 0.1s",
+            transform: isFlipped[index] ? "rotateY(180deg)" : "rotateY(0)",
+            ...getCardAnimation(card.rarity, index, card.type),
+          }}
+          _hover={{
+            boxShadow:
+              card.rarity?.toUpperCase() === "LEGENDARY"
+                ? "0 0 20px #FF4D4D"
+                : card.rarity?.toUpperCase() === "EPIC"
+                  ? "0 0 20px #FF9104"
+                  : card.rarity?.toUpperCase() === "RARE"
+                    ? "0 0 20px #B5B5B5"
+                    : isFlipped[index]
+                      ? "0 0 65px -37px white"
+                      : "",
+            transition: "transform 0.4s",
+          }}
         >
-          {rowCards.map((card, index) => {
-            const actualIndex = startIndex + index;
-            return (
-              <motion.div
-                key={card.id}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.6 }}
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  flex: 1,
-                  maxWidth: `${100 / columns}%`,
-                  boxSizing: "border-box",
-                  padding: "0.5rem",
-                }}
-              >
-                <Box
-                  position="relative"
-                  width={{
-                    base: "130px",
-                    xxs: "130px",
-                    xs: "169px",
-                    sm: "162px",
-                    md: "148px",
-                    lg: "206px",
-                    xl: "214px",
-                    "2xl": "214px",
-                  }}
-                  height={{
-                    base: "182px",
-                    xxs: "182px",
-                    xs: "230px",
-                    sm: "230px",
-                    md: "205px",
-                    lg: "288px",
-                    xl: "300px",
-                    "2xl": "300px",
-                  }}
-                  sx={{ perspective: "1000px" }}
-                  onClick={() => handleCardClick(actualIndex)}
-                  _hover={{
-                    transform: "scale(1.1)",
-                    cursor: "pointer",
-                    transition: "transform 0.4s",
-                  }}
-                  transition="transform 0.4s"
-                  borderRadius="7px"
-                >
-                  <Box
-                    position="absolute"
-                    width="100%"
-                    height="100%"
-                    bg="transparent"
-                    borderRadius="7px"
-                    sx={{
-                      transformStyle: "preserve-3d",
-                      transition: "transform 0.1s",
-                      transform: isFlipped[actualIndex]
-                        ? "rotateY(180deg)"
-                        : "rotateY(0)",
-                      ...getCardAnimation(card.rarity, actualIndex),
-                    }}
-                    _hover={{
-                      boxShadow:
-                        card.rarity === "Legendary"
-                          ? "0 0 20px #FF4D4D"
-                          : card.rarity === "Epic"
-                            ? "0 0 20px #FF9104"
-                            : card.rarity === "Rare"
-                              ? "0 0 20px #B5B5B5"
-                              : "",
-                      transition: "transform 0.4s",
-                    }}
-                  >
-                    <Box
-                      position="absolute"
-                      width="100%"
-                      height="100%"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      borderRadius="7px"
-                      sx={{ backgroundColor: "transparent" }}
-                    >
-                      <Image
-                        src="./images/card-back.png"
-                        alt="Back"
-                        objectFit="cover"
-                        width="100%"
-                        height="100%"
-                        borderRadius="7px"
-                      />
-                    </Box>
-                    <Box
-                      position="absolute"
-                      width="100%"
-                      height="100%"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      transform="rotateY(180deg)"
-                      borderRadius="7px"
-                      sx={{
-                        backfaceVisibility: "hidden",
-                        visibility: isFlipped[actualIndex]
-                          ? "visible"
-                          : "hidden",
-                        backgroundColor: "transparent",
-                      }}
-                    >
-                      <Image
-                        src={card.imageUrl}
-                        alt={card.name}
-                        objectFit="cover"
-                        width="100%"
-                        height="100%"
-                        borderRadius="7px"
-                        className={showContrast[actualIndex] ? "contrast" : ""}
-                      />
-                    </Box>
-                  </Box>
-                  {showCircle[actualIndex] && (
-                    <Box
-                      className="circle"
-                      sx={{
-                        top: "40%",
-                        left: "40%",
-                        transform: "translate(-50%, -50%)",
-                        background:
-                          card.rarity === "Legendary"
-                            ? "rgba(255, 77, 77, 0.6)"
-                            : card.rarity === "Epic"
-                              ? "rgba(255, 145, 4, 0.6)"
-                              : "rgba(255, 77, 77, 0.6)",
-                      }}
-                    />
-                  )}
-                </Box>
-              </motion.div>
-            );
-          })}
-        </div>
-      );
-    }
-
-    return rows;
-  };
+          <Box
+            position="absolute"
+            width="100%"
+            height="100%"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            borderRadius="7px"
+            sx={{ backgroundColor: "transparent" }}
+          >
+            <Image
+              src="./images/card-back.png"
+              alt="Back"
+              objectFit="cover"
+              width="100%"
+              height="100%"
+              borderRadius="7px"
+            />
+          </Box>
+          <Box
+            position="absolute"
+            width="100%"
+            height="100%"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            transform="rotateY(180deg)"
+            borderRadius="7px"
+            sx={{
+              backfaceVisibility: "hidden",
+              visibility: isFlipped[index] ? "visible" : "hidden",
+              backgroundColor: "transparent",
+            }}
+          >
+            <Image
+              src={card.image}
+              alt={card.image}
+              objectFit="cover"
+              width="100%"
+              height="100%"
+              borderRadius="7px"
+              className={showContrast[index] ? "contrast" : ""}
+            />
+          </Box>
+        </Box>
+        {showCircle[index] && (
+          <Box
+            className="circle"
+            sx={{
+              top: "40%",
+              left: "40%",
+              transform: "translate(-50%, -50%)",
+              background:
+                card.rarity?.toUpperCase() === "LEGENDARY"
+                  ? "rgba(255, 77, 77, 0.6)"
+                  : card.rarity?.toUpperCase() === "EPIC"
+                    ? "rgba(255, 145, 4, 0.6)"
+                    : "rgba(255, 77, 77, 0.6)",
+            }}
+          />
+        )}
+      </Box>
+    );
+  });
 
   return (
     <>
@@ -399,36 +383,115 @@ const CardPackOpener: FC = () => {
           }
         `}
       />
-      <Box px={{ base: "10px", sm: "20px", md: "30px", lg: "40px" }} py="20px">
-        <Flex justifyContent="center" mb="10">
-          <Button
-            bg="#15C1A2"
-            color="white"
-            _hover={{ bg: "#15C1A2d6" }}
-            size="lg"
-            shadow="md"
-            borderBottom="4px solid"
-            borderColor="#1C465B"
-            borderRadius="md"
-            fontFamily="Poppins"
-            onClick={handleOpenPack}
-          >
-            OPEN ALL
-          </Button>
-        </Flex>
-        <Grid
-          mt="4"
-          gap={{
-            base: "2",
-            sm: "2",
-            md: "8",
-            lg: "10",
-            xl: "10",
-            "2xl": "10",
-          }}
-        >
-          {renderCards()}
-        </Grid>
+      <Box
+        px={{ base: "10px", sm: "20px", md: "30px", lg: "40px" }}
+        py="20px"
+        className={`fixed inset-0 z-50 ${show ? "" : "hidden"} overflow-y-auto`}
+      >
+        <div className="bg-[#1A1A1A] p-5 rounded-lg shadow-xl w-full h-full mx-auto overflow-hidden z-10 flex flex-col">
+          <div className="flex-grow overflow-y-auto">
+            {cards.length > 0 ? (
+              <Box className="flex flex-wrap justify-center" gap="10" mt="6">
+                {mappedCards}
+              </Box>
+            ) : (
+              <p className="text-center text-white">No cards to display</p>
+            )}
+            <Flex
+              justifyContent="center"
+              mt="10"
+              flexDirection="column"
+              gap="6"
+              alignItems="center"
+            >
+              <Button
+                display="flex"
+                alignItems="center"
+                bg="#15C1A2"
+                color="white"
+                shadow="md"
+                borderColor="#1C465B"
+                borderRadius="md"
+                fontFamily="CCElephantmenTall Regular"
+                fontWeight="400"
+                width={{
+                  base: "100%",
+                  xs: "100%",
+                  sm: "30%",
+                  md: "30%",
+                  lg: "25%",
+                  xl: "25%",
+                  "2xl": "25%",
+                }}
+                gap="2"
+                fontSize={{
+                  base: "14px",
+                  xs: "14px",
+                  sm: "14px",
+                  md: "20px",
+                  lg: "25px",
+                  xl: "25px",
+                  "2xl": "25px",
+                }}
+                py="7"
+                _hover={{ bg: "#15C1A2d6", transform: "scale(1.04)" }}
+                onClick={handleOpenPack}
+              >
+                <Image
+                  src="/images/open-packs-icon.png"
+                  objectFit="contain"
+                  alt="HP ICON"
+                  width="25px"
+                  height="25px"
+                />
+                OPEN PACKS
+              </Button>
+              <Button
+                display="flex"
+                alignItems="center"
+                bg="#3A3F49"
+                color="white"
+                size="md"
+                shadow="md"
+                borderColor="#1C465B"
+                borderRadius="md"
+                fontFamily="CCElephantmenTall Regular"
+                fontWeight="400"
+                width={{
+                  base: "100%",
+                  xs: "100%",
+                  sm: "30%",
+                  md: "30%",
+                  lg: "25%",
+                  xl: "25%",
+                  "2xl": "25%",
+                }}
+                gap="2"
+                fontSize={{
+                  base: "14px",
+                  xs: "14px",
+                  sm: "14px",
+                  md: "20px",
+                  lg: "25px",
+                  xl: "25px",
+                  "2xl": "25px",
+                }}
+                py="6"
+                _hover={{ bg: "#3A3F49d6", transform: "scale(1.04)" }}
+                onClick={handleClose}
+              >
+                <Image
+                  src="/images/go-back-icon.png"
+                  objectFit="contain"
+                  alt="HP ICON"
+                  width="22px"
+                  height="22px"
+                />
+                GO BACK
+              </Button>
+            </Flex>
+          </div>
+        </div>
       </Box>
     </>
   );

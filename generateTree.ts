@@ -40,6 +40,9 @@ function createFolderStructureFile(startPath: string): void {
   console.log("Folder structure has been saved to folder_structure.txt");
 }
 
+/**
+ * @ts-expect-error
+ */
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
 // Replace __dirname with the path to the directory you want to scan

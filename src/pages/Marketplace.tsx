@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faFilter } from "@fortawesome/free-solid-svg-icons";
 import { FaFilter, FaHeart } from "react-icons/fa6";
 import { Box, Button, Flex, Icon, Image, Text } from "@chakra-ui/react";
+import { CardFlipContainer } from "@/components";
 
 const Marketplace = () => {
   const [selectedFaction, setSelectedFaction] = useState("");
@@ -131,6 +132,9 @@ const Marketplace = () => {
           selectedRarity={selectedRarity}
           selectedGameStats={selectedGameStats}
         />
+      </Box>
+      <Box>
+        <CardFlipContainer />
       </Box>
       {/* <div className="row">
         <div

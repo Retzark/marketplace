@@ -41,6 +41,7 @@ const UserMenu = () => {
         borderBottom="4px solid"
         borderColor="#1C465B"
         borderRadius="md"
+        fontFamily="Poppins"
         onClick={handleLogin}
       >
         LOGIN

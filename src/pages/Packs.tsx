@@ -15,7 +15,7 @@ const Packs = () => {
       settingsReady: state.settingsReady,
       error: state.error,
       fetchSettings: state.fetchSettings,
-    }),
+    })
   );
 
   useEffect(() => {
@@ -75,7 +75,7 @@ const Packs = () => {
                 </h5>
                 <div className="flex mb-4 mt-4">
                   <div className="bg-gray-700 text-white px-4 py-2 md:py-3 text-sm md:text-[24px] rounded-md flex font-elephantmen">
-                    {settings.packs[0].remaining.toLocaleString()} PACKS
+                    {settings?.packs?.[0].remaining.toLocaleString()} PACKS
                     REMAINING
                   </div>
                 </div>

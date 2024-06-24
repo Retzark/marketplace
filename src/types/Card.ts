@@ -16,4 +16,6 @@ export interface Card {
   egy: number; // EGY attribute
   rarity: string; // RARITY attribute
   grouping: Grouping; // Nested object containing grouping information
+  edition: string; // Edition of the card, e.g., "First", "Second"
+  foil: string; // Foil type, could be "0" for Regular, "1" for Gold, etc.
 }

@@ -133,9 +133,6 @@ const Marketplace = () => {
           selectedGameStats={selectedGameStats}
         />
       </Box>
-      <Box>
-        <CardFlipContainer />
-      </Box>
       {/* <div className="row">
         <div
           className="relative flex justify-center text-white text-center bg-no-repeat bg-cover bg-center"

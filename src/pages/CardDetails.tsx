@@ -278,7 +278,7 @@ const CardDetails = () => {
                 >
                   {fetchedCard.name}
                 </Text>
-                <Flex gap="2">
+                <Flex gap="2" flexWrap="wrap">
                   <Box
                     bgColor="#3A3F49"
                     px="4"

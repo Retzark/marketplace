@@ -5,6 +5,7 @@ import useFetchNFTMarketData from "@/hooks/useFetchNFTMarketData";
 import Loading from "@/components/Loading";
 import { Box, Flex, Grid, Icon, Image, Text } from "@chakra-ui/react";
 import { RiFireFill } from "react-icons/ri";
+import useAppStore from "@/store/useAppStore";
 
 interface NFTCardsListProps {
   selectedFaction?: string;
@@ -26,29 +27,31 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
   const [itemsPerPage] = useState(10); // Set the number of items per page
 
   const navigate = useNavigate();
-
+  const { settings } = useAppStore((state) => ({
+    settings: state.settings,
+  }));
   useEffect(() => {
     if (data) {
       let filtered = data.filter((item: Card) => item.count > 0); // Filter out cards with count zero
 
       if (selectedFilter) {
         filtered = filtered.filter(
-          (item: Card) => item.grouping.foil === selectedFilter
+          (item: Card) => item.grouping.foil === selectedFilter,
         );
       }
       if (selectedFaction) {
         filtered = filtered.filter(
-          (item: Card) => item.grouping.faction === selectedFaction
+          (item: Card) => item.grouping.faction === selectedFaction,
         );
       }
       if (selectedRarity) {
         filtered = filtered.filter(
-          (item: Card) => item.grouping.rarity === selectedRarity
+          (item: Card) => item.grouping.rarity === selectedRarity,
         );
       }
       if (selectedGameStats) {
         filtered = filtered.filter(
-          (item: Card) => item.grouping.gameStats === selectedGameStats
+          (item: Card) => item.grouping.gameStats === selectedGameStats,
         );
       }
 
@@ -174,7 +177,7 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
               >
                 <Box position="relative" width="full" height="auto">
                   <Image
-                    src={`https://cdn.tribaldex.com/packmanager/DATA/${card.grouping.edition}_${card.grouping.type}_${card.grouping.foil}.png`}
+                    src={`https://cdn.tribaldex.com/packmanager/${settings.nft_symbol}/${card.grouping.edition}_${card.grouping.type}_${card.grouping.foil}.png`}
                     objectFit="cover"
                     alt={card.name}
                     h="fit-content"

@@ -32,7 +32,7 @@ const BuyPacksModal: React.FC<BuyPacksModalProps> = ({
   const [currencies, setCurrencies] = useState<Currency[]>([]);
   const [currency, setCurrency] = useState<string>("HIVE");
   const [modalBusy, setModalBusy] = useState<boolean>(false);
-  const [symbol, setSymbol] = useState<string>("DATA");
+  const [symbol, setSymbol] = useState<string>(settings.nft_symbol);
 
   useEffect(() => {
     if (!settings && !error) {
@@ -50,6 +50,7 @@ const BuyPacksModal: React.FC<BuyPacksModalProps> = ({
         symbol: c.symbol,
         name: `${c.name} (${c.symbol})`,
       }));
+      setSymbol(settings.nft_symbol);
       setCurrencies(formattedCurrencies);
     }
   }, [settings]);
@@ -66,7 +67,7 @@ const BuyPacksModal: React.FC<BuyPacksModalProps> = ({
     usePacksStore.getState().startPurchase({
       paymentMethod: "crypto",
       currency: currency,
-      items: [{ symbol: "DATA", quantity }],
+      items: [{ symbol: symbol, quantity }],
       quantity,
     });
   };

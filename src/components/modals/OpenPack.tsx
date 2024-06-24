@@ -1,6 +1,7 @@
 import { useState, ChangeEvent, FormEvent } from "react";
 import usePacksStore from "@/store/usePacksStore";
 import useTransactionStore from "@/store/useTransactionStore";
+import useAppStore from "@/store/useAppStore";
 
 interface OpenPackProps {
   isOpen: boolean;
@@ -19,6 +20,14 @@ const OpenPack: React.FC<OpenPackProps> = ({
   const requestOpenPacks = usePacksStore((state) => state.requestOpenPacks);
   const fetchAndValidateTransaction = useTransactionStore(
     (state) => state.fetchAndValidateTransaction,
+  );
+  const { settings, settingsReady, error, fetchSettings } = useAppStore(
+    (state) => ({
+      settings: state.settings,
+      settingsReady: state.settingsReady,
+      error: state.error,
+      fetchSettings: state.fetchSettings,
+    }),
   );
 
   if (!isOpen) return null;
@@ -42,7 +51,7 @@ const OpenPack: React.FC<OpenPackProps> = ({
     setLoading(true);
     try {
       const transactionId = await requestOpenPacks({
-        packSymbol: "DATA",
+        packSymbol: settings.nft_symbol,
         packs: number,
       });
 

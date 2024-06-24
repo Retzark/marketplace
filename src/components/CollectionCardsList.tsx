@@ -16,7 +16,6 @@ const CollectionCardsList = () => {
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
   const [sellPrice, setSellPrice] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const navigate = useNavigate();
   const { requestSell } = useMarketStore();
 
   useEffect(() => {
@@ -35,7 +34,7 @@ const CollectionCardsList = () => {
       const filtered = Object.values(cardCountMap);
       if (selectedFilter) {
         setFilteredData(
-          filtered.filter((item) => item.card.foil === selectedFilter)
+          filtered.filter((item) => item.card.foil === selectedFilter),
         );
       } else {
         setFilteredData(filtered);

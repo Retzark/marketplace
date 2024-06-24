@@ -3,6 +3,7 @@ import { useState } from "react";
 import useUserStore from "@/store/userStore";
 import apiService from "@/api/apiService";
 import { useNavigate } from "react-router-dom";
+import { Box, Button, Flex, Image, Input } from "@chakra-ui/react";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -29,39 +30,62 @@ const Login = () => {
         } else {
           alert("Login failed. Please try again.");
         }
-      },
+      }
     );
   };
 
   return (
     <div>
       <LazyLoad height="70vh" once>
-        <div
+        <Box
           className="relative text-white text-center bg-no-repeat bg-cover bg-center"
           style={{
             backgroundImage: `url('/images/open-pack-image.webp')`,
-            height: "70vh",
-            width: "100vw",
+            height: "91vh",
+            // width: "100vh",
           }}
+          p="10"
         >
-          <div className="absolute inset-x-0 bottom-10 mx-auto w-full max-w-xs p-4">
-            <input
-              type="text"
-              id="username"
-              name="username"
-              placeholder="username"
-              required
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <button
-              onClick={handleLogin}
-              className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            >
-              Login with Keychain
-            </button>
-          </div>
-        </div>
+          <Flex w="100%" h="100%" alignItems="center">
+            <Flex flexDirection="column" alignItems="center" w="100%">
+              <Image
+                src="./images/retzark-logo.png"
+                objectFit="contain"
+                width="300px"
+              />
+              <Flex flexDirection="column" alignItems="center" mt="6" w="25%">
+                <Input
+                  type="text"
+                  bgColor="white"
+                  placeholder="Username"
+                  fontFamily="Poppins"
+                  fontWeight="400"
+                  color="black"
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+                <Button
+                  mt="2"
+                  display="flex"
+                  alignItems="center"
+                  bg="#15C1A2"
+                  color="white"
+                  size="md"
+                  shadow="md"
+                  borderColor="#1C465B"
+                  borderRadius="md"
+                  fontFamily="CCElephantmenTall Regular"
+                  fontWeight="400"
+                  py="6"
+                  w="full"
+                  _hover={{ bg: "#15C1A2d6", transform: "scale(1.04)" }}
+                  onClick={handleLogin}
+                >
+                  LOGIN WITH KEYCHAIN
+                </Button>
+              </Flex>
+            </Flex>
+          </Flex>
+        </Box>
       </LazyLoad>
     </div>
   );

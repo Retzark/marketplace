@@ -6,6 +6,7 @@ import OpenPack from "@/components/modals/OpenPack";
 import ViewCards from "@/components/modals/ViewCards";
 import TransferPack from "@/components/modals/TransferPack";
 import useBalanceStore from "@/store/useBalanceStore";
+import { CardFlipContainer } from "@/components";
 
 const Open = () => {
   const { settingsReady } = useAppStore((state) => ({
@@ -23,7 +24,7 @@ const Open = () => {
       cards: state.cards,
       setCards: state.setCards,
       removeCardByIndex: state.removeCardByIndex,
-    }),
+    })
   );
 
   const handleCloseModal = () => {
@@ -54,6 +55,8 @@ const Open = () => {
 
   const handleViewCardsModalClose = () => {
     setShowViewCardsModal(false);
+    setIsOpenPackModalOpen(false);
+    fetchBalance();
   };
 
   return (
@@ -70,23 +73,32 @@ const Open = () => {
           <Image src="/images/card_open.webp" alt="Alpha Pack" />
         </Flex>
 
-        <Flex justifyContent="center" alignItems="center" mt={5}>
+        <Flex justifyContent="center" alignItems="center" mt={5} gap="2">
           <Button
-            onClick={handleOpenPackClick}
-            bg="#0FBD9E"
+            bg="#15C1A2"
             color="white"
-            _hover={{ bg: "#0aa885" }}
-            mr={3}
-            mt={5}
+            _hover={{ bg: "#15C1A2d6" }}
+            size="lg"
+            shadow="md"
+            borderBottom="4px solid"
+            borderColor="#1C465B"
+            borderRadius="md"
+            fontFamily="Poppins"
+            onClick={handleOpenPackClick}
           >
             OPEN PACK (x{balance})
           </Button>
           <Button
-            onClick={handleTransferPackClick}
-            bg="#0FBD9E"
+            bg="#15C1A2"
             color="white"
-            _hover={{ bg: "#0aa885" }}
-            mt={5}
+            _hover={{ bg: "#15C1A2d6" }}
+            size="lg"
+            shadow="md"
+            borderBottom="4px solid"
+            borderColor="#1C465B"
+            borderRadius="md"
+            fontFamily="Poppins"
+            onClick={handleTransferPackClick}
           >
             TRANSFER PACK
           </Button>
@@ -98,7 +110,13 @@ const Open = () => {
         onClose={handleCloseModal}
         onCardsOpened={handleCardsOpened}
       />
-      <ViewCards
+      {/* <ViewCards
+        show={showViewCardsModal}
+        handleClose={handleViewCardsModalClose}
+        cards={cards}
+        removeCardByIndex={removeCardByIndex}
+      /> */}
+      <CardFlipContainer
         show={showViewCardsModal}
         handleClose={handleViewCardsModalClose}
         cards={cards}

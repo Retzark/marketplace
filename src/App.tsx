@@ -23,7 +23,7 @@ export default function App() {
         <Box flexGrow={1} mt="65px">
           <AppRoutes />
         </Box>
-        <Box className="w-full h-1 bg-yellow-500 mt-8"></Box>
+        {/* <Box className="w-full h-1 bg-yellow-500 mt-8"></Box> */}
       </Flex>
     </Router>
   );

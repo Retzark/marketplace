@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Card } from "@/types/Card";
 import useFetchCollectionData from "@/hooks/useFetchCollectionData";
 import useMarketStore from "@/store/useMarketStore";
+import useAppStore from "@/store/useAppStore";
 
 const PAGE_SIZE = 15;
 
@@ -16,8 +16,10 @@ const CollectionCardsList = () => {
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
   const [sellPrice, setSellPrice] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const navigate = useNavigate();
   const { requestSell } = useMarketStore();
+  const { settings } = useAppStore((state) => ({
+    settings: state.settings,
+  }));
 
   useEffect(() => {
     if (data) {
@@ -35,7 +37,7 @@ const CollectionCardsList = () => {
       const filtered = Object.values(cardCountMap);
       if (selectedFilter) {
         setFilteredData(
-          filtered.filter((item) => item.card.foil === selectedFilter)
+          filtered.filter((item) => item.card.foil === selectedFilter),
         );
       } else {
         setFilteredData(filtered);
@@ -122,7 +124,7 @@ const CollectionCardsList = () => {
                   {count}
                 </div>
                 <img
-                  src={`https://cdn.tribaldex.com/packmanager/DATA/${card.edition}_${card.type}_${card.foil}.png`}
+                  src={`https://cdn.tribaldex.com/packmanager/${settings.nft_symbol}/${card.edition}_${card.type}_${card.foil}.png`}
                   alt={card.name}
                   className="w-full h-full object-cover"
                 />

@@ -31,10 +31,10 @@ const ViewCards: React.FC<ViewCardsProps> = ({
   cards = [],
 }) => {
   const [flipped, setFlipped] = useState<boolean[]>(
-    Array(cards.length).fill(false),
+    Array(cards.length).fill(false)
   );
   const [hasBeenFlipped, setHasBeenFlipped] = useState<boolean[]>(
-    Array(cards.length).fill(false),
+    Array(cards.length).fill(false)
   );
   const [fetchedCards, setFetchedCards] = useState<FetchedCard[]>([]);
 

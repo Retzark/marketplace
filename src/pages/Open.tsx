@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
-import { Box, Button, Flex, Image } from "@chakra-ui/react";
+import { Box, Button, Flex, Icon, Image } from "@chakra-ui/react";
 import useAppStore from "@/store/useAppStore";
 import useTransactionStore from "@/store/useTransactionStore";
 import OpenPack from "@/components/modals/OpenPack";
 import ViewCards from "@/components/modals/ViewCards";
 import TransferPack from "@/components/modals/TransferPack";
 import useBalanceStore from "@/store/useBalanceStore";
+import { CardFlipContainer } from "@/components";
+import { BiTransferAlt } from "react-icons/bi";
 
 const Open = () => {
   const { settingsReady } = useAppStore((state) => ({
@@ -23,7 +25,7 @@ const Open = () => {
       cards: state.cards,
       setCards: state.setCards,
       removeCardByIndex: state.removeCardByIndex,
-    }),
+    })
   );
 
   const handleCloseModal = () => {
@@ -54,56 +56,85 @@ const Open = () => {
 
   const handleViewCardsModalClose = () => {
     setShowViewCardsModal(false);
+    setIsOpenPackModalOpen(false);
+    fetchBalance();
   };
 
   return (
     <Flex direction="column" minH="70vh">
-      <Box flexGrow={1}>
-        <Flex
-          justifyContent="center"
-          alignItems="center"
-          bgImage="url('/images/open-pack-image.webp')"
-          bgSize="cover"
-          bgPosition="center"
-          height="70vh"
-        >
-          <Image src="/images/card_open.webp" alt="Alpha Pack" />
-        </Flex>
+      <Flex
+        justifyContent="center"
+        alignItems="center"
+        bgImage="url('/images/open-pack-image.webp')"
+        bgSize="cover"
+        bgPosition="center"
+        height="93vh"
+      >
+        {!showViewCardsModal && (
+          <Flex flexDirection="column">
+            <Image src="/images/card_open.webp" alt="Alpha Pack" />
 
-        <Flex justifyContent="center" alignItems="center" mt={5}>
-          <Button
-            onClick={handleOpenPackClick}
-            bg="#0FBD9E"
-            color="white"
-            _hover={{ bg: "#0aa885" }}
-            mr={3}
-            mt={5}
-          >
-            OPEN PACK (x{balance})
-          </Button>
-          <Button
-            onClick={handleTransferPackClick}
-            bg="#0FBD9E"
-            color="white"
-            _hover={{ bg: "#0aa885" }}
-            mt={5}
-          >
-            TRANSFER PACK
-          </Button>
-        </Flex>
-      </Box>
+            <Flex justifyContent="center" alignItems="center" mt="6" gap="2">
+              <Button
+                bg="#15C1A2"
+                color="white"
+                _hover={{ bg: "#15C1A2d6" }}
+                borderRadius="md"
+                fontFamily="CCElephantmenTall Regular"
+                fontWeight="400"
+                fontSize="25px"
+                px="8"
+                py="6"
+                onClick={handleOpenPackClick}
+              >
+                <Image
+                  src="/images/open-packs-icon.png"
+                  objectFit="contain"
+                  alt="HP ICON"
+                  width="25px"
+                  height="25px"
+                />
+                &nbsp;OPEN PACK (x{balance})
+              </Button>
+              <Button
+                bg="#15C1A2"
+                color="white"
+                _hover={{ bg: "#15C1A2d6" }}
+                borderRadius="md"
+                fontFamily="CCElephantmenTall Regular"
+                fontWeight="400"
+                fontSize="25px"
+                px="8"
+                py="6"
+                onClick={handleTransferPackClick}
+              >
+                <Icon as={BiTransferAlt} />
+                &nbsp;TRANSFER PACK
+              </Button>
+            </Flex>
+          </Flex>
+        )}
 
+        {showViewCardsModal && (
+          <CardFlipContainer
+            show={showViewCardsModal}
+            handleClose={handleViewCardsModalClose}
+            cards={cards}
+            removeCardByIndex={removeCardByIndex}
+          />
+        )}
+      </Flex>
       <OpenPack
         isOpen={isOpenPackModalOpen}
         onClose={handleCloseModal}
         onCardsOpened={handleCardsOpened}
       />
-      <ViewCards
+      {/* <ViewCards
         show={showViewCardsModal}
         handleClose={handleViewCardsModalClose}
         cards={cards}
         removeCardByIndex={removeCardByIndex}
-      />
+      /> */}
       <TransferPack
         isOpen={isTransferPackModalOpen}
         onClose={handleCloseModal}

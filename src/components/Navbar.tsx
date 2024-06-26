@@ -73,6 +73,15 @@ const NavigationLinks = ({ isMobile }: { isMobile: boolean }) => (
       xl: "row",
       "2xl": "row",
     }}
+    bgColor={{
+      base: "black",
+      sm: "black",
+      md: "transparent",
+      lg: "transparent",
+      xl: "transparent",
+      "2xl": "transparent",
+    }}
+    padding="10px"
   >
     <NavLink
       to="/"
@@ -165,7 +174,7 @@ const Navbar = () => {
       </Box>
       {isMobileMenuOpen && (
         <div className="sm:hidden" id="mobile-menu">
-          <div className="px-2 pt-2 pb-3 space-y-1">
+          <div className="space-y-1">
             <NavigationLinks isMobile={true} />
           </div>
         </div>

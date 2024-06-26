@@ -1,6 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { SellBookEntry } from "@/types";
 import Loading from "@/components/Loading";
+import {
+  Box,
+  Checkbox,
+  Divider,
+  Flex,
+  Grid,
+  Image,
+  Text,
+} from "@chakra-ui/react";
 
 interface ListingsTableProps {
   entries: SellBookEntry[];
@@ -15,7 +24,7 @@ const ListingsTable: React.FC<ListingsTableProps> = ({
 }) => {
   const [selectAll, setSelectAll] = useState(false);
   const [selectedEntries, setSelectedEntries] = useState<Set<number>>(
-    new Set(),
+    new Set()
   );
 
   useEffect(() => {
@@ -54,252 +63,364 @@ const ListingsTable: React.FC<ListingsTableProps> = ({
   }, [selectedEntries, entries.length]);
 
   return (
-    <div className="w-full mb-8">
-      <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg p-4">
-        <h3 className="text-lg font-bold text-white mb-4">LISTINGS</h3>
+    <>
+      <Box bgColor="#282C34" borderRadius="lg" p="6">
+        <Text
+          mt="-6px"
+          fontFamily="Poppins"
+          fontSize="22px"
+          fontWeight="bold"
+          color="white"
+        >
+          LISTINGS
+        </Text>
         {isLoading ? (
           <div className="text-center py-4">
             <Loading />
           </div>
         ) : (
-          <div className="flex flex-col space-y-4">
-            <div className="hidden md:block">
-              <table
-                className="min-w-full border border-gray-700 rounded-lg shadow-md overflow-hidden"
-                style={{ backgroundColor: "#3A3F49" }}
+          <Flex mt="4">
+            <Box
+              w="100%"
+              bgColor="#3A3F49"
+              borderRadius="lg"
+              flexDirection="column"
+              p="2"
+              display={{
+                base: "none",
+                sm: "none",
+                md: "none",
+                lg: "flex",
+                xl: "flex",
+                "2xl": "flex",
+              }}
+            >
+              <Flex
+                w="100%"
+                bgColor="#3A3F49"
+                borderRadius="lg"
+                alignItems="center"
               >
-                <thead
-                  className="rounded-t-lg"
-                  style={{ backgroundColor: "#3A3F49" }}
-                >
-                  <tr
-                    className="bg-gray-800"
-                    style={{ backgroundColor: "#3A3F49" }}
+                <Flex w="10%" p="5" justifyContent="center">
+                  <Checkbox
+                    size="lg"
+                    bgColor="white"
+                    colorScheme="green"
+                    isChecked={selectAll}
+                    onChange={(e) => setSelectAll(e.target.checked)}
+                    className="form-checkbox h-5 w-5 text-green-500 border-gray-300 rounded focus:ring-0 focus:ring-offset-0"
+                  />
+                </Flex>
+                <Box w="22.5%" p="5">
+                  <Text
+                    fontFamily="CCElephantmenTall Regular"
+                    fontSize="20px"
+                    fontWeight="400"
+                    color="white"
                   >
-                    <th
-                      className="px-4 py-3 text-white text-center rounded-tl-lg"
-                      style={{
-                        fontFamily: '"CCElephantmenTall Regular"',
-                        fontSize: "24px",
-                      }}
+                    PRICE
+                  </Text>
+                </Box>
+                <Box w="22.5%" p="5">
+                  <Text
+                    fontFamily="CCElephantmenTall Regular"
+                    fontSize="20px"
+                    fontWeight="400"
+                    color="white"
+                  >
+                    ASC LVL
+                  </Text>
+                </Box>
+                <Box w="22.5%" p="5">
+                  <Text
+                    fontFamily="CCElephantmenTall Regular"
+                    fontSize="20px"
+                    fontWeight="400"
+                    color="white"
+                  >
+                    CARD ID
+                  </Text>
+                </Box>
+                <Box w="22.5%" p="5">
+                  <Text
+                    fontFamily="CCElephantmenTall Regular"
+                    fontSize="20px"
+                    fontWeight="400"
+                    color="white"
+                  >
+                    SELLER
+                  </Text>
+                </Box>
+              </Flex>
+
+              {entries.map((entry, index) => {
+                return (
+                  <Fragment key={entry.nft_id}>
+                    <Flex
+                      w="100%"
+                      bgColor={index % 2 === 0 ? "#090909" : "transparent"}
+                      alignItems="center"
                     >
-                      <input
-                        type="checkbox"
-                        checked={selectAll}
-                        onChange={(e) => setSelectAll(e.target.checked)}
-                        className="form-checkbox h-5 w-5 text-green-500 border-gray-300 rounded focus:ring-0 focus:ring-offset-0"
-                      />
-                    </th>
-                    <th
-                      className="px-4 py-3 text-white text-left"
-                      style={{
-                        fontFamily: '"CCElephantmenTall Regular"',
-                        fontSize: "24px",
-                      }}
-                    >
-                      PRICE
-                    </th>
-                    <th
-                      className="px-4 py-3 text-white text-left"
-                      style={{
-                        fontFamily: '"CCElephantmenTall Regular"',
-                        fontSize: "24px",
-                      }}
-                    >
-                      ASC LVL
-                    </th>
-                    <th
-                      className="px-4 py-3 text-white text-left"
-                      style={{
-                        fontFamily: '"CCElephantmenTall Regular"',
-                        fontSize: "24px",
-                      }}
-                    >
-                      CARD ID
-                    </th>
-                    <th
-                      className="px-4 py-3 text-white text-left rounded-tr-lg"
-                      style={{
-                        fontFamily: '"CCElephantmenTall Regular"',
-                        fontSize: "24px",
-                      }}
-                    >
-                      SELLER
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {entries.map((entry, index) => (
-                    <tr
-                      key={entry.nft_id}
-                      className={`text-white ${
-                        index === entries.length - 1 ? "rounded-b-lg" : ""
-                      } ${index % 2 === 0 ? "bg-[#090909]" : "bg-[#3A3F49]"}`}
-                      style={{ height: "82px" }}
-                    >
-                      <td className="border-t border-gray-700 px-4 py-3 text-center">
-                        <input
-                          type="checkbox"
-                          checked={selectedEntries.has(entry.nft_id)}
+                      <Flex w="10%" p="5" justifyContent="center">
+                        <Checkbox
+                          bgColor="white"
+                          size="lg"
+                          colorScheme="green"
+                          isChecked={selectedEntries.has(entry.nft_id)}
                           onChange={() => handleEntryCheckboxChange(entry)}
                           className="form-checkbox h-5 w-5 text-green-500 border-gray-300 rounded focus:ring-0 focus:ring-offset-0"
                         />
-                      </td>
-                      <td
-                        className="border-t border-gray-700 px-4 py-3 text-left"
-                        style={{
-                          fontFamily: "Poppins, sans-serif",
-                          fontSize: "18px",
-                        }}
-                      >
-                        <div className="flex items-center">
-                          <img
+                      </Flex>
+                      <Box w="22.5%" p="5">
+                        <Text
+                          fontFamily="Poppins"
+                          fontSize="16px"
+                          fontWeight="400"
+                          color="white"
+                          display="flex"
+                          gap="2"
+                        >
+                          <Image
                             src="/images/currency_logo.svg"
-                            alt="LB Icon"
-                            className="w-6 h-6 mr-2"
+                            objectFit="contain"
                           />
                           {entry.price} {entry.priceSymbol}
-                        </div>
-                      </td>
-                      <td
-                        className="border-t border-gray-700 px-4 py-3 text-left"
-                        style={{
-                          fontFamily: "Poppins, sans-serif",
-                          fontSize: "18px",
-                        }}
-                      >
-                        <div className="flex items-center">
-                          <img
-                            src="/images/asc_lvl_gray.svg"
-                            className="w-5 h-5 mr-1"
-                            alt="Ascension Level Icon"
+                        </Text>
+                      </Box>
+                      <Box w="22.5%" p="5" display="flex" gap="1">
+                        <Image
+                          src="/images/asc_lvl_gray.svg"
+                          objectFit="contain"
+                        />
+                        <Image
+                          src="/images/asc_lvl_gray.svg"
+                          objectFit="contain"
+                        />
+                        <Image
+                          src="/images/asc_lvl_red.svg"
+                          objectFit="contain"
+                        />
+                      </Box>
+                      <Box w="22.5%" p="5">
+                        <Text
+                          fontFamily="Poppins"
+                          fontSize="16px"
+                          fontWeight="400"
+                          color="white"
+                        >
+                          #{entry.nft_id}
+                        </Text>
+                      </Box>
+                      <Box w="22.5%" p="5">
+                        <Text
+                          fontFamily="Poppins"
+                          fontSize="16px"
+                          fontWeight="400"
+                          color="white"
+                        >
+                          @{entry.account}
+                        </Text>
+                      </Box>
+                    </Flex>
+                  </Fragment>
+                );
+              })}
+            </Box>
+            <Box
+              w="100%"
+              bgColor="#3A3F49"
+              borderRadius="lg"
+              flexDirection="column"
+              p="2"
+              display={{
+                base: "flex",
+                sm: "flex",
+                md: "flex",
+                lg: "none",
+                xl: "none",
+                "2xl": "none",
+              }}
+            >
+              {entries.map((entry, index) => {
+                return (
+                  <Fragment key={entry.nft_id}>
+                    <Flex px="3" py="1">
+                      <Checkbox
+                        size="md"
+                        bgColor="white"
+                        colorScheme="green"
+                        isChecked={selectedEntries.has(entry.nft_id)}
+                        onChange={() => handleEntryCheckboxChange(entry)}
+                        className="form-checkbox  text-green-500 border-gray-300 rounded focus:ring-0 focus:ring-offset-0"
+                      />
+                    </Flex>
+                    <Grid
+                      templateColumns={{
+                        base: "repeat(2, 1fr)",
+                        sm: "repeat(2, 1fr)",
+                        md: "repeat(4, 1fr)",
+                      }}
+                      gap="2"
+                      w="100%"
+                      p={{
+                        base: "1",
+                        sm: "1",
+                        md: "2",
+                      }}
+                    >
+                      <Box p="2">
+                        <Text
+                          fontFamily="Poppins"
+                          fontSize={{
+                            base: "12px",
+                            sm: "12px",
+                            md: "14px",
+                          }}
+                          fontWeight="600"
+                          color="white"
+                          display="flex"
+                          gap="2"
+                        >
+                          PRICE
+                        </Text>
+                        <Text
+                          mt="2"
+                          fontFamily="Poppins"
+                          fontSize={{
+                            base: "10px",
+                            sm: "10px",
+                            md: "12px",
+                          }}
+                          fontWeight="400"
+                          color="white"
+                          display="flex"
+                          gap="2"
+                        >
+                          <Image
+                            src="/images/currency_logo.svg"
+                            objectFit="contain"
+                            w="14px"
                           />
-                          <img
+                          {entry.price} {entry.priceSymbol}
+                        </Text>
+                      </Box>
+                      <Box p="2">
+                        <Text
+                          fontFamily="Poppins"
+                          fontSize={{
+                            base: "12px",
+                            sm: "12px",
+                            md: "14px",
+                          }}
+                          fontWeight="600"
+                          color="white"
+                          display="flex"
+                          gap="2"
+                        >
+                          ASC LVL
+                        </Text>
+                        <Box display="flex" gap="1" mt="2">
+                          <Image
                             src="/images/asc_lvl_gray.svg"
-                            className="w-5 h-5 mr-1"
-                            alt="Ascension Level Icon"
+                            objectFit="contain"
+                            w={{
+                              base: "10px",
+                              sm: "10px",
+                              md: "12px",
+                            }}
                           />
-                          <img
+                          <Image
+                            src="/images/asc_lvl_gray.svg"
+                            objectFit="contain"
+                            w={{
+                              base: "10px",
+                              sm: "10px",
+                              md: "12px",
+                            }}
+                          />
+                          <Image
                             src="/images/asc_lvl_red.svg"
-                            className="w-5 h-5 mr-1"
-                            alt="Ascension Level Icon"
+                            objectFit="contain"
+                            w={{
+                              base: "10px",
+                              sm: "10px",
+                              md: "12px",
+                            }}
                           />
-                        </div>
-                      </td>
-                      <td
-                        className="border-t border-gray-700 px-4 py-3 text-left"
-                        style={{
-                          fontFamily: "Poppins, sans-serif",
-                          fontSize: "18px",
-                        }}
-                      >
-                        #{entry.nft_id}
-                      </td>
-                      <td
-                        className={`border-t border-gray-700 px-4 py-3 text-left ${
-                          index === entries.length - 1
-                            ? "rounded-bl-lg rounded-br-lg"
-                            : ""
-                        }`}
-                        style={{
-                          fontFamily: "Poppins, sans-serif",
-                          fontSize: "18px",
-                        }}
-                      >
-                        @{entry.account}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="block md:hidden">
-              {entries.map((entry, index) => (
-                <div
-                  key={entry.nft_id}
-                  className={`bg-gray-900 border border-gray-700 rounded-lg shadow-md p-4 flex flex-col space-y-2 ${
-                    index % 2 === 0 ? "bg-[#090909]" : "bg-[#3A3F49]"
-                  }`}
-                >
-                  <div className="flex justify-between text-white">
-                    <span className="font-bold">SELECT:</span>
-                    <input
-                      type="checkbox"
-                      checked={selectedEntries.has(entry.nft_id)}
-                      onChange={() => handleEntryCheckboxChange(entry)}
-                      className="form-checkbox h-5 w-5 text-green-500 border-gray-300 rounded focus:ring-0 focus:ring-offset-0"
-                    />
-                  </div>
-                  <div
-                    className="flex justify-between text-white"
-                    style={{
-                      fontFamily: "Poppins, sans-serif",
-                      fontSize: "18px",
-                    }}
-                  >
-                    <span className="font-bold">PRICE:</span>
-                    <span>
-                      <img
-                        src="/images/lb-icon.svg"
-                        alt="Price Icon"
-                        className="inline mr-2"
-                      />
-                      {entry.price} {entry.priceSymbol}
-                    </span>
-                  </div>
-                  <div
-                    className="flex justify-between text-white"
-                    style={{
-                      fontFamily: "Poppins, sans-serif",
-                      fontSize: "18px",
-                    }}
-                  >
-                    <span className="font-bold">ASC LVL:</span>
-                    <span>
-                      <img
-                        src="/images/asc_lvl_gray.svg"
-                        className="w-4 h-4 mr-1"
-                        alt="Ascension Level Icon"
-                      />
-                      <img
-                        src="/images/asc_lvl_gray.svg"
-                        className="w-4 h-4 mr-1"
-                        alt="Ascension Level Icon"
-                      />
-                      <img
-                        src="/images/asc_lvl_red.svg"
-                        className="w-4 h-4"
-                        alt="Ascension Level Icon"
-                      />
-                    </span>
-                  </div>
-                  <div
-                    className="flex justify-between text-white"
-                    style={{
-                      fontFamily: "Poppins, sans-serif",
-                      fontSize: "18px",
-                    }}
-                  >
-                    <span className="font-bold">CARD ID:</span>
-                    <span>#{entry.nft_id}</span>
-                  </div>
-                  <div
-                    className="flex justify-between text-white"
-                    style={{
-                      fontFamily: "Poppins, sans-serif",
-                      fontSize: "18px",
-                    }}
-                  >
-                    <span className="font-bold">SELLER:</span>
-                    <span>@{entry.account}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+                        </Box>
+                      </Box>
+                      <Box p="2">
+                        <Text
+                          fontFamily="Poppins"
+                          fontSize={{
+                            base: "12px",
+                            sm: "12px",
+                            md: "14px",
+                          }}
+                          fontWeight="600"
+                          color="white"
+                          display="flex"
+                          gap="2"
+                        >
+                          CARD ID
+                        </Text>
+                        <Text
+                          mt="2"
+                          fontFamily="Poppins"
+                          fontSize={{
+                            base: "10px",
+                            sm: "10px",
+                            md: "12px",
+                          }}
+                          fontWeight="400"
+                          color="white"
+                          display="flex"
+                          gap="2"
+                        >
+                          #{entry.nft_id}
+                        </Text>
+                      </Box>
+                      <Box p="2">
+                        <Text
+                          fontFamily="Poppins"
+                          fontSize={{
+                            base: "12px",
+                            sm: "12px",
+                            md: "14px",
+                          }}
+                          fontWeight="600"
+                          color="white"
+                          display="flex"
+                          gap="2"
+                        >
+                          SELLER
+                        </Text>
+                        <Text
+                          mt="2"
+                          fontFamily="Poppins"
+                          fontSize={{
+                            base: "10px",
+                            sm: "10px",
+                            md: "12px",
+                          }}
+                          fontWeight="400"
+                          color="white"
+                          display="flex"
+                          gap="2"
+                        >
+                          @{entry.account}
+                        </Text>
+                      </Box>
+                    </Grid>
+                    {entries.length !== index + 1 && <Divider mb="2" />}
+                  </Fragment>
+                );
+              })}
+            </Box>
+          </Flex>
         )}
-      </div>
-    </div>
+      </Box>
+    </>
   );
 };
 

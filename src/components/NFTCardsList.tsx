@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { Card } from "@/types/Card";
 import useFetchNFTMarketData from "@/hooks/useFetchNFTMarketData";
 import Loading from "@/components/Loading";
-import { Badge, Box, Flex, Grid, Icon, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Grid, Icon, Image, Text } from "@chakra-ui/react";
 import { RiFireFill } from "react-icons/ri";
+import useAppStore from "@/store/useAppStore";
 
 interface NFTCardsListProps {
   selectedFaction?: string;
@@ -24,30 +25,33 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
   const [selectedFilter, setSelectedFilter] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10); // Set the number of items per page
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
+  const { settings } = useAppStore((state) => ({
+    settings: state.settings,
+  }));
   useEffect(() => {
     if (data) {
       let filtered = data.filter((item: Card) => item.count > 0); // Filter out cards with count zero
 
       if (selectedFilter) {
         filtered = filtered.filter(
-          (item: Card) => item.grouping.foil === selectedFilter
+          (item: Card) => item.grouping.foil === selectedFilter,
         );
       }
       if (selectedFaction) {
         filtered = filtered.filter(
-          (item: Card) => item.grouping.faction === selectedFaction
+          (item: Card) => item.grouping.faction === selectedFaction,
         );
       }
       if (selectedRarity) {
         filtered = filtered.filter(
-          (item: Card) => item.grouping.rarity === selectedRarity
+          (item: Card) => item.grouping.rarity === selectedRarity,
         );
       }
       if (selectedGameStats) {
         filtered = filtered.filter(
-          (item: Card) => item.grouping.gameStats === selectedGameStats
+          (item: Card) => item.grouping.gameStats === selectedGameStats,
         );
       }
 
@@ -78,6 +82,16 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  const handleMouseEnter = (index: number) => {
+    setHoveredIndex(index);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredIndex(null);
+  };
 
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(filteredData.length / itemsPerPage); i++) {
@@ -139,26 +153,31 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
             "2xl": "repeat(5, 1fr)",
           }}
           gap={{
-            base: "1",
-            sm: "1",
-            md: "1",
-            lg: "2",
+            base: "4",
+            sm: "4",
+            md: "4",
+            lg: "4",
             xl: "4",
-            "2xl": "6",
+            "2xl": "50px",
           }}
         >
           {currentItems.map((card, index) => (
             <Fragment key={card._id}>
               <Box
-                bgColor="#282C34"
+                bgColor="#3E3B3B"
                 onClick={() => handleClick(card)}
                 borderRadius="10px"
                 overflow="hidden"
                 cursor="pointer"
+                onMouseEnter={() => handleMouseEnter(index)}
+                onMouseLeave={() => handleMouseLeave()}
+                transition="transform 0.4s"
+                transform={hoveredIndex === index ? "scale(1.05)" : "scale(1)"}
+                boxShadow={hoveredIndex === index ? "0 0 65px -37px white" : ""}
               >
                 <Box position="relative" width="full" height="auto">
                   <Image
-                    src={`https://cdn.tribaldex.com/packmanager/DATA/${card.grouping.edition}_${card.grouping.type}_${card.grouping.foil}.png`}
+                    src={`https://cdn.tribaldex.com/packmanager/${settings.nft_symbol}/${card.grouping.edition}_${card.grouping.type}_${card.grouping.foil}.png`}
                     objectFit="cover"
                     alt={card.name}
                     h="fit-content"
@@ -179,9 +198,9 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
                       xs: "90%",
                       sm: "92%",
                       md: "92%",
-                      lg: "95%",
-                      xl: "95%",
-                      "2xl": "95%",
+                      lg: "94%",
+                      xl: "94%",
+                      "2xl": "94%",
                     }}
                   >
                     <Flex
@@ -229,8 +248,8 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
                           sm: "12px",
                           md: "12px",
                           lg: "14px",
-                          xl: "16px",
-                          "2xl": "18px",
+                          xl: "14px",
+                          "2xl": "14px",
                         }}
                         letterSpacing="0.5px"
                         display="flex"
@@ -251,8 +270,8 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
                             sm: "8px",
                             md: "10px",
                             lg: "14px",
-                            xl: "16px",
-                            "2xl": "18px",
+                            xl: "14px",
+                            "2xl": "14px",
                           }}
                         />
                         &nbsp;#
@@ -301,8 +320,8 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
                               sm: "8px",
                               md: "10px",
                               lg: "14px",
-                              xl: "16px",
-                              "2xl": "18px",
+                              xl: "14px",
+                              "2xl": "14px",
                             }}
                             letterSpacing="0.5px"
                           >
@@ -315,8 +334,8 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
                                 sm: "8px",
                                 md: "10px",
                                 lg: "14px",
-                                xl: "16px",
-                                "2xl": "18px",
+                                xl: "14px",
+                                "2xl": "14px",
                               }}
                               mt="-1px"
                             />
@@ -364,12 +383,12 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
                               sm: "8px",
                               md: "10px",
                               lg: "14px",
-                              xl: "16px",
-                              "2xl": "18px",
+                              xl: "14px",
+                              "2xl": "14px",
                             }}
                             letterSpacing="0.5px"
                           >
-                            <Icon as={RiFireFill} color="white" mt="-2px" />
+                            <Icon as={RiFireFill} color="white" />
                             &nbsp;HOT
                           </Text>
                         </Flex>
@@ -403,7 +422,33 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
                   </Box>
                 </Box>
 
-                <Box p="2" textAlign="center">
+                <Box
+                  display="flex"
+                  justifyContent="center"
+                  p="2"
+                  textAlign="center"
+                  bgColor={hoveredIndex === index ? "#12BFA0" : "#282C34"}
+                  transition="all 0.4s ease-out"
+                  transform={
+                    hoveredIndex === index ? "scale(1.05)" : "scale(1)"
+                  }
+                >
+                  {hoveredIndex === index && (
+                    <Image
+                      src="./images/currency_logo.svg"
+                      objectFit="contain"
+                      w={{
+                        base: "12px",
+                        sm: "14px",
+                        md: "18px",
+                        lg: "20px",
+                        xl: "22px",
+                        "2xl": "24px",
+                      }}
+                      mt="-1px"
+                    />
+                  )}
+                  &nbsp;
                   <Text
                     fontFamily="CCElephantmenTall Regular"
                     color="white"
@@ -416,8 +461,11 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
                       "2xl": "24px",
                     }}
                     textTransform="uppercase"
+                    transition="all 0.4s ease-out"
                   >
-                    {randomNames[index % randomNames.length]}
+                    {hoveredIndex === index
+                      ? "0.00090234"
+                      : randomNames[index % randomNames.length]}
                   </Text>
                 </Box>
               </Box>

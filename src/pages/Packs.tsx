@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import BuyPacksModal from "@/components/modals/BuyPacks";
 import Cookies from "js-cookie";
 import useAppStore from "@/store/useAppStore";
+import { Box, Button, Divider, Flex, Image, Text } from "@chakra-ui/react";
 
 const Packs = () => {
   const [showModal, setShowModal] = useState(false);
@@ -15,7 +16,7 @@ const Packs = () => {
       settingsReady: state.settingsReady,
       error: state.error,
       fetchSettings: state.fetchSettings,
-    }),
+    })
   );
 
   useEffect(() => {
@@ -39,171 +40,677 @@ const Packs = () => {
   };
 
   return (
-    <div>
-      {/* Hero Section */}
-      <div
-        className="relative text-center bg-no-repeat bg-cover bg-center text-white h-screen sm:h-[70vh]"
-        style={{ backgroundImage: `url('/images/BANNER-ALPHA-PACK.webp')` }}
+    <>
+      <Box
+        position="relative"
+        width="full"
+        height={{
+          base: "195px",
+          xs: "195px",
+          sm: "183px",
+          md: "310px",
+          lg: "350px",
+          xl: "520px",
+          "2xl": "520px",
+        }}
+        overflow="hidden"
       >
-        <div className="flex flex-col items-center justify-center w-full h-full px-4 sm:px-8">
-          <div className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-elephantmen">
+        <Image
+          src="./images/BANNER-ALPHA-PACK.webp" // Replace with your image path
+          alt="Blended Image"
+          objectFit="cover"
+          width="full"
+          height={{
+            base: "28vh",
+            xxs: "28vh",
+            xs: "28vh",
+            sm: "22vh",
+            md: "83vh",
+            lg: "54vh",
+            xl: "76vh",
+            "2xl": "76vh",
+          }}
+        />
+        <Box
+          position="absolute"
+          bottom="0"
+          left="0"
+          width="full"
+          height="16%"
+          bgGradient={`linear(to-b, rgba(0,0,0,0), #090909)`}
+        />
+        <Flex
+          position="absolute"
+          top="0"
+          left="0"
+          width="full"
+          height="full"
+          align="center"
+          justify="center"
+          pointerEvents="none" // This ensures the text doesn't interfere with any click events
+          flexDirection="column"
+        >
+          <Text
+            fontWeight="regular"
+            color="white"
+            textAlign="center"
+            fontSize={{
+              base: "30px",
+              sm: "30px",
+              md: "60px",
+              lg: "80px",
+              xl: "100px",
+              "2xl": "100px",
+            }}
+            fontFamily="CCElephantmenTall Regular"
+          >
             THE ALPHA PACK
-          </div>
-          <div className="text-xl sm:text-2xl md:text-xl lg:text-2xl xl:text-3xl text-secondary font-elephantmen mt-2 sm:mt-4">
+          </Text>
+          <Text
+            fontFamily="Poppins"
+            fontWeight="500"
+            fontStyle="italic"
+            textAlign="center"
+            color="#14C2A3"
+            fontSize={{
+              base: "14px",
+              sm: "14px",
+              md: "25px",
+              lg: "25px",
+              xl: "25px",
+              "2xl": "25px",
+            }}
+          >
             5 CARDS, YOURS TO KEEP
-          </div>
-          <div className="text-xs sm:text-sm md:text-lg lg:text-xl xl:text-lg text-white max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl mt-2 sm:mt-4 font-poppins">
-            The Retzark Alpha card deck is a collection of 161 unique cards.
-            Each pack contains 5 random cards from the Retzark Alpha card set.
-          </div>
-        </div>
-      </div>
+          </Text>
+          <Flex
+            w={{
+              base: "100%",
+              sm: "100%",
+              md: "100%",
+              lg: "50%",
+              xl: "50%",
+              "2xl": "50%",
+            }}
+            textAlign="justify"
+          >
+            <Text
+              mt={{
+                base: "40px",
+                sm: "40px",
+                md: "85px",
+                lg: "85px",
+                xl: "85px",
+                "2xl": "85px",
+              }}
+              px="4"
+              fontFamily="Poppins"
+              fontWeight="400"
+              textAlign="center"
+              color="white"
+              fontSize={{
+                base: "12px",
+                sm: "12px",
+                md: "14px",
+                lg: "14px",
+                xl: "14px",
+                "2xl": "14px",
+              }}
+            >
+              The Retzark Alpha card deck is a collection of 161 unique cards.
+              Each pack contains 5 random cards from the Retzark Alpha card set.
+            </Text>
+          </Flex>
+        </Flex>
+      </Box>
 
       {/* Packs Section */}
-      <div className="px-2 sm:px-4 md:px-8 lg:px-16 my-4 sm:my-8">
-        <div className="grid gap-4 sm:gap-8 md:grid-cols-3">
-          <div className="md:col-span-2">
-            <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg p-4 sm:p-6 grid grid-cols-1 md:grid-cols-3 gap-2 sm:gap-4">
-              <img
-                className="w-full md:col-span-1 object-cover rounded-lg"
-                src="/images/alpha-pack.webp"
-                alt="Alpha Pack"
-              />
-              <div className="flex flex-col p-2 sm:p-4 text-white md:col-span-2">
-                <h5 className="text-2xl sm:text-2xl font-bold mb-5 sm:mb-4 font-poppins">
-                  ALPHA PACK
-                </h5>
-                <div className="flex mb-4 mt-4">
-                  <div className="bg-gray-700 text-white px-4 py-2 md:py-3 text-sm md:text-[24px] rounded-md flex font-elephantmen">
-                    {settings.packs[0].remaining.toLocaleString()} PACKS
-                    REMAINING
-                  </div>
-                </div>
-                <hr className="border-gray-400 border border-gray-400 rounded-md mt-8 mb-8" />
-                <p className="text-white text-sm sm:text-base mb-5">
-                  The ALPHA PACK set is now available!
-                </p>
-                <p className="text-white text-sm sm:text-base mb-5">
-                  Each pack contains 5 random cards from the Retzark Alpha card
-                  set.
-                </p>
-                <p className="text-white text-sm sm:text-base mb-5">
-                  Guaranteed to contain at least one card that is EPIC or
-                  better!
-                </p>
-                <div className="text-white mb-1 md:mt-19 sm:mt-0 sm:col-span-2">
-                  <div className="font-bold text-sm sm:text-base mb-5">
-                    Drop Rates:
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
-                    <div className="flex justify-center items-center bg-gray-700 text-white rounded-lg px-2 sm:px-3 py-1 text-xs sm:text-sm md:text-base font-elephantmen whitespace-nowrap max-w-[1/4] h-12">
-                      <img
-                        src="/images/legendary-badge.svg"
-                        alt="LEGENDARY"
-                        className="mr-1 flex-shrink-0"
-                      />
-                      <span>LEGENDARY: 0.25%</span>
-                    </div>
-                    <div className="flex justify-center items-center bg-gray-700 text-white rounded-lg px-2 sm:px-3 py-1 text-xs sm:text-sm md:text-base font-elephantmen whitespace-nowrap max-w-[1/4] h-12">
-                      <img
-                        src="/images/epic-badge.svg"
-                        alt="EPIC"
-                        className="mr-1 flex-shrink-0"
-                      />
-                      <span>EPIC: 5.75%</span>
-                    </div>
-                    <div className="flex justify-center items-center bg-gray-700 text-white rounded-lg px-2 sm:px-3 py-1 text-xs sm:text-sm md:text-base font-elephantmen whitespace-nowrap max-w-[1/4] h-12">
-                      <img
-                        src="/images/rare-badge.svg"
-                        alt="RARE"
-                        className="mr-1 flex-shrink-0"
-                      />
-                      <span>RARE: 34%</span>
-                    </div>
-                    <div className="flex justify-center items-center bg-gray-700 text-white rounded-lg px-2 sm:px-3 py-1 text-xs sm:text-sm md:text-base font-elephantmen whitespace-nowrap max-w-[1/4] h-12">
-                      <img
-                        src="/images/common-badge.svg"
-                        alt="COMMON"
-                        className="mr-1 flex-shrink-0"
-                      />
-                      <span>COMMON: 60%</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg p-4 sm:p-6">
-              <h5 className="text-xl sm:text-2xl font-bold text-white mb-2 sm:mb-4">
-                BUY ALPHA PACKS
-              </h5>
-              <div className="flex flex-wrap gap-2 mb-4">
-                <button
-                  onClick={() => handleSelectPack("10")}
-                  className={`${
-                    selectedPack === "10"
-                      ? "bg-primary text-white"
-                      : "bg-gray-700 text-white"
-                  } font-bold py-2 px-2 sm:px-4 rounded hover:bg-gray-600 transition duration-150 ease-in-out text-sm sm:text-base`}
+      <Flex
+        width="100%"
+        gap="4"
+        p="8"
+        pb="120px"
+        flexDirection={{
+          base: "column",
+          sm: "column",
+          md: "column",
+          lg: "row",
+          xl: "row",
+          "2xl": "row",
+        }}
+      >
+        <Flex
+          p="6"
+          bgColor="#282C34"
+          borderRadius="lg"
+          width={{
+            base: "100%",
+            sm: "100%",
+            md: "100%",
+            lg: "70%",
+            xl: "70%",
+            "2xl": "70%",
+          }}
+          gap="10"
+          flexDirection={{
+            base: "column",
+            sm: "column",
+            md: "row",
+            lg: "row",
+            xl: "row",
+            "2xl": "row",
+          }}
+        >
+          <Flex justifyContent="center">
+            <Image
+              src="./images/alpha-pack.webp"
+              objectFit="contain"
+              w={{
+                base: "180px",
+                sm: "180px",
+                md: "auto",
+                lg: "auto",
+                xl: "auto",
+                "2xl": "auto",
+              }}
+            />
+          </Flex>
+          <Flex flexDirection="column" alignItems="start" w="100%">
+            <Text
+              fontFamily="Poppins"
+              fontWeight="600"
+              textAlign="center"
+              color="white"
+              fontSize={{
+                base: "16px",
+                sm: "16px",
+                md: "20px",
+                lg: "20px",
+                xl: "25px",
+                "2xl": "25px",
+              }}
+            >
+              ALPHA PACK
+            </Text>
+            <Box bgColor="#3A3F49" px="4" py="2" borderRadius="10px" mt="2">
+              <Text
+                fontFamily="CCElephantmenTall Regular"
+                fontWeight="400"
+                textAlign="center"
+                color="white"
+                fontSize={{
+                  base: "12px",
+                  sm: "12px",
+                  md: "14px",
+                  lg: "14px",
+                  xl: "14px",
+                  "2xl": "14px",
+                }}
+                letterSpacing="1px"
+              >
+                {settings?.packs?.[0].remaining.toLocaleString()} PACKS
+                REMAINING
+              </Text>
+            </Box>
+            <Divider borderColor="#3A3F49" my="6" />
+            <Flex alignItems="start" flexDirection="column" gap="4">
+              <Text
+                fontFamily="Poppins"
+                fontWeight="thin"
+                color="white"
+                fontSize={{
+                  base: "10px",
+                  sm: "10px",
+                  md: "12px",
+                  lg: "12px",
+                  xl: "14px",
+                  "2xl": "14px",
+                }}
+              >
+                The ALPHA PACK set is now available!
+              </Text>
+              <Text
+                fontFamily="Poppins"
+                fontWeight="thin"
+                color="white"
+                fontSize={{
+                  base: "10px",
+                  sm: "10px",
+                  md: "12px",
+                  lg: "12px",
+                  xl: "14px",
+                  "2xl": "14px",
+                }}
+              >
+                Each pack contains 5 random cards from the Retzark Alpha card
+                set.
+              </Text>
+              <Text
+                fontFamily="Poppins"
+                fontWeight="semibold"
+                color="white"
+                fontSize={{
+                  base: "10px",
+                  sm: "10px",
+                  md: "12px",
+                  lg: "12px",
+                  xl: "14px",
+                  "2xl": "14px",
+                }}
+              >
+                Guaranteed to contain at least one card that is EPIC or better!
+              </Text>
+            </Flex>
+            <Flex alignItems="start" flexDirection="column" gap="4" mt="6">
+              <Text
+                fontFamily="Poppins"
+                fontWeight="semibold"
+                textAlign="center"
+                color="white"
+                fontSize={{
+                  base: "10px",
+                  sm: "10px",
+                  md: "12px",
+                  lg: "12px",
+                  xl: "14px",
+                  "2xl": "14px",
+                }}
+              >
+                Drop Rates:
+              </Text>
+              <Flex gap="2" flexWrap="wrap">
+                <Flex
+                  bgColor="#3A3F49"
+                  px="3"
+                  py="1"
+                  borderRadius="10px"
+                  gap="2"
+                  alignItems="center"
                 >
-                  Buy 10 Packs
-                </button>
-                <button
-                  onClick={() => handleSelectPack("100")}
-                  className={`${
-                    selectedPack === "100"
-                      ? "bg-primary text-white"
-                      : "bg-gray-700 text-white"
-                  } font-bold py-2 px-2 sm:px-4 rounded hover:bg-gray-600 transition duration-150 ease-in-out text-sm sm:text-base`}
+                  <Image
+                    src="./images/legendary-badge.svg"
+                    objectFit="contain"
+                    w={{
+                      base: "10px",
+                      sm: "10px",
+                      md: "10px",
+                      lg: "10px",
+                      xl: "12px",
+                      "2xl": "12px",
+                    }}
+                  />
+                  <Text
+                    fontFamily="CCElephantmenTall Regular"
+                    fontWeight="regular"
+                    textAlign="center"
+                    color="#FF4D4D"
+                    fontSize={{
+                      base: "10px",
+                      xxs: "8px",
+                      xs: "10px",
+                      sm: "10px",
+                      md: "12px",
+                      lg: "12px",
+                      xl: "14px",
+                      "2xl": "14px",
+                    }}
+                    letterSpacing="1px"
+                  >
+                    LEGENDARY:&nbsp;
+                    <Text as="span" color="white">
+                      0.25%
+                    </Text>
+                  </Text>
+                </Flex>
+                <Flex
+                  bgColor="#3A3F49"
+                  px="3"
+                  py="1"
+                  borderRadius="10px"
+                  gap="2"
+                  alignItems="center"
                 >
-                  Buy 100 Packs
-                </button>
-                <button
-                  onClick={() => handleSelectPack("500")}
-                  className={`${
-                    selectedPack === "500"
-                      ? "bg-primary text-white"
-                      : "bg-gray-700 text-white"
-                  } font-bold py-2 px-2 sm:px-4 rounded hover:bg-gray-600 transition duration-150 ease-in-out text-sm sm:text-base`}
+                  <Image
+                    src="./images/epic-badge.svg"
+                    objectFit="contain"
+                    w={{
+                      base: "10px",
+                      sm: "10px",
+                      md: "10px",
+                      lg: "10px",
+                      xl: "12px",
+                      "2xl": "12px",
+                    }}
+                  />
+                  <Text
+                    fontFamily="CCElephantmenTall Regular"
+                    fontWeight="regular"
+                    textAlign="center"
+                    color="#FF9104"
+                    fontSize={{
+                      base: "10px",
+                      xxs: "8px",
+                      xs: "10px",
+                      sm: "10px",
+                      md: "12px",
+                      lg: "12px",
+                      xl: "14px",
+                      "2xl": "14px",
+                    }}
+                    letterSpacing="1px"
+                  >
+                    EPIC:&nbsp;
+                    <Text as="span" color="white">
+                      0.5.75%
+                    </Text>
+                  </Text>
+                </Flex>
+                <Flex
+                  bgColor="#3A3F49"
+                  px="3"
+                  py="1"
+                  borderRadius="10px"
+                  gap="2"
+                  alignItems="center"
                 >
-                  Buy 500 Packs
-                </button>
-              </div>
-              <div className="text-left text-white font-semibold mb-2 text-sm sm:text-base">
-                QTY: {selectedPack ? selectedPack : "1"}
-              </div>
-              <div className="text-lg text-white mb-4 text-left">
+                  <Image
+                    src="./images/rare-badge.svg"
+                    objectFit="contain"
+                    w={{
+                      base: "10px",
+                      sm: "10px",
+                      md: "10px",
+                      lg: "10px",
+                      xl: "12px",
+                      "2xl": "12px",
+                    }}
+                  />
+                  <Text
+                    fontFamily="CCElephantmenTall Regular"
+                    fontWeight="regular"
+                    textAlign="center"
+                    color="#B5B5B5"
+                    fontSize={{
+                      base: "10px",
+                      xxs: "8px",
+                      xs: "10px",
+                      sm: "10px",
+                      md: "12px",
+                      lg: "12px",
+                      xl: "14px",
+                      "2xl": "14px",
+                    }}
+                    letterSpacing="1px"
+                  >
+                    RARE:&nbsp;
+                    <Text as="span" color="white">
+                      34%
+                    </Text>
+                  </Text>
+                </Flex>
+                <Flex
+                  bgColor="#3A3F49"
+                  px="3"
+                  py="1"
+                  borderRadius="10px"
+                  gap="2"
+                  alignItems="center"
+                >
+                  <Image
+                    src="./images/common-badge.svg"
+                    objectFit="contain"
+                    w={{
+                      base: "10px",
+                      sm: "10px",
+                      md: "10px",
+                      lg: "10px",
+                      xl: "12px",
+                      "2xl": "12px",
+                    }}
+                  />
+                  <Text
+                    fontFamily="CCElephantmenTall Regular"
+                    fontWeight="regular"
+                    textAlign="center"
+                    color="#DA9466"
+                    fontSize={{
+                      base: "10px",
+                      xxs: "8px",
+                      xs: "10px",
+                      sm: "10px",
+                      md: "12px",
+                      lg: "12px",
+                      xl: "14px",
+                      "2xl": "14px",
+                    }}
+                    letterSpacing="1px"
+                  >
+                    COMMON:&nbsp;
+                    <Text as="span" color="white">
+                      60%
+                    </Text>
+                  </Text>
+                </Flex>
+              </Flex>
+            </Flex>
+          </Flex>
+        </Flex>
+        <Flex
+          p="6"
+          bgColor="#282C34"
+          borderRadius="lg"
+          width={{
+            base: "100%",
+            sm: "100%",
+            md: "100%",
+            lg: "30%",
+            xl: "30%",
+            "2xl": "30%",
+          }}
+          gap="10"
+        >
+          <Flex flexDirection="column" alignItems="start" w="100%">
+            <Text
+              fontFamily="Poppins"
+              fontWeight="600"
+              color="white"
+              fontSize={{
+                base: "20px",
+                sm: "20px",
+                md: "20px",
+                lg: "20px",
+                xl: "25px",
+                "2xl": "25px",
+              }}
+            >
+              BUY ALPHA PACKS
+            </Text>
+            <Flex mt="4" gap="2" flexWrap="wrap">
+              <Button
+                size="xs"
+                px="4"
+                py="2"
+                fontFamily="CCElephantmenTall Regular"
+                fontWeight="400"
+                textAlign="center"
+                color="white"
+                bgColor={selectedPack === "10" ? "#12BFA0" : "#3A3F49"}
+                borderRadius="10px"
+                fontSize={{
+                  base: "12px",
+                  sm: "12px",
+                  md: "12px",
+                  lg: "12px",
+                  xl: "14px",
+                  "2xl": "14px",
+                }}
+                _hover={{
+                  bgColor: "#12BFA0",
+                }}
+                onClick={() => handleSelectPack("10")}
+              >
+                BUY 10 PACKS
+              </Button>
+              <Button
+                size="xs"
+                px="4"
+                py="2"
+                fontFamily="CCElephantmenTall Regular"
+                fontWeight="400"
+                textAlign="center"
+                color="white"
+                bgColor={selectedPack === "100" ? "#12BFA0" : "#3A3F49"}
+                borderRadius="10px"
+                fontSize={{
+                  base: "12px",
+                  sm: "12px",
+                  md: "12px",
+                  lg: "12px",
+                  xl: "14px",
+                  "2xl": "14px",
+                }}
+                _hover={{
+                  bgColor: "#12BFA0",
+                }}
+                onClick={() => handleSelectPack("100")}
+              >
+                BUY 100 PACKS
+              </Button>
+              <Button
+                size="xs"
+                px="4"
+                py="2"
+                fontFamily="CCElephantmenTall Regular"
+                fontWeight="400"
+                textAlign="center"
+                color="white"
+                bgColor={selectedPack === "500" ? "#12BFA0" : "#3A3F49"}
+                borderRadius="10px"
+                fontSize={{
+                  base: "12px",
+                  sm: "12px",
+                  md: "12px",
+                  lg: "12px",
+                  xl: "14px",
+                  "2xl": "14px",
+                }}
+                _hover={{
+                  bgColor: "#12BFA0",
+                }}
+                onClick={() => handleSelectPack("500")}
+              >
+                BUY 500 PACKS
+              </Button>
+            </Flex>
+            <Flex mt="4" gap="2" flexWrap="wrap">
+              <Box
+                px="4"
+                py="2px"
+                fontFamily="CCElephantmenTall Regular"
+                fontWeight="400"
+                textAlign="center"
+                color="#959595"
+                bgColor="white"
+                borderRadius="10px"
+                fontSize={{
+                  base: "12px",
+                  sm: "12px",
+                  md: "12px",
+                  lg: "12px",
+                  xl: "14px",
+                  "2xl": "14px",
+                }}
+              >
+                QTY:&nbsp;
+                <Text as="span" color="#090909">
+                  {selectedPack ? selectedPack : "1"}
+                </Text>
+              </Box>
+            </Flex>
+            <Divider borderColor="#3A3F49" my="8" />
+            <Box w="full">
+              <Text
+                fontFamily="Poppins"
+                fontWeight="thin"
+                color="white"
+                fontSize={{
+                  base: "12px",
+                  sm: "12px",
+                  md: "12px",
+                  lg: "12px",
+                  xl: "14px",
+                  "2xl": "14px",
+                }}
+              >
                 TOTAL PRICE
-              </div>
-              <div className="flex items-center mb-4">
-                <img
-                  src="/images/currency_logo.svg"
-                  alt="Currency"
-                  className="w-6 sm:w-8 h-6 sm:h-8 mr-2"
+              </Text>
+              <Flex alignItems="center" gap="1">
+                <Image
+                  src="./images/currency_logo.svg"
+                  alt="currency"
+                  objectFit="contain"
+                  mt="-3px"
+                  w={{
+                    base: "25px",
+                    sm: "25px",
+                    md: "25px",
+                    lg: "22px",
+                    xl: "28px",
+                    "2xl": "28px",
+                  }}
                 />
-                <div className="text-2xl sm:text-3xl font-bold text-white">
+                <Text
+                  fontFamily="Poppins"
+                  fontWeight="bold"
+                  color="white"
+                  fontSize={{
+                    base: "28px",
+                    sm: "28px",
+                    md: "28px",
+                    lg: "28px",
+                    xl: "30px",
+                    "2xl": "30px",
+                  }}
+                >
                   0.083745
-                </div>
-              </div>
-              <button
-                className="bg-primary text-white font-bold py-3 px-6 sm:py-2 sm:px-4 rounded mt-4 flex items-center justify-center space-x-2 w-full"
+                </Text>
+              </Flex>
+              <Button
+                w="full"
+                mt="8"
+                bgColor="#12BFA0"
+                fontFamily="CCElephantmenTall Regular"
+                fontWeight="regular"
+                color="white"
+                fontSize={{
+                  base: "20px",
+                  sm: "20px",
+                  md: "20px",
+                  lg: "20px",
+                  xl: "20px",
+                  "2xl": "20px",
+                }}
+                h="50px"
+                _hover={{ bgColor: "#0d977e" }}
                 onClick={handleOpenModal}
               >
-                <img
-                  src="/images/buy-now.svg"
-                  className="w-8 sm:w-10 h-8 sm:h-10"
-                  alt="Buy Now"
+                <Image
+                  src="./images/buy-now.svg"
+                  w={{
+                    base: "20px",
+                    sm: "20px",
+                    md: "20px",
+                    lg: "20px",
+                    xl: "20px",
+                    "2xl": "20px",
+                  }}
                 />
-                <span className="hidden sm:inline">BUY NOW</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
+                &nbsp; BUY NOW
+              </Button>
+            </Box>
+          </Flex>
+        </Flex>
+      </Flex>
       {showModal && (
         <BuyPacksModal
           showModal={showModal}
@@ -212,7 +719,7 @@ const Packs = () => {
           setQuantity={setQuantity}
         />
       )}
-    </div>
+    </>
   );
 };
 

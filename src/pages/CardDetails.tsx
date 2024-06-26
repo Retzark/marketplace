@@ -230,7 +230,6 @@ const CardDetails = () => {
 
   const confirmBuy = async () => {
     try {
-      console.log(selectedEntries);
       await requestBuy({
         nfts: selectedEntries.map((entry) => entry.nft_id.toString()),
       });

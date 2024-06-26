@@ -32,7 +32,7 @@ const BuyCard: React.FC<BuyCardProps> = ({
     }
     try {
       const endpoint = "contracts";
-      const symbols = ["SWAP.HIVE"];
+      const symbols = ["ZARK"];
       const query = {
         account: user?.username,
         symbol: { $in: symbols },
@@ -118,11 +118,11 @@ const BuyCard: React.FC<BuyCardProps> = ({
         </div>
         <div className="mb-6 text-white">
           <h3 className="font-semibold text-gray-300">Total Price:</h3>
-          <p className="text-lg">{totalPrice} SWAP.HIVE</p>
+          <p className="text-lg">{totalPrice} ZARK</p>
         </div>
         <div className="mb-6 text-white">
           <h3 className="font-semibold text-gray-300">Current Balance:</h3>
-          <p className="text-lg">{balance} SWAP.HIVE</p>
+          <p className="text-lg">{balance} ZARK</p>
         </div>
         <div className="flex justify-end space-x-4">
           <button
@@ -137,8 +137,8 @@ const BuyCard: React.FC<BuyCardProps> = ({
                 ? "bg-gray-600 cursor-not-allowed"
                 : "bg-green-600 hover:bg-green-700"
             } text-white py-2 px-4 rounded-lg shadow transition duration-200`}
-            onClick={balance >= totalPrice ? onConfirm : undefined}
-            disabled={balance < totalPrice}
+            onClick={onConfirm}
+            // disabled={balance < totalPrice}
           >
             Confirm
           </button>

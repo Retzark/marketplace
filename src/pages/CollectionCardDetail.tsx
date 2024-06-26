@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { Card, SellBookEntry } from "@/types"; // Adjust the import paths as necessary
-import useMarketStore from "@/store/useMarketStore";
 import Loading from "@/components/Loading"; // Adjust the import path as necessary
-import BuyCard from "@/components/modals/BuyCard"; // Adjust the import path as necessary
 import ListingsTable from "@/components/ListingsTable"; // Adjust the import path as necessary
 import StatsAndMoveset from "@/components/StatsAndMoveset";
-import { fetchCardsData } from "@/utils/fetchCardData"; // Adjust the import path as necessary
+import useCardStore from "@/store/useCardStore";
 import {
   Box,
   Button,
@@ -17,7 +15,6 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { RiFireFill } from "react-icons/ri";
-import useAppStore from "@/store/useAppStore";
 
 const Hero = () => (
   <div className="relative w-full">
@@ -110,20 +107,18 @@ const SaleHistoryTable: React.FC<{ entries: SellBookEntry[] }> = ({
   );
 };
 
-const CardDetails = () => {
+const CollectionCardDetail = () => {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
   const card = location.state?.card as Card;
-  const { fetchSellBook, requestBuy, requestCancel } = useMarketStore();
+  const fetchCardDetails = useCardStore((state) => state.fetchCardDetails);
   const [fetchedCard, setFetchedCard] = useState<Card | null>(null);
   const [sellBookEntries, setSellBookEntries] = useState<SellBookEntry[]>([]);
   const [selectedEntries, setSelectedEntries] = useState<SellBookEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isListingsLoading, setIsListingsLoading] = useState(true); // For listings loading
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { settings } = useAppStore((state) => ({
-    settings: state.settings,
-  }));
+
   const [saleHistoryEntries] = useState<SellBookEntry[]>([
     {
       buyer: "valkangel",
@@ -148,53 +143,25 @@ const CardDetails = () => {
   ]); // Dummy sale history data
 
   useEffect(() => {
-    const fetchCardDetails = async () => {
-      // Fetch the JSON data
+    const fetchDetails = async () => {
+      setIsLoading(true);
       try {
-        const data = await fetchCardsData();
-
-        // Find the card data from JSON
-        const cardFromJson = data.find((c) => c.ID === parseInt(id));
-        if (cardFromJson) {
-          setFetchedCard({
-            _id: cardFromJson.ID.toString(),
-            name: cardFromJson.NAME,
-            type: "Type", // Adjust this if you have a type in your JSON
-            description: "Description", // Adjust this if you have a description in your JSON
-            count: 1, // Adjust this if you have a count in your JSON
-            hp: cardFromJson.HP,
-            atk: cardFromJson.ATK,
-            spd: cardFromJson.SPD,
-            egy: cardFromJson.EGY,
-            rarity: cardFromJson.RARITY,
-            grouping: {
-              type: card?.grouping.type,
-              foil: card?.grouping.foil, // Assuming foil is not provided in the JSON, default to "0"
-              edition: card?.grouping.edition, // Assuming edition is not provided in the JSON, default to "0"
-            },
-          } as Card);
-        }
+        const { card: fetchedCard, sellBookEntries } = await fetchCardDetails(
+          id,
+          card,
+        );
+        setFetchedCard(fetchedCard);
+        setSellBookEntries(sellBookEntries);
       } catch (error) {
-        console.error("Failed to fetch cards data:", error);
-        return;
+        console.error("Failed to fetch card details:", error);
+      } finally {
+        setIsLoading(false);
+        setIsListingsLoading(false); // Set listings loading to false after fetching
       }
-
-      const query = {
-        "grouping.type": card?.grouping.type || fetchedCard?.grouping.type,
-        "grouping.foil": card?.grouping.foil || fetchedCard?.grouping.foil,
-        "grouping.edition":
-          card?.grouping.edition || fetchedCard?.grouping.edition,
-      };
-
-      const fetchedSellBookEntries = await fetchSellBook(query);
-      setSellBookEntries(fetchedSellBookEntries);
-
-      setIsListingsLoading(false); // Set listings loading to false after fetching
-      setIsLoading(false);
     };
 
-    fetchCardDetails();
-  }, [id, card, fetchSellBook]);
+    fetchDetails();
+  }, [id, card, fetchCardDetails]);
 
   const handleSelect = (entry: SellBookEntry, isSelected: boolean) => {
     setSelectedEntries((prev) => {
@@ -204,44 +171,6 @@ const CardDetails = () => {
         return prev.filter((e) => e.nft_id !== entry.nft_id);
       }
     });
-  };
-
-  const handleBuyNow = () => {
-    if (selectedEntries.length > 0) {
-      setIsModalOpen(true);
-    } else {
-      alert("Please select at least one entry to buy.");
-    }
-  };
-
-  const handleCancel = async (entry: SellBookEntry) => {
-    try {
-      await requestCancel({ nfts: [entry.nft_id.toString()] });
-      alert("Cancellation successful!");
-      // Optionally, update the state to remove the cancelled entry
-      setSellBookEntries((prev) =>
-        prev.filter((e) => e.nft_id !== entry.nft_id),
-      );
-    } catch (error) {
-      console.error("Cancellation failed:", error);
-      alert("Cancellation failed. Please try again.");
-    }
-  };
-
-  const confirmBuy = async () => {
-    try {
-      console.log(selectedEntries);
-      await requestBuy({
-        nfts: selectedEntries.map((entry) => entry.nft_id.toString()),
-      });
-      alert("Purchase successful!");
-    } catch (error) {
-      console.error("Purchase failed:", error);
-      alert("Purchase failed. Please try again.");
-    } finally {
-      setIsModalOpen(false);
-      setSelectedEntries([]);
-    }
   };
 
   if (isLoading) {
@@ -266,7 +195,7 @@ const CardDetails = () => {
           <Box>
             <Box bgColor="#282C34" borderRadius="lg" p="6">
               <Image
-                src={`https://cdn.tribaldex.com/packmanager/${settings.nft_symbol}/${fetchedCard.grouping.edition}_${fetchedCard.grouping.type}_${fetchedCard.grouping.foil}.png`}
+                src={`https://cdn.tribaldex.com/packmanager/DATA/${fetchedCard.grouping.edition}_${fetchedCard.type}_${fetchedCard.foil}.png`}
                 objectFit="cover"
                 h="290px"
                 w="full"
@@ -369,7 +298,7 @@ const CardDetails = () => {
                   </Text>
                   <Flex alignItems="center" gap="2">
                     <Image
-                      src="/images/ZARK-TOKEN_1.png"
+                      src="/images/currency_logo.svg"
                       objectFit="contain"
                       alt="EGY ICON"
                       width="32px"
@@ -399,7 +328,6 @@ const CardDetails = () => {
                       opacity: "0.8",
                       transform: "scale(1.05)",
                     }}
-                    onClick={handleBuyNow}
                   >
                     <Image
                       src="/images/buy-now.svg"
@@ -427,16 +355,9 @@ const CardDetails = () => {
         <div className="w-full mt-8">
           <SaleHistoryTable entries={saleHistoryEntries} />
         </div>
-
-        <BuyCard
-          isOpen={isModalOpen}
-          onRequestClose={() => setIsModalOpen(false)}
-          entries={selectedEntries}
-          onConfirm={confirmBuy}
-        />
       </div>
     </div>
   );
 };
 
-export default CardDetails;
+export default CollectionCardDetail;

@@ -1,6 +1,15 @@
+import { useParams, Navigate } from "react-router-dom";
 import CollectionCardsList from "@/components/CollectionCardsList";
+import useUserStore from "@/store/userStore";
 
 const Cards = () => {
+  const { username } = useParams<{ username: string }>();
+  const user = useUserStore((state) => state.user);
+
+  if (!user || user.username !== username) {
+    return <Navigate to="/login" />;
+  }
+
   return (
     <div>
       <div className="row">
@@ -20,7 +29,7 @@ const Cards = () => {
         </div>
       </div>
 
-      <CollectionCardsList />
+      <CollectionCardsList username={username} />
     </div>
   );
 };

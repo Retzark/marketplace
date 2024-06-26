@@ -1,6 +1,7 @@
 import React from "react";
 import { Card } from "@/types";
 import { Box, Divider, Flex, Grid, Image, Text } from "@chakra-ui/react";
+import useAppStore from "@/store/useAppStore";
 
 interface StatsAndMovesetProps {
   card: Card;
@@ -16,13 +17,16 @@ const badgeStyles = {
 };
 
 const StatsAndMoveset: React.FC<StatsAndMovesetProps> = ({ card }) => {
+  const { settings } = useAppStore((state) => ({
+    settings: state.settings,
+  }));
   return (
     <Box bgColor="#282C34" borderRadius="lg" p="6">
       <Box display="flex" gap="8" alignItems="start">
         <Box>
           <Image
             borderRadius="7px"
-            src={`https://cdn.tribaldex.com/packmanager/DATA/${card.grouping.edition}_${card.grouping.type}_${card.grouping.foil}.png`}
+            src={`https://cdn.tribaldex.com/packmanager/${settings.nft_symbol}/${card.grouping.edition}_${card.grouping.type}_${card.grouping.foil}.png`}
             objectFit="contain"
             alt="Card Image"
             width="100%"

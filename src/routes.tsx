@@ -7,11 +7,16 @@ import Home from "@/pages/Home";
 import Packs from "@/pages/Packs";
 import Login from "@/pages/Login";
 import Profile from "@/pages/Profile";
+import CollectionCardDetail from "@/pages/CollectionCardDetail";
 
 const AppRoutes = () => (
   <Routes>
     <Route path="/" element={<Home />} />
-    <Route path="/cards" element={<Cards />} />
+    <Route path="/cards/:username" element={<Cards />} />
+    <Route
+      path="/collection/card/:id"
+      element={<CollectionCardDetail />}
+    />{" "}
     <Route path="/packs" element={<Packs />} />
     <Route path="/marketplace" element={<Marketplace />} />
     <Route path="/open" element={<Open />} />

@@ -161,20 +161,20 @@ const useMarketStore = create<MarketStore>((set, get) => {
           },
         };
 
-        await requestBroadcastOps(json, "sell");
+        return await requestBroadcastOps(json, "sell");
       } catch (error) {
         console.error(error);
       }
     },
     requestBuy: async ({ nfts }) => {
       try {
-        const { nft_symbol, account } = useAppStore.getState().settings;
+        const { account } = useAppStore.getState().settings;
 
         const json = {
           contractName: "nftmarket",
           contractAction: "buy",
           contractPayload: {
-            symbol: nft_symbol,
+            symbol: "ZARK",
             nfts,
             marketAccount: account,
           },

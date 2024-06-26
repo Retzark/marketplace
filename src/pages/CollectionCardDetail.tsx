@@ -1,20 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { Card, SellBookEntry } from "@/types"; // Adjust the import paths as necessary
 import Loading from "@/components/Loading"; // Adjust the import path as necessary
 import ListingsTable from "@/components/ListingsTable"; // Adjust the import path as necessary
 import StatsAndMoveset from "@/components/StatsAndMoveset";
 import useCardStore from "@/store/useCardStore";
+import useMarketStore from "@/store/useMarketStore";
 import {
   Box,
   Button,
   Divider,
   Flex,
+  Grid,
   Icon,
   Image,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { RiFireFill } from "react-icons/ri";
+import useAppStore from "@/store/useAppStore";
+import Swal from "sweetalert2";
+import SellModal from "@/components/modals/SellModal";
 
 const Hero = () => (
   <div className="relative w-full">
@@ -112,12 +118,18 @@ const CollectionCardDetail = () => {
   const location = useLocation();
   const card = location.state?.card as Card;
   const fetchCardDetails = useCardStore((state) => state.fetchCardDetails);
+  const fetchCollection = useCardStore((state) => state.fetchCollection);
+  const requestSell = useMarketStore((state) => state.requestSell);
+  const data = useCardStore((state) => state.data);
+  const isLoading = useCardStore((state) => state.isLoading);
+  const error = useCardStore((state) => state.error);
   const [fetchedCard, setFetchedCard] = useState<Card | null>(null);
   const [sellBookEntries, setSellBookEntries] = useState<SellBookEntry[]>([]);
   const [selectedEntries, setSelectedEntries] = useState<SellBookEntry[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [isListingsLoading, setIsListingsLoading] = useState(true); // For listings loading
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { settings } = useAppStore((state) => ({
+    settings: state.settings,
+  }));
 
   const [saleHistoryEntries] = useState<SellBookEntry[]>([
     {
@@ -142,39 +154,83 @@ const CollectionCardDetail = () => {
     },
   ]); // Dummy sale history data
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedNftId, setSelectedNftId] = useState<number | null>(null);
+
+  const handleSell = (id: number) => {
+    setSelectedNftId(id);
+    onOpen();
+  };
+
+  const handleModalSubmit = async (
+    nftId: number,
+    price: string,
+    priceSymbol: string,
+  ) => {
+    try {
+      await requestSell({
+        nfts: [nftId.toString()],
+        price: parseFloat(price),
+        priceSymbol,
+      });
+      Swal.fire({
+        title: "Success",
+        text: `NFT with ID ${nftId} is listed for sale at ${price} ${priceSymbol}.`,
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+    } catch (error) {
+      Swal.fire({
+        title: "Error",
+        text: "Failed to list NFT for sale.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      console.error("Failed to sell NFT:", error);
+    }
+  };
+
   useEffect(() => {
     const fetchDetails = async () => {
-      setIsLoading(true);
+      setIsListingsLoading(true);
       try {
+        await fetchCollection(); // Fetch the collection data
         const { card: fetchedCard, sellBookEntries } = await fetchCardDetails(
           id,
           card,
         );
         setFetchedCard(fetchedCard);
         setSellBookEntries(sellBookEntries);
+        console.log("Card details fetched:", fetchedCard);
+        console.log("Sell book entries:", sellBookEntries);
       } catch (error) {
         console.error("Failed to fetch card details:", error);
       } finally {
-        setIsLoading(false);
         setIsListingsLoading(false); // Set listings loading to false after fetching
       }
     };
 
     fetchDetails();
-  }, [id, card, fetchCardDetails]);
+  }, [id, card, fetchCardDetails, fetchCollection]);
 
-  const handleSelect = (entry: SellBookEntry, isSelected: boolean) => {
-    setSelectedEntries((prev) => {
-      if (isSelected) {
-        return [...prev, entry];
-      } else {
-        return prev.filter((e) => e.nft_id !== entry.nft_id);
-      }
-    });
-  };
+  const filteredData = data.filter(
+    (item) => fetchedCard && item.type === fetchedCard.grouping.type,
+  );
+
+  useEffect(() => {
+    console.log("Filtered data:", filteredData);
+  }, [filteredData]);
 
   if (isLoading) {
     return <Loading />;
+  }
+
+  if (error) {
+    return (
+      <div className="text-center mt-8">
+        Failed to load card details: {error.message}
+      </div>
+    );
   }
 
   if (!fetchedCard) {
@@ -189,173 +245,223 @@ const CollectionCardDetail = () => {
         style={{ marginTop: "-390px", position: "relative" }}
       >
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <div className="md:col-span-2">
+          <div className="md:col-span-3">
             <StatsAndMoveset card={fetchedCard} />
           </div>
-          <Box>
-            <Box bgColor="#282C34" borderRadius="lg" p="6">
-              <Image
-                src={`https://cdn.tribaldex.com/packmanager/DATA/${fetchedCard.grouping.edition}_${fetchedCard.type}_${fetchedCard.foil}.png`}
-                objectFit="cover"
-                h="290px"
-                w="full"
-                borderRadius="lg"
-              />
-              <Box>
-                <Text
-                  as="h5"
-                  fontFamily="CCElephantmenTall Regular"
-                  fontSize="32px"
-                  color="white"
-                >
-                  {fetchedCard.name}
-                </Text>
-                <Flex gap="2" flexWrap="wrap">
-                  <Box
-                    bgColor="#3A3F49"
-                    px="4"
-                    py="2"
-                    borderRadius="10px"
-                    display="flex"
-                    gap="1"
-                    width="fit-content"
-                    alignItems="center"
-                    mt="2"
-                  >
-                    <Image
-                      src="/images/legendary-badge.svg"
-                      objectFit="contain"
-                      alt="EGY ICON"
-                      width="16px"
-                      height="16px"
-                    />
-                    <Text
-                      fontFamily="CCElephantmenTall Regular"
-                      fontSize="16px"
-                      color="#FF4D4D"
-                    >
-                      LEGENDARY
-                    </Text>
-                  </Box>
-                  <Box
-                    bgColor="#E40000"
-                    px="4"
-                    py="2"
-                    borderRadius="10px"
-                    display="flex"
-                    gap="1"
-                    width="fit-content"
-                    alignItems="center"
-                    mt="2"
-                  >
-                    <Icon as={RiFireFill} color="white" mt="-2px" />
-                    <Text
-                      fontFamily="CCElephantmenTall Regular"
-                      fontSize="16px"
-                      color="white"
-                    >
-                      HOT
-                    </Text>
-                  </Box>
-                  <Box
-                    bgColor="#005BE4"
-                    px="4"
-                    py="2"
-                    borderRadius="10px"
-                    display="flex"
-                    gap="1"
-                    width="fit-content"
-                    alignItems="center"
-                    mt="2"
-                  >
-                    <Image
-                      src="/images/limited-icon.svg"
-                      objectFit="contain"
-                      alt="EGY ICON"
-                      width="16px"
-                      height="16px"
-                    />
-                    <Text
-                      fontFamily="CCElephantmenTall Regular"
-                      fontSize="16px"
-                      color="white"
-                    >
-                      LIMITED
-                    </Text>
-                  </Box>
-                </Flex>
-
-                <Divider borderColor="#3A3F49" my="4" />
-                <Box>
-                  <Text
-                    as="h5"
-                    fontFamily="Poppins"
-                    fontSize="16px"
-                    color="white"
-                    fontWeight="300"
-                  >
-                    TOTAL PRICE
-                  </Text>
-                  <Flex alignItems="center" gap="2">
-                    <Image
-                      src="/images/currency_logo.svg"
-                      objectFit="contain"
-                      alt="EGY ICON"
-                      width="32px"
-                      height="32px"
-                    />
-                    <Text
-                      fontFamily="Poppins"
-                      fontSize="32px"
-                      color="white"
-                      fontWeight="bold"
-                    >
-                      5.083655
-                    </Text>
-                  </Flex>
-                  <Button
-                    mt="6"
-                    w="full"
-                    p="6"
-                    bgColor="#12BFA0"
-                    fontFamily="CCElephantmenTall Regular"
-                    fontSize="24px"
-                    color="white"
-                    fontWeight="400"
-                    gap="4"
-                    _hover={{
-                      bgColor: "#12BFA0",
-                      opacity: "0.8",
-                      transform: "scale(1.05)",
-                    }}
-                  >
-                    <Image
-                      src="/images/buy-now.svg"
-                      objectFit="contain"
-                      alt="EGY ICON"
-                      width="24px"
-                      height="24px"
-                    />
-                    BUY NOW
-                  </Button>
-                </Box>
-              </Box>
-            </Box>
-          </Box>
         </div>
+        <Box bgColor="#282C34" borderRadius="lg" p="6" mt="8">
+          <Text
+            mt="-6px"
+            fontFamily="Poppins"
+            fontSize="22px"
+            fontWeight="bold"
+            color="white"
+          >
+            Cards
+          </Text>
+          <Flex mt="4">
+            <Box
+              w="100%"
+              bgColor="#3A3F49"
+              borderRadius="lg"
+              flexDirection="column"
+              p="2"
+              display={{
+                base: "none",
+                sm: "none",
+                md: "none",
+                lg: "flex",
+                xl: "flex",
+                "2xl": "flex",
+              }}
+            >
+              <Flex
+                w="100%"
+                bgColor="#3A3F49"
+                borderRadius="lg"
+                alignItems="center"
+              >
+                <Box w="25%" p="5">
+                  <Text
+                    fontFamily="CCElephantmenTall Regular"
+                    fontSize="20px"
+                    fontWeight="400"
+                    color="white"
+                  >
+                    ID
+                  </Text>
+                </Box>
+                <Box w="30%" p="5">
+                  <Text
+                    fontFamily="CCElephantmenTall Regular"
+                    fontSize="20px"
+                    fontWeight="400"
+                    color="white"
+                  >
+                    Account
+                  </Text>
+                </Box>
+                <Box w="35%" p="5">
+                  <Text
+                    fontFamily="CCElephantmenTall Regular"
+                    fontSize="20px"
+                    fontWeight="400"
+                    color="white"
+                  >
+                    Name
+                  </Text>
+                </Box>
+                <Box w="10%" p="5">
+                  <Text
+                    fontFamily="CCElephantmenTall Regular"
+                    fontSize="20px"
+                    fontWeight="400"
+                    color="white"
+                  >
+                    Action
+                  </Text>
+                </Box>
+              </Flex>
 
-        <Box>
-          <ListingsTable
-            entries={sellBookEntries}
-            isLoading={isListingsLoading}
-            onSelect={handleSelect}
-          />
+              {filteredData.map((item, index) => {
+                return (
+                  <Fragment key={item.nft_id}>
+                    <Flex
+                      w="100%"
+                      bgColor={index % 2 === 0 ? "#090909" : "transparent"}
+                      alignItems="center"
+                    >
+                      <Box w="25%" p="5">
+                        <Text
+                          fontFamily="Poppins"
+                          fontSize="16px"
+                          fontWeight="400"
+                          color="white"
+                        >
+                          #{item.nft_id}
+                        </Text>
+                      </Box>
+                      <Box w="30%" p="5">
+                        <Text
+                          fontFamily="Poppins"
+                          fontSize="16px"
+                          fontWeight="400"
+                          color="white"
+                        >
+                          @{item.account}
+                        </Text>
+                      </Box>
+                      <Box w="35%" p="5">
+                        <Text
+                          fontFamily="Poppins"
+                          fontSize="16px"
+                          fontWeight="400"
+                          color="white"
+                        >
+                          {item.name}
+                        </Text>
+                      </Box>
+                      <Box w="10%" p="5">
+                        <Button
+                          onClick={() => handleSell(item.nft_id)}
+                          bgColor="green.500"
+                          color="white"
+                          _hover={{
+                            bgColor: "green.700",
+                          }}
+                        >
+                          Sell
+                        </Button>
+                      </Box>
+                    </Flex>
+                  </Fragment>
+                );
+              })}
+            </Box>
+            <Box
+              w="100%"
+              bgColor="#3A3F49"
+              borderRadius="lg"
+              flexDirection="column"
+              p="2"
+              display={{
+                base: "flex",
+                sm: "flex",
+                md: "flex",
+                lg: "none",
+                xl: "none",
+                "2xl": "none",
+              }}
+            >
+              {filteredData.map((item, index) => {
+                return (
+                  <Fragment key={item.nft_id}>
+                    <Grid
+                      templateColumns="repeat(2, 1fr)"
+                      gap="2"
+                      w="100%"
+                      p="2"
+                    >
+                      <Box>
+                        <Text
+                          fontFamily="Poppins"
+                          fontSize="12px"
+                          fontWeight="600"
+                          color="white"
+                        >
+                          ID
+                        </Text>
+                        <Text
+                          mt="2"
+                          fontFamily="Poppins"
+                          fontSize="10px"
+                          fontWeight="400"
+                          color="white"
+                        >
+                          #{item.nft_id}
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Text
+                          fontFamily="Poppins"
+                          fontSize="12px"
+                          fontWeight="600"
+                          color="white"
+                        >
+                          Action
+                        </Text>
+                        <Button
+                          mt="2"
+                          w="full"
+                          onClick={() => handleSell(item.nft_id)}
+                          bgColor="green.500"
+                          color="white"
+                          _hover={{
+                            bgColor: "green.700",
+                          }}
+                        >
+                          Sell
+                        </Button>
+                      </Box>
+                    </Grid>
+                    {filteredData.length !== index + 1 && <Divider mb="2" />}
+                  </Fragment>
+                );
+              })}
+            </Box>
+          </Flex>
         </Box>
 
         <div className="w-full mt-8">
           <SaleHistoryTable entries={saleHistoryEntries} />
         </div>
       </div>
+      <SellModal
+        isOpen={isOpen}
+        onClose={onClose}
+        nftId={selectedNftId}
+        onSubmit={handleModalSubmit}
+      />
     </div>
   );
 };

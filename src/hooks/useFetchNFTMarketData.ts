@@ -29,7 +29,7 @@ const useFetchNFTMarketData = () => {
           params: {
             contract: "nftmarket",
             table: `${settings.nft_symbol}openInterest`,
-            query: { priceSymbol: "SWAP.HIVE" },
+            query: { priceSymbol: "ZARK" },
           },
         };
 

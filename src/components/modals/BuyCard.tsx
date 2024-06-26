@@ -138,7 +138,7 @@ const BuyCard: React.FC<BuyCardProps> = ({
                 : "bg-green-600 hover:bg-green-700"
             } text-white py-2 px-4 rounded-lg shadow transition duration-200`}
             onClick={onConfirm}
-            // disabled={balance < totalPrice}
+            disabled={balance < totalPrice}
           >
             Confirm
           </button>

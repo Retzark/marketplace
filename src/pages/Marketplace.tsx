@@ -31,10 +31,10 @@ const Marketplace = () => {
           height={{
             base: "145px",
             sm: "183px",
-            md: "345px",
-            lg: "440px",
-            xl: "675px",
-            "2xl": "675px",
+            md: "255px",
+            lg: "350px",
+            xl: "520px",
+            "2xl": "520px",
           }}
           overflow="hidden"
         >
@@ -48,8 +48,8 @@ const Marketplace = () => {
               sm: "22vh",
               md: "40vh",
               lg: "54vh",
-              xl: "90vh",
-              "2xl": "90vh",
+              xl: "76vh",
+              "2xl": "76vh",
             }}
           />
           <Box

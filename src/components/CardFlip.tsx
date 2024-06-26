@@ -50,8 +50,10 @@ const CardPackOpener: FC<ViewCardsProps> = ({
   );
 
   const [fetchedCards, setFetchedCards] = useState<FetchedCard[]>([]);
+  const [isBusy, setIsBusy] = useState<boolean>(false);
 
   useEffect(() => {
+    setIsBusy(false);
     const fetchData = async () => {
       try {
         const data = await fetchCardsData();
@@ -70,34 +72,15 @@ const CardPackOpener: FC<ViewCardsProps> = ({
 
   const handleOpenPack = useCallback(() => {
     cards.forEach((card, index) => {
+      setIsBusy(true);
       setTimeout(
-        () => handleCardAnimation(card, index, card.type),
+        () => handleCardAnimation(index, card.type),
         (index + 1) * 1000
       );
     });
   }, []);
 
-  const [columns, setColumns] = useState(2);
-
-  useEffect(() => {
-    const updateColumns = () => {
-      const width = window.innerWidth;
-      if (width >= 1536) setColumns(5);
-      else if (width >= 1200) setColumns(5);
-      else if (width >= 960) setColumns(4);
-      else if (width >= 768) setColumns(3);
-      else if (width >= 568) setColumns(2);
-      else if (width >= 511) setColumns(2);
-      else if (width >= 320) setColumns(2);
-      else setColumns(2);
-    };
-
-    updateColumns();
-    window.addEventListener("resize", updateColumns);
-    return () => window.removeEventListener("resize", updateColumns);
-  }, []);
-
-  const handleCardAnimation = (card: Card, index: number, type: string) => {
+  const handleCardAnimation = (index: number, type: string) => {
     const cardDetails = fetchedCards.find((card) => card.ID === parseInt(type));
     if (cardDetails?.RARITY?.toUpperCase() === "LEGENDARY") {
       setShakeCompleted((prev) => {
@@ -106,14 +89,15 @@ const CardPackOpener: FC<ViewCardsProps> = ({
         return updated;
       });
 
-      setTimeout(() => flipCard(card, index, type), 500);
+      setTimeout(() => flipCard(index, type), 500);
     } else {
-      flipCard(card, index, type);
+      flipCard(index, type);
     }
   };
 
-  const flipCard = (card: Card, index: number, type: string) => {
+  const flipCard = (index: number, type: string) => {
     const cardDetails = fetchedCards.find((card) => card.ID === parseInt(type));
+
     setIsFlipped((prevFlips) => {
       const flips = [...prevFlips];
       flips[index] = true;
@@ -133,11 +117,11 @@ const CardPackOpener: FC<ViewCardsProps> = ({
         cardDetails?.RARITY?.toUpperCase() as string
       )
     ) {
-      showEffects(card, index);
+      showEffects(index);
     }
   };
 
-  const showEffects = (card: Card, index: number) => {
+  const showEffects = (index: number) => {
     setShowCircle((prev) => {
       const updated = [...prev];
       updated[index] = true;
@@ -170,17 +154,16 @@ const CardPackOpener: FC<ViewCardsProps> = ({
   const handleCardClick = (index: number) => {
     if (!isFlipped[index]) {
       const card = cards[index];
-      handleCardAnimation(card, index, card.type);
+      handleCardAnimation(index, card.type);
     }
   };
 
-  const getCardAnimation = (rarity: string, index: number, type: string) => {
+  const getCardAnimation = (index: number, type: string) => {
     const cardDetails = fetchedCards.find((card) => card.ID === parseInt(type));
-
     if (
       shakeCompleted[index] &&
       !isFlipped[index] &&
-      cardDetails?.RARITY?.toUpperCase() === "Legendary"
+      cardDetails?.RARITY?.toUpperCase() === "LEGENDARY"
     ) {
       return { animation: "shake 0.4s" };
     }
@@ -190,13 +173,13 @@ const CardPackOpener: FC<ViewCardsProps> = ({
     }
 
     const animations: { [key: string]: any } = {
-      Rare: { boxShadow: "0 0 20px #B5B5B5", transform: "rotateY(180deg)" },
-      Epic: {
+      RARE: { boxShadow: "0 0 20px #B5B5B5", transform: "rotateY(180deg)" },
+      EPIC: {
         boxShadow: "0 0 20px #FF9104",
         transition: "transform 0.2s",
         transform: "rotateY(180deg)",
       },
-      Legendary: {
+      LEGENDARY: {
         boxShadow: "1px 1px 108px 0px #FF4D4D",
         transition: "transform 0.6s",
         transform: "rotateY(180deg)",
@@ -205,8 +188,8 @@ const CardPackOpener: FC<ViewCardsProps> = ({
       default: { boxShadow: "", transform: "rotateY(180deg)" },
     };
 
-    if (animations[rarity]) {
-      return animations[rarity];
+    if (animations[cardDetails?.RARITY?.toUpperCase() as string]) {
+      return animations[cardDetails?.RARITY?.toUpperCase() as string];
     } else {
       return animations.default;
     }
@@ -256,7 +239,7 @@ const CardPackOpener: FC<ViewCardsProps> = ({
             transformStyle: "preserve-3d",
             transition: "transform 0.1s",
             transform: isFlipped[index] ? "rotateY(180deg)" : "rotateY(0)",
-            ...getCardAnimation(card.rarity, index, card.type),
+            ...getCardAnimation(index, card.type),
           }}
           _hover={{
             boxShadow:
@@ -386,112 +369,119 @@ const CardPackOpener: FC<ViewCardsProps> = ({
       <Box
         px={{ base: "10px", sm: "20px", md: "30px", lg: "40px" }}
         py="20px"
-        className={`fixed inset-0 z-50 ${show ? "" : "hidden"} overflow-y-auto`}
+        p="0px !important"
       >
-        <div className="bg-[#1A1A1A] p-5 rounded-lg shadow-xl w-full h-full mx-auto overflow-hidden z-10 flex flex-col">
+        {cards.length > 0 ? (
+          <Box className="flex flex-wrap justify-center" gap="10" mt="6">
+            {mappedCards}
+          </Box>
+        ) : (
+          <p className="text-center text-white">No cards to display</p>
+        )}
+        <Flex
+          justifyContent="center"
+          mt="10"
+          flexDirection="column"
+          gap="6"
+          alignItems="center"
+        >
+          <Button
+            display="flex"
+            alignItems="center"
+            bg="#15C1A2"
+            color="white"
+            shadow="md"
+            borderColor="#1C465B"
+            borderRadius="md"
+            fontFamily="CCElephantmenTall Regular"
+            fontWeight="400"
+            width={{
+              base: "100%",
+              xs: "100%",
+              sm: "30%",
+              md: "30%",
+              lg: "25%",
+              xl: "25%",
+              "2xl": "25%",
+            }}
+            gap="2"
+            fontSize={{
+              base: "14px",
+              xs: "14px",
+              sm: "14px",
+              md: "20px",
+              lg: "25px",
+              xl: "25px",
+              "2xl": "25px",
+            }}
+            py="7"
+            _hover={{ bg: "#1aa188", transform: "scale(1.06)" }}
+            _disabled={{
+              bgColor: "#1aa188",
+              cursor: "not-allowed",
+              transform: "scale(1)",
+            }}
+            isDisabled={isBusy || isFlipped.includes(true)}
+            onClick={handleOpenPack}
+          >
+            <Image
+              src="/images/open-packs-icon.png"
+              objectFit="contain"
+              alt="HP ICON"
+              width="25px"
+              height="25px"
+            />
+            OPEN ALL
+          </Button>
+          <Button
+            display="flex"
+            alignItems="center"
+            bg="#3A3F49"
+            color="white"
+            size="md"
+            shadow="md"
+            borderColor="#1C465B"
+            borderRadius="md"
+            fontFamily="CCElephantmenTall Regular"
+            fontWeight="400"
+            width={{
+              base: "100%",
+              xs: "100%",
+              sm: "30%",
+              md: "30%",
+              lg: "25%",
+              xl: "25%",
+              "2xl": "25%",
+            }}
+            gap="2"
+            fontSize={{
+              base: "14px",
+              xs: "14px",
+              sm: "14px",
+              md: "20px",
+              lg: "25px",
+              xl: "25px",
+              "2xl": "25px",
+            }}
+            py="6"
+            _hover={{ bg: "#525865", transform: "scale(1.04)" }}
+            onClick={handleClose}
+          >
+            <Image
+              src="/images/go-back-icon.png"
+              objectFit="contain"
+              alt="HP ICON"
+              width="22px"
+              height="22px"
+            />
+            GO BACK
+          </Button>
+        </Flex>
+        {/* <div className="bg-[#1A1A1A] p-5 rounded-lg shadow-xl w-full h-full mx-auto overflow-hidden z-10 flex flex-col">
           <div className="flex-grow overflow-y-auto">
-            {cards.length > 0 ? (
-              <Box className="flex flex-wrap justify-center" gap="10" mt="6">
-                {mappedCards}
-              </Box>
-            ) : (
-              <p className="text-center text-white">No cards to display</p>
-            )}
-            <Flex
-              justifyContent="center"
-              mt="10"
-              flexDirection="column"
-              gap="6"
-              alignItems="center"
-            >
-              <Button
-                display="flex"
-                alignItems="center"
-                bg="#15C1A2"
-                color="white"
-                shadow="md"
-                borderColor="#1C465B"
-                borderRadius="md"
-                fontFamily="CCElephantmenTall Regular"
-                fontWeight="400"
-                width={{
-                  base: "100%",
-                  xs: "100%",
-                  sm: "30%",
-                  md: "30%",
-                  lg: "25%",
-                  xl: "25%",
-                  "2xl": "25%",
-                }}
-                gap="2"
-                fontSize={{
-                  base: "14px",
-                  xs: "14px",
-                  sm: "14px",
-                  md: "20px",
-                  lg: "25px",
-                  xl: "25px",
-                  "2xl": "25px",
-                }}
-                py="7"
-                _hover={{ bg: "#15C1A2d6", transform: "scale(1.04)" }}
-                onClick={handleOpenPack}
-              >
-                <Image
-                  src="/images/open-packs-icon.png"
-                  objectFit="contain"
-                  alt="HP ICON"
-                  width="25px"
-                  height="25px"
-                />
-                OPEN PACKS
-              </Button>
-              <Button
-                display="flex"
-                alignItems="center"
-                bg="#3A3F49"
-                color="white"
-                size="md"
-                shadow="md"
-                borderColor="#1C465B"
-                borderRadius="md"
-                fontFamily="CCElephantmenTall Regular"
-                fontWeight="400"
-                width={{
-                  base: "100%",
-                  xs: "100%",
-                  sm: "30%",
-                  md: "30%",
-                  lg: "25%",
-                  xl: "25%",
-                  "2xl": "25%",
-                }}
-                gap="2"
-                fontSize={{
-                  base: "14px",
-                  xs: "14px",
-                  sm: "14px",
-                  md: "20px",
-                  lg: "25px",
-                  xl: "25px",
-                  "2xl": "25px",
-                }}
-                py="6"
-                _hover={{ bg: "#3A3F49d6", transform: "scale(1.04)" }}
-                onClick={handleClose}
-              >
-                <Image
-                  src="/images/go-back-icon.png"
-                  objectFit="contain"
-                  alt="HP ICON"
-                  width="22px"
-                  height="22px"
-                />
-                GO BACK
-              </Button>
-            </Flex>
+
           </div>
-        </div>
+        </div> */}
       </Box>
     </>
   );

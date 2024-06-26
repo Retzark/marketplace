@@ -24,7 +24,7 @@ const ListingsTable: React.FC<ListingsTableProps> = ({
 }) => {
   const [selectAll, setSelectAll] = useState(false);
   const [selectedEntries, setSelectedEntries] = useState<Set<number>>(
-    new Set()
+    new Set(),
   );
 
   useEffect(() => {
@@ -181,8 +181,9 @@ const ListingsTable: React.FC<ListingsTableProps> = ({
                           gap="2"
                         >
                           <Image
-                            src="/images/currency_logo.svg"
+                            src="/images/ZARK-TOKEN_1.png"
                             objectFit="contain"
+                            className="h-5"
                           />
                           {entry.price} {entry.priceSymbol}
                         </Text>

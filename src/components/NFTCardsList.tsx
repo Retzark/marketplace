@@ -30,6 +30,7 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
   const { settings } = useAppStore((state) => ({
     settings: state.settings,
   }));
+
   useEffect(() => {
     if (data) {
       let filtered = data.filter((item: Card) => item.count > 0); // Filter out cards with count zero
@@ -230,54 +231,7 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
                         "2xl": "10px",
                       }}
                       alignItems="center"
-                    >
-                      {/* common: B5B5B5 , rare: FF9104,  epic: DA9466 , legendary: FF4D4D*/}
-                      <Text
-                        fontFamily="CCElephantmenTall Regular"
-                        color={
-                          [2, 6, 5].includes(index)
-                            ? "#B5B5B5"
-                            : [9].includes(index)
-                              ? "#FF9104"
-                              : [4].includes(index)
-                                ? "#FF4D4D"
-                                : "#DA9466"
-                        }
-                        fontSize={{
-                          base: "8px",
-                          sm: "12px",
-                          md: "12px",
-                          lg: "14px",
-                          xl: "14px",
-                          "2xl": "14px",
-                        }}
-                        letterSpacing="0.5px"
-                        display="flex"
-                      >
-                        <Image
-                          src={
-                            [2, 6, 5].includes(index)
-                              ? badges.rare.icon
-                              : [9].includes(index)
-                                ? badges.epic.icon
-                                : [4].includes(index)
-                                  ? badges.legendary.icon
-                                  : badges.common.icon
-                          }
-                          objectFit="contain"
-                          w={{
-                            base: "8px",
-                            sm: "8px",
-                            md: "10px",
-                            lg: "14px",
-                            xl: "14px",
-                            "2xl": "14px",
-                          }}
-                        />
-                        &nbsp;#
-                        {card._id.toString().padStart(8, "0")}
-                      </Text>
-                    </Flex>
+                    ></Flex>
 
                     <Flex flexDirection="column" gap="1" alignItems="end">
                       {[3, 8].includes(index) && (

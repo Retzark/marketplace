@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Login from "@/components/modals/Login";
 import UserMenu from "@/components/UserMenu";
-import useAppStore from "@/store/useAppStore";
 import { NavLink, useLocation } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
+import useUserStore from "@/store/userStore";
 
 interface MenuButtonProps {
   isOpen: boolean;
@@ -60,7 +60,17 @@ const MenuButton: React.FC<MenuButtonProps> = ({ isOpen, toggleMenu }) => (
   </button>
 );
 
-const NavigationLinks = ({ isMobile }: { isMobile: boolean }) => (
+interface NavigationLinksProps {
+  isMobile: boolean;
+  isUserLoggedIn: boolean;
+  username?: string | null;
+}
+
+const NavigationLinks: React.FC<NavigationLinksProps> = ({
+  isMobile,
+  isUserLoggedIn,
+  username,
+}) => (
   <Box
     display="flex"
     justifyContent="space-evenly"
@@ -73,15 +83,6 @@ const NavigationLinks = ({ isMobile }: { isMobile: boolean }) => (
       xl: "row",
       "2xl": "row",
     }}
-    bgColor={{
-      base: "black",
-      sm: "black",
-      md: "transparent",
-      lg: "transparent",
-      xl: "transparent",
-      "2xl": "transparent",
-    }}
-    padding="10px"
   >
     <NavLink
       to="/"
@@ -98,34 +99,23 @@ const NavigationLinks = ({ isMobile }: { isMobile: boolean }) => (
         The Rundown
       </Box>
     </NavLink>
-    <NavLink
-      to="/cards"
-      aria-current={({ isActive }) => (isActive ? "page" : undefined)}
-    >
-      <Box
-        as="span"
-        className="uppercase"
-        fontFamily="Poppins"
-        fontWeight={useIsActive("/cards") ? 600 : 400}
-        color={useIsActive("/cards") ? "#15C1A2" : "white"}
+    {isUserLoggedIn && username && (
+      <NavLink
+        to={`/cards/${username}`}
+        aria-current={({ isActive }) => (isActive ? "page" : undefined)}
       >
-        Collection
-      </Box>
-    </NavLink>
-    <NavLink
-      to="/blog"
-      aria-current={({ isActive }) => (isActive ? "page" : undefined)}
-    >
-      <Box
-        as="span"
-        className="uppercase"
-        fontFamily="Poppins"
-        fontWeight={useIsActive("/blog") ? 600 : 400}
-        color={useIsActive("/blog") ? "#15C1A2" : "white"}
-      >
-        Blog
-      </Box>
-    </NavLink>
+        <Box
+          as="span"
+          className="uppercase"
+          fontFamily="Poppins"
+          fontWeight={useIsActive(`/cards/${username}`) ? 600 : 400}
+          color={useIsActive(`/cards/${username}`) ? "#15C1A2" : "white"}
+        >
+          Collection
+        </Box>
+      </NavLink>
+    )}
+
     <NavLink
       to="/marketplace"
       aria-current={({ isActive }) => (isActive ? "page" : undefined)}
@@ -146,6 +136,7 @@ const NavigationLinks = ({ isMobile }: { isMobile: boolean }) => (
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const user = useUserStore((state) => state.user);
 
   return (
     <nav className="bg-[#0B0B0B] w-[100%] h-[65px] fixed z-10">
@@ -166,7 +157,11 @@ const Navbar = () => {
           </div>
           <div className="flex-1 flex justify-center items-center sm:items-stretch sm:justify-start lg:justify-center">
             <div className="hidden sm:block sm:ml-6">
-              <NavigationLinks isMobile={false} />
+              <NavigationLinks
+                isMobile={false}
+                isUserLoggedIn={!!user}
+                username={user?.username}
+              />
             </div>
           </div>
           <UserMenu />
@@ -174,8 +169,12 @@ const Navbar = () => {
       </Box>
       {isMobileMenuOpen && (
         <div className="sm:hidden" id="mobile-menu">
-          <div className="space-y-1">
-            <NavigationLinks isMobile={true} />
+          <div className="px-2 pt-2 pb-3 space-y-1">
+            <NavigationLinks
+              isMobile={true}
+              isUserLoggedIn={!!user}
+              username={user?.username}
+            />
           </div>
         </div>
       )}

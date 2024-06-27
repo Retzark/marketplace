@@ -2,7 +2,6 @@ import React, { useEffect, useState, Fragment } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { Card, SellBookEntry } from "@/types"; // Adjust the import paths as necessary
 import Loading from "@/components/Loading"; // Adjust the import path as necessary
-import ListingsTable from "@/components/ListingsTable"; // Adjust the import path as necessary
 import StatsAndMoveset from "@/components/StatsAndMoveset";
 import useCardStore from "@/store/useCardStore";
 import useMarketStore from "@/store/useMarketStore";
@@ -12,13 +11,10 @@ import {
   Divider,
   Flex,
   Grid,
-  Icon,
-  Image,
   Text,
   useDisclosure,
   Spinner,
 } from "@chakra-ui/react";
-import { RiFireFill } from "react-icons/ri";
 import useAppStore from "@/store/useAppStore";
 import Swal from "sweetalert2";
 import SellModal from "@/components/modals/SellModal";

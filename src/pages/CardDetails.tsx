@@ -114,9 +114,11 @@ const CardDetails = () => {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
   const card = location.state?.card as Card;
-  const { fetchSellBook, requestBuy, requestCancel } = useMarketStore();
+  const { fetchSellBook, requestBuy } = useMarketStore();
   const [fetchedCard, setFetchedCard] = useState<Card | null>(null);
   const [sellBookEntries, setSellBookEntries] = useState<SellBookEntry[]>([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+
   const [selectedEntries, setSelectedEntries] = useState<SellBookEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isListingsLoading, setIsListingsLoading] = useState(true); // For listings loading
@@ -196,6 +198,15 @@ const CardDetails = () => {
     fetchCardDetails();
   }, [id, card, fetchSellBook]);
 
+  useEffect(() => {
+    // Calculate the total price based on the sellBookEntries
+    const total = sellBookEntries.reduce(
+      (sum, entry) => sum + parseFloat(entry.price),
+      0,
+    );
+    setTotalPrice(total);
+  }, [sellBookEntries]);
+
   const handleSelect = (entry: SellBookEntry, isSelected: boolean) => {
     setSelectedEntries((prev) => {
       if (isSelected) {
@@ -205,25 +216,12 @@ const CardDetails = () => {
       }
     });
   };
+
   const handleBuyNow = () => {
     if (selectedEntries.length > 0) {
       setIsModalOpen(true);
     } else {
       alert("Please select at least one entry to buy.");
-    }
-  };
-
-  const handleCancel = async (entry: SellBookEntry) => {
-    try {
-      await requestCancel({ nfts: [entry.nft_id.toString()] });
-      alert("Cancellation successful!");
-      // Optionally, update the state to remove the cancelled entry
-      setSellBookEntries((prev) =>
-        prev.filter((e) => e.nft_id !== entry.nft_id),
-      );
-    } catch (error) {
-      console.error("Cancellation failed:", error);
-      alert("Cancellation failed. Please try again.");
     }
   };
 
@@ -375,7 +373,7 @@ const CardDetails = () => {
                       color="white"
                       fontWeight="bold"
                     >
-                      5.083655
+                      {totalPrice.toFixed(2)} {sellBookEntries[0]?.priceSymbol}
                     </Text>
                   </Flex>
                   <Button

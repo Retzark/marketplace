@@ -16,6 +16,7 @@ import {
   Image,
   Text,
   useDisclosure,
+  Spinner,
 } from "@chakra-ui/react";
 import { RiFireFill } from "react-icons/ri";
 import useAppStore from "@/store/useAppStore";
@@ -127,6 +128,7 @@ const CollectionCardDetail = () => {
   const [sellBookEntries, setSellBookEntries] = useState<SellBookEntry[]>([]);
   const [selectedEntries, setSelectedEntries] = useState<SellBookEntry[]>([]);
   const [isListingsLoading, setIsListingsLoading] = useState(true); // For listings loading
+  const [isSubmitting, setIsSubmitting] = useState(false); // For request sell loading state
   const { settings } = useAppStore((state) => ({
     settings: state.settings,
   }));
@@ -167,6 +169,7 @@ const CollectionCardDetail = () => {
     price: string,
     priceSymbol: string,
   ) => {
+    setIsSubmitting(true);
     try {
       await requestSell({
         nfts: [nftId.toString()],
@@ -178,6 +181,8 @@ const CollectionCardDetail = () => {
         text: `NFT with ID ${nftId} is listed for sale at ${price} ${priceSymbol}.`,
         icon: "success",
         confirmButtonText: "OK",
+      }).then(() => {
+        window.location.reload();
       });
     } catch (error) {
       Swal.fire({
@@ -187,6 +192,9 @@ const CollectionCardDetail = () => {
         confirmButtonText: "OK",
       });
       console.error("Failed to sell NFT:", error);
+    } finally {
+      setIsSubmitting(false);
+      onClose();
     }
   };
 
@@ -462,6 +470,22 @@ const CollectionCardDetail = () => {
         nftId={selectedNftId}
         onSubmit={handleModalSubmit}
       />
+      {isSubmitting && (
+        <Box
+          position="fixed"
+          top="0"
+          left="0"
+          width="100%"
+          height="100%"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          backgroundColor="rgba(0, 0, 0, 0.5)"
+          zIndex="1000"
+        >
+          <Spinner size="xl" color="white" />
+        </Box>
+      )}
     </div>
   );
 };

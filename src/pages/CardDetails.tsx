@@ -205,7 +205,6 @@ const CardDetails = () => {
       }
     });
   };
-
   const handleBuyNow = () => {
     if (selectedEntries.length > 0) {
       setIsModalOpen(true);
@@ -230,8 +229,12 @@ const CardDetails = () => {
 
   const confirmBuy = async () => {
     try {
+      const filteredEntries = selectedEntries.filter(
+        (entry, index, self) =>
+          index === self.findIndex((e) => e.nft_id === entry.nft_id),
+      );
       await requestBuy({
-        nfts: selectedEntries.map((entry) => entry.nft_id.toString()),
+        nfts: filteredEntries.map((entry) => entry.nft_id.toString()),
       });
       alert("Purchase successful!");
     } catch (error) {
@@ -272,14 +275,6 @@ const CardDetails = () => {
                 borderRadius="lg"
               />
               <Box>
-                <Text
-                  as="h5"
-                  fontFamily="CCElephantmenTall Regular"
-                  fontSize="32px"
-                  color="white"
-                >
-                  {fetchedCard.name}
-                </Text>
                 <Flex gap="2" flexWrap="wrap">
                   <Box
                     bgColor="#3A3F49"

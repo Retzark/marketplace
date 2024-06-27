@@ -60,7 +60,7 @@ const BuyCard: React.FC<BuyCardProps> = ({
   }, [fetchData, settingsReady]);
 
   useEffect(() => {
-    const total = entries.reduce((sum, entry) => sum + entry.price, 0);
+    const total = uniqueEntries.reduce((sum, entry) => sum + entry.price, 0);
     setTotalPrice(total);
   }, [entries]);
 

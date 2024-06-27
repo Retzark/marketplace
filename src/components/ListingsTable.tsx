@@ -40,6 +40,7 @@ const ListingsTable: React.FC<ListingsTableProps> = ({
 
   const handleSelect = (entry: SellBookEntry, isSelected: boolean) => {
     const newSelectedEntries = new Set(selectedEntries);
+
     if (isSelected) {
       newSelectedEntries.add(entry.nft_id);
     } else {
@@ -51,6 +52,7 @@ const ListingsTable: React.FC<ListingsTableProps> = ({
 
   const handleEntryCheckboxChange = (entry: SellBookEntry) => {
     const isSelected = selectedEntries.has(entry.nft_id);
+    console.log(isSelected);
     handleSelect(entry, !isSelected);
   };
 

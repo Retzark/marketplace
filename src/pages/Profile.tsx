@@ -10,7 +10,6 @@ interface Affiliate {
 
 interface UserProfile {
   avatar: string;
-  name: string;
   username: string;
   email: string;
   bio: string;
@@ -28,8 +27,6 @@ const ProfilePage: React.FC = () => {
         try {
           // Dummy user data
           const userData = {
-            firstName: "Gerard",
-            lastName: "Baluyot",
             username: user.username,
             email: "john.doe@example.com",
             bio: "Hive Developer",
@@ -54,7 +51,6 @@ const ProfilePage: React.FC = () => {
           const avatarUrl = `https://images.hive.blog/u/${user.username}/avatar`;
           setProfile({
             avatar: avatarUrl,
-            name: `${userData.firstName} ${userData.lastName}`,
             username: userData.username,
             email: userData.email,
             bio: userData.bio,

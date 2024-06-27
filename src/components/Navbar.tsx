@@ -93,7 +93,7 @@ const NavigationLinks: React.FC<NavigationLinksProps> = ({
         as="span"
         className="uppercase"
         fontFamily="Poppins"
-        fontWeight={useIsActive("/") ? 600 : 400}
+        fontWeight="400"
         color={useIsActive("/") ? "#15C1A2" : "white"}
       >
         The Rundown
@@ -108,7 +108,7 @@ const NavigationLinks: React.FC<NavigationLinksProps> = ({
           as="span"
           className="uppercase"
           fontFamily="Poppins"
-          fontWeight={useIsActive(`/cards/${username}`) ? 600 : 400}
+          fontWeight="400"
           color={useIsActive(`/cards/${username}`) ? "#15C1A2" : "white"}
         >
           Collection
@@ -124,7 +124,7 @@ const NavigationLinks: React.FC<NavigationLinksProps> = ({
         as="span"
         className="uppercase"
         fontFamily="Poppins"
-        fontWeight={useIsActive("/marketplace") ? 600 : 400}
+        fontWeight="400"
         color={useIsActive("/marketplace") ? "#15C1A2" : "white"}
       >
         Marketplace
@@ -139,50 +139,60 @@ const Navbar = () => {
   const user = useUserStore((state) => state.user);
 
   return (
-    <nav className="bg-[#0B0B0B] w-[100%] h-[65px] fixed z-10">
-      <Box maxWidth="117rem" className="mx-auto px-2 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center justify-between flex-1 sm:hidden">
+    <Box className="bg-[#0B0B0B] w-[100%] h-[65px] fixed z-10">
+      <Box maxWidth="117rem" className="mx-auto px-2 sm:px-6 lg:px-8" mt="2">
+        <Box display="flex" justifyContent="center" alignItems="center">
+          <Box className="sm:hidden" mr="4">
             <MenuButton
               isOpen={isMobileMenuOpen}
               toggleMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             />
-          </div>
-          <div className="flex-shrink-0 flex items-center">
+          </Box>
+          <Box
+            className="flex-shrink-0 flex items-center"
+            w={{
+              base: "50px",
+              sm: "50px",
+              md: "50px",
+              lg: "95px",
+              xl: "95px",
+              "2xl": "95px",
+            }}
+          >
             <img
               className="h-8 w-auto"
               src="/images/retzark_logo.png"
               alt="Retzark Marketplace"
             />
-          </div>
-          <div className="flex-1 flex justify-center items-center sm:items-stretch sm:justify-start lg:justify-center">
-            <div className="hidden sm:block sm:ml-6">
+          </Box>
+          <Box className="flex-1 flex justify-center items-center sm:items-stretch sm:justify-start lg:justify-center">
+            <Box className="hidden sm:block ">
               <NavigationLinks
                 isMobile={false}
                 isUserLoggedIn={!!user}
                 username={user?.username}
               />
-            </div>
-          </div>
+            </Box>
+          </Box>
           <UserMenu />
-        </div>
+        </Box>
       </Box>
       {isMobileMenuOpen && (
-        <div className="sm:hidden" id="mobile-menu">
-          <div className="px-2 pt-2 pb-3 space-y-1">
+        <Box bgColor="#0b0b0b" className="sm:hidden" id="mobile-menu">
+          <Box className="px-4 pt-4 pb-4 space-y-1">
             <NavigationLinks
               isMobile={true}
               isUserLoggedIn={!!user}
               username={user?.username}
             />
-          </div>
-        </div>
+          </Box>
+        </Box>
       )}
       <Login
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}
       />
-    </nav>
+    </Box>
   );
 };
 

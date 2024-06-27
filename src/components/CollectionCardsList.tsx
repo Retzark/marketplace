@@ -4,6 +4,8 @@ import useFetchCollectionData from "@/hooks/useFetchCollectionData";
 import useAppStore from "@/store/useAppStore";
 import CardItem from "@/components/CardItem";
 import Pagination from "@/components/Pagination";
+import { Box, Divider, Grid, Select } from "@chakra-ui/react";
+import Loading from "./Loading";
 
 const PAGE_SIZE = 15;
 
@@ -34,7 +36,7 @@ const CollectionCardsList = () => {
       const filtered = Object.values(cardCountMap);
       if (selectedFilter) {
         setFilteredData(
-          filtered.filter((item) => item.card.foil === selectedFilter),
+          filtered.filter((item) => item.card.foil === selectedFilter)
         );
       } else {
         setFilteredData(filtered);
@@ -56,43 +58,101 @@ const CollectionCardsList = () => {
   const indexOfFirstItem = indexOfLastItem - PAGE_SIZE;
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-black">
+        <Loading />
+      </div>
+    );
+  }
+
   if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <div className="mx-auto px-10 flex-grow">
-        <div className="mb-4">
-          <select
-            value={selectedFilter}
-            onChange={handleFilterChange}
-            className="form-select block mt-1"
-          >
-            <option value="">All Types</option>
-            <option value="0">Regular</option>
-            <option value="1">Gold</option>
-          </select>
-        </div>
-        <div className="flex justify-center">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {currentItems.map(({ card, count }) => (
-              <CardItem
-                key={card.type}
-                card={card}
-                count={count}
-                settings={settings}
-              />
-            ))}
+    <Box>
+      <Box
+        w="100%"
+        px={{ base: "10px", sm: "20px", md: "30px", lg: "40px" }}
+        mb="4"
+      >
+        <Select
+          w="fit-content"
+          bgColor="white"
+          value={selectedFilter}
+          onChange={handleFilterChange}
+        >
+          <option value="">All Types</option>
+          <option value="0">Regular</option>
+          <option value="1">Gold</option>
+        </Select>
+      </Box>
+      <Box px={{ base: "10px", sm: "20px", md: "30px", lg: "40px" }}>
+        <Grid
+          templateColumns={{
+            base: "repeat(2, 1fr)",
+            sm: "repeat(3, 1fr)",
+            md: "repeat(4, 1fr)",
+            lg: "repeat(5, 1fr)",
+            xl: "repeat(6, 1fr)",
+            "2xl": "repeat(6, 1fr)",
+          }}
+          gap={{
+            base: "4",
+            sm: "4",
+            md: "4",
+            lg: "4",
+            xl: "4",
+            "2xl": "50px",
+          }}
+        >
+          {currentItems.map(({ card, count }) => (
+            <CardItem
+              key={card.type}
+              card={card}
+              count={count}
+              settings={settings}
+            />
+          ))}
+        </Grid>
+      </Box>
+      <Box mt="75px">
+        <Pagination
+          currentPage={currentPage}
+          totalItems={filteredData.length}
+          pageSize={PAGE_SIZE}
+          onPageChange={handlePageChange}
+        />
+      </Box>
+
+      {/* <div className="min-h-screen flex flex-col">
+        <div className="mx-auto px-10 flex-grow">
+          <div className="mb-4">
+            <select
+              value={selectedFilter}
+              onChange={handleFilterChange}
+              className="form-select block mt-1"
+            >
+              <option value="">All Types</option>
+              <option value="0">Regular</option>
+              <option value="1">Gold</option>
+            </select>
           </div>
-        </div>
-      </div>
-      <Pagination
-        currentPage={currentPage}
-        totalItems={filteredData.length}
-        pageSize={PAGE_SIZE}
-        onPageChange={handlePageChange}
-      />
-    </div>
+          <div className="flex justify-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+              {currentItems.map(({ card, count }) => (
+                <CardItem
+                  key={card.type}
+                  card={card}
+                  count={count}
+                  settings={settings}
+                />
+              ))}
+            </div>
+          </div>
+        </div> */}
+
+      {/* </div> */}
+    </Box>
   );
 };
 

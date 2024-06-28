@@ -46,14 +46,32 @@ const Login = () => {
           }}
           p="10"
         >
-          <Flex w="100%" h="100%" alignItems="center">
-            <Flex flexDirection="column" alignItems="center" w="100%">
+          <Box display="flex" w="100%" h="100%" alignItems="center">
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              w="100%"
+            >
               <Image
                 src="./images/retzark-logo.png"
                 objectFit="contain"
                 width="300px"
               />
-              <Flex flexDirection="column" alignItems="center" mt="6" w="25%">
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                mt="6"
+                width={{
+                  base: "100%",
+                  sm: "50%",
+                  md: "50%",
+                  lg: "30%",
+                  xl: "25%",
+                  "2xl": "25%",
+                }}
+              >
                 <Input
                   type="text"
                   bgColor="white"
@@ -82,9 +100,9 @@ const Login = () => {
                 >
                   LOGIN WITH KEYCHAIN
                 </Button>
-              </Flex>
-            </Flex>
-          </Flex>
+              </Box>
+            </Box>
+          </Box>
         </Box>
       </LazyLoad>
     </div>

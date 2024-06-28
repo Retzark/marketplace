@@ -646,7 +646,7 @@ const Packs = () => {
               </Text>
               <Flex alignItems="center" gap="1">
                 <Image
-                  src="./images/currency_logo.svg"
+                  src="./images/ZARK-TOKEN_1.png"
                   alt="currency"
                   objectFit="contain"
                   mt="-3px"

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, FC } from "react";
+import { useState, useCallback, useEffect, FC, useRef, useMemo } from "react";
 import { Box, Button, Flex, Image } from "@chakra-ui/react";
 import { Global } from "@emotion/react";
 import { fetchCardsData } from "@/utils/fetchCardData";
@@ -6,7 +6,7 @@ import { fetchCardsData } from "@/utils/fetchCardData";
 interface Card {
   type: string;
   edition: string;
-  foil: boolean;
+  foil: number;
   image: string;
   rarity: string;
 }
@@ -48,9 +48,17 @@ const CardPackOpener: FC<ViewCardsProps> = ({
   const [hasBeenFlipped, setHasBeenFlipped] = useState<boolean[]>(
     Array(cards.length).fill(false)
   );
-
-  const [fetchedCards, setFetchedCards] = useState<FetchedCard[]>([]);
   const [isBusy, setIsBusy] = useState<boolean>(false);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [fetchedCards, setFetchedCards] = useState<FetchedCard[]>([]);
+
+  useEffect(() => {
+    setIsFlipped(Array(cards.length).fill(false));
+    setHasBeenFlipped(Array(cards.length).fill(false));
+    setShakeCompleted(Array(cards.length).fill(false));
+    setShowContrast(Array(cards.length).fill(false));
+    setShowCircle(Array(cards.length).fill(false));
+  }, [cards]);
 
   useEffect(() => {
     setIsBusy(false);
@@ -65,39 +73,48 @@ const CardPackOpener: FC<ViewCardsProps> = ({
     fetchData();
   }, []);
 
-  useEffect(() => {
-    setIsFlipped(Array(cards.length).fill(false));
-    setHasBeenFlipped(Array(cards.length).fill(false));
-  }, [cards]);
-
-  const handleOpenPack = useCallback(() => {
-    cards.forEach((card, index) => {
-      setIsBusy(true);
-      setTimeout(
-        () => handleCardAnimation(index, card.type),
-        (index + 1) * 1000
-      );
+  const cardList = useMemo(() => {
+    return cards.map((card) => {
+      const matchedItem = fetchedCards.find((base) => base.ID === +card.type);
+      if (matchedItem) {
+        return {
+          ...card,
+          rarity: matchedItem.RARITY,
+        };
+      } else {
+        return {
+          ...card,
+          rarity: "UNKNOWN", // Default value if no match found
+        };
+      }
     });
-  }, []);
+  }, [cards, fetchedCards]);
 
-  const handleCardAnimation = (index: number, type: string) => {
-    const cardDetails = fetchedCards.find((card) => card.ID === parseInt(type));
-    if (cardDetails?.RARITY?.toUpperCase() === "LEGENDARY") {
+  const handleOpenPack = () => {
+    cardList.map((card, index) => {
+      const { rarity } = card;
+      setIsBusy(true);
+      setTimeout(() => handleCardAnimation(index, rarity), (index + 1) * 1000);
+    });
+  };
+
+  const handleCardAnimation = (index: number, rarity: string) => {
+    cardRefs.current[index]?.scrollIntoView({ behavior: "smooth" });
+
+    if (rarity === "LEGENDARY") {
       setShakeCompleted((prev) => {
         const updated = [...prev];
         updated[index] = true;
         return updated;
       });
 
-      setTimeout(() => flipCard(index, type), 500);
+      setTimeout(() => flipCard(index, rarity), 500);
     } else {
-      flipCard(index, type);
+      flipCard(index, rarity);
     }
   };
 
-  const flipCard = (index: number, type: string) => {
-    const cardDetails = fetchedCards.find((card) => card.ID === parseInt(type));
-
+  const flipCard = (index: number, rarity: string) => {
     setIsFlipped((prevFlips) => {
       const flips = [...prevFlips];
       flips[index] = true;
@@ -112,11 +129,7 @@ const CardPackOpener: FC<ViewCardsProps> = ({
       });
     }
 
-    if (
-      ["EPIC", "LEGENDARY"].includes(
-        cardDetails?.RARITY?.toUpperCase() as string
-      )
-    ) {
+    if (["EPIC", "LEGENDARY"].includes(rarity)) {
       showEffects(index);
     }
   };
@@ -151,20 +164,15 @@ const CardPackOpener: FC<ViewCardsProps> = ({
     }, 1000);
   };
 
-  const handleCardClick = (index: number) => {
+  const handleCardClick = (index: number, rarity: string) => {
     if (!isFlipped[index]) {
       const card = cards[index];
-      handleCardAnimation(index, card.type);
+      handleCardAnimation(index, rarity);
     }
   };
 
-  const getCardAnimation = (index: number, type: string) => {
-    const cardDetails = fetchedCards.find((card) => card.ID === parseInt(type));
-    if (
-      shakeCompleted[index] &&
-      !isFlipped[index] &&
-      cardDetails?.RARITY?.toUpperCase() === "LEGENDARY"
-    ) {
+  const getCardAnimation = (index: number, rarity: string) => {
+    if (shakeCompleted[index] && !isFlipped[index] && rarity === "LEGENDARY") {
       return { animation: "shake 0.4s" };
     }
 
@@ -188,16 +196,18 @@ const CardPackOpener: FC<ViewCardsProps> = ({
       default: { boxShadow: "", transform: "rotateY(180deg)" },
     };
 
-    if (animations[cardDetails?.RARITY?.toUpperCase() as string]) {
-      return animations[cardDetails?.RARITY?.toUpperCase() as string];
+    if (animations[rarity]) {
+      return animations[rarity];
     } else {
       return animations.default;
     }
   };
 
-  const mappedCards = cards.map((card, index) => {
+  const mappedCards = cardList.map((card, index) => {
+    const { rarity } = card;
     return (
       <Box
+        ref={(el) => (cardRefs.current[index] = el)}
         position="relative"
         width={{
           base: "109px",
@@ -220,7 +230,7 @@ const CardPackOpener: FC<ViewCardsProps> = ({
           "2xl": "300px",
         }}
         sx={{ perspective: "1000px" }}
-        onClick={() => handleCardClick(index)}
+        onClick={() => handleCardClick(index, rarity)}
         _hover={{
           transform: "scale(1.1)",
           cursor: "pointer",
@@ -228,6 +238,7 @@ const CardPackOpener: FC<ViewCardsProps> = ({
         }}
         transition="transform 0.4s"
         borderRadius="7px"
+        pt="6"
       >
         <Box
           position="absolute"
@@ -239,15 +250,15 @@ const CardPackOpener: FC<ViewCardsProps> = ({
             transformStyle: "preserve-3d",
             transition: "transform 0.1s",
             transform: isFlipped[index] ? "rotateY(180deg)" : "rotateY(0)",
-            ...getCardAnimation(index, card.type),
+            ...getCardAnimation(index, rarity),
           }}
           _hover={{
             boxShadow:
-              card.rarity?.toUpperCase() === "LEGENDARY"
+              rarity === "LEGENDARY"
                 ? "0 0 20px #FF4D4D"
-                : card.rarity?.toUpperCase() === "EPIC"
+                : rarity === "EPIC"
                   ? "0 0 20px #FF9104"
-                  : card.rarity?.toUpperCase() === "RARE"
+                  : rarity === "RARE"
                     ? "0 0 20px #B5B5B5"
                     : isFlipped[index]
                       ? "0 0 65px -37px white"
@@ -275,6 +286,7 @@ const CardPackOpener: FC<ViewCardsProps> = ({
             />
           </Box>
           <Box
+            className={card.foil === 1 ? "shine" : ""}
             position="absolute"
             width="100%"
             height="100%"
@@ -308,9 +320,9 @@ const CardPackOpener: FC<ViewCardsProps> = ({
               left: "40%",
               transform: "translate(-50%, -50%)",
               background:
-                card.rarity?.toUpperCase() === "LEGENDARY"
+                rarity === "LEGENDARY"
                   ? "rgba(255, 77, 77, 0.6)"
-                  : card.rarity?.toUpperCase() === "EPIC"
+                  : rarity === "EPIC"
                     ? "rgba(255, 145, 4, 0.6)"
                     : "rgba(255, 77, 77, 0.6)",
             }}
@@ -350,6 +362,21 @@ const CardPackOpener: FC<ViewCardsProps> = ({
               box-shadow: 0 0 80px 10px #FF4D4D;
             }
           }
+          
+          @keyframes shine {
+            0% {
+              background-position: -200% center;
+            }
+            100% {
+              background-position: 200% center;
+            }
+          }
+
+          .shine {
+            background: linear-gradient(90deg, rgba(255,255,255,0.1) 25%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.1) 75%);
+            background-size: 200% 100%;
+            animation: shine 2s infinite;
+          }
 
           .circle {
             position: absolute;
@@ -366,24 +393,43 @@ const CardPackOpener: FC<ViewCardsProps> = ({
           }
         `}
       />
-      <Box
-        px={{ base: "10px", sm: "20px", md: "30px", lg: "40px" }}
-        py="20px"
-        p="0px !important"
-      >
-        {cards.length > 0 ? (
-          <Box className="flex flex-wrap justify-center" gap="10" mt="6">
+      <Box py="10px" p="0px !important" position="absolute" width="100%">
+        {cardList.length ? (
+          <Box
+            className="flex flex-wrap justify-center"
+            gap="6"
+            top="40px"
+            left="1px"
+            overflowY="auto"
+            maxH="80vh"
+            p={{
+              base: "2",
+              sm: "2",
+              md: "5",
+              lg: "10",
+              xl: "10",
+              "2xl": "10",
+            }}
+            pb="150px !important"
+          >
             {mappedCards}
           </Box>
         ) : (
           <p className="text-center text-white">No cards to display</p>
         )}
-        <Flex
+        <Box
+          p="4"
+          bgColor="#000000cf"
+          display="flex"
           justifyContent="center"
           mt="10"
           flexDirection="column"
-          gap="6"
+          gap="2"
           alignItems="center"
+          position="fixed"
+          w="100%"
+          bottom="0"
+          left="0"
         >
           <Button
             display="flex"
@@ -476,7 +522,7 @@ const CardPackOpener: FC<ViewCardsProps> = ({
             />
             GO BACK
           </Button>
-        </Flex>
+        </Box>
         {/* <div className="bg-[#1A1A1A] p-5 rounded-lg shadow-xl w-full h-full mx-auto overflow-hidden z-10 flex flex-col">
           <div className="flex-grow overflow-y-auto">
 

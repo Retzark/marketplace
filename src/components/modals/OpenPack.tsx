@@ -7,19 +7,21 @@ interface OpenPackProps {
   isOpen: boolean;
   onClose: () => void;
   onCardsOpened: (cards: any) => void;
+  setIsOpenPackModalOpen: (value: boolean) => void;
 }
 
 const OpenPack: React.FC<OpenPackProps> = ({
   isOpen,
   onClose,
   onCardsOpened,
+  setIsOpenPackModalOpen,
 }) => {
   const [number, setNumber] = useState<number>(1);
   const [isValid, setIsValid] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
   const requestOpenPacks = usePacksStore((state) => state.requestOpenPacks);
   const fetchAndValidateTransaction = useTransactionStore(
-    (state) => state.fetchAndValidateTransaction,
+    (state) => state.fetchAndValidateTransaction
   );
   const { settings, settingsReady, error, fetchSettings } = useAppStore(
     (state) => ({
@@ -27,7 +29,7 @@ const OpenPack: React.FC<OpenPackProps> = ({
       settingsReady: state.settingsReady,
       error: state.error,
       fetchSettings: state.fetchSettings,
-    }),
+    })
   );
 
   if (!isOpen) return null;
@@ -62,6 +64,7 @@ const OpenPack: React.FC<OpenPackProps> = ({
       alert("Failed to open packs. Please try again.");
     } finally {
       setLoading(false);
+      setIsOpenPackModalOpen(false);
     }
   };
 

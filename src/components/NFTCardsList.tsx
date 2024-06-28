@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Card } from "@/types/Card";
 import useFetchNFTMarketData from "@/hooks/useFetchNFTMarketData";
 import Loading from "@/components/Loading";
-import { Box, Flex, Grid, Icon, Image, Text } from "@chakra-ui/react";
-import { RiFireFill } from "react-icons/ri";
+import { Box, Grid, Image, Text } from "@chakra-ui/react";
 import useAppStore from "@/store/useAppStore";
 import useMarketStore from "@/store/useMarketStore";
 
@@ -13,8 +12,6 @@ interface NFTCardsListProps {
   selectedRarity?: string;
   selectedGameStats?: string;
 }
-
-const randomNames = ["Yue", "Yax", "Brix", "Krizator", "Nivlef"];
 
 const NFTCardsList: React.FC<NFTCardsListProps> = ({
   selectedFaction = "",

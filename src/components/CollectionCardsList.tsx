@@ -7,7 +7,7 @@ import Pagination from "@/components/Pagination";
 import { Box, Divider, Grid, Select } from "@chakra-ui/react";
 import Loading from "./Loading";
 
-const PAGE_SIZE = 15;
+const PAGE_SIZE = 18;
 
 const CollectionCardsList = () => {
   const { data, isLoading, error } = useFetchCollectionData();

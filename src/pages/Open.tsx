@@ -64,7 +64,7 @@ const Open = () => {
     <Flex direction="column" minH="70vh">
       <Flex
         justifyContent="center"
-        alignItems="center"
+        alignItems="start"
         bgImage="url('/images/open-pack-image.webp')"
         bgSize="cover"
         bgPosition="center"
@@ -161,20 +161,20 @@ const Open = () => {
             </Box>
           </Box>
         )}
-
-        {showViewCardsModal && (
-          <CardFlipContainer
-            show={showViewCardsModal}
-            handleClose={handleViewCardsModalClose}
-            cards={cards}
-            removeCardByIndex={removeCardByIndex}
-          />
-        )}
       </Flex>
+      {showViewCardsModal && (
+        <CardFlipContainer
+          show={showViewCardsModal}
+          handleClose={handleViewCardsModalClose}
+          cards={cards}
+          removeCardByIndex={removeCardByIndex}
+        />
+      )}
       <OpenPack
         isOpen={isOpenPackModalOpen}
         onClose={handleCloseModal}
         onCardsOpened={handleCardsOpened}
+        setIsOpenPackModalOpen={setIsOpenPackModalOpen}
       />
       {/* <ViewCards
         show={showViewCardsModal}

@@ -199,12 +199,15 @@ const CardDetails = () => {
   }, [id, card, fetchSellBook]);
 
   useEffect(() => {
-    // Calculate the total price based on the sellBookEntries
-    const total = sellBookEntries.reduce(
-      (sum, entry) => sum + parseFloat(entry.price),
-      0,
-    );
-    setTotalPrice(total);
+    if (sellBookEntries.length > 0) {
+      const leastPricedItem = sellBookEntries.reduce((minItem, currentItem) => {
+        return parseFloat(currentItem.price) < parseFloat(minItem.price)
+          ? currentItem
+          : minItem;
+      });
+
+      setTotalPrice(leastPricedItem.price);
+    }
   }, [sellBookEntries]);
 
   const handleSelect = (entry: SellBookEntry, isSelected: boolean) => {
@@ -357,7 +360,7 @@ const CardDetails = () => {
                     color="white"
                     fontWeight="300"
                   >
-                    TOTAL PRICE
+                    PRICE
                   </Text>
                   <Flex alignItems="center" gap="2">
                     <Image

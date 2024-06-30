@@ -199,6 +199,7 @@ const CardDetails = () => {
   }, [id, card, fetchSellBook]);
 
   useEffect(() => {
+    // Calculate the initial total price based on the least priced item
     if (sellBookEntries.length > 0) {
       const leastPricedItem = sellBookEntries.reduce((minItem, currentItem) => {
         return parseFloat(currentItem.price) < parseFloat(minItem.price)
@@ -210,10 +211,35 @@ const CardDetails = () => {
     }
   }, [sellBookEntries]);
 
+  useEffect(() => {
+    // Calculate the total price based on the selected entries
+    if (selectedEntries.length > 0) {
+      const total = selectedEntries.reduce(
+        (sum, entry) => sum + parseFloat(entry.price),
+        0,
+      );
+      setTotalPrice(total);
+    } else if (sellBookEntries.length > 0) {
+      // Reset to least priced item if no entries are selected
+      const leastPricedItem = sellBookEntries.reduce((minItem, currentItem) => {
+        return parseFloat(currentItem.price) < parseFloat(minItem.price)
+          ? currentItem
+          : minItem;
+      });
+
+      setTotalPrice(leastPricedItem.price);
+    }
+  }, [selectedEntries, sellBookEntries]);
+
   const handleSelect = (entry: SellBookEntry, isSelected: boolean) => {
     setSelectedEntries((prev) => {
       if (isSelected) {
-        return [...prev, entry];
+        // Add entry if not already in the list
+        const newEntries = [...prev, entry].filter(
+          (value, index, self) =>
+            index === self.findIndex((e) => e.nft_id === value.nft_id),
+        );
+        return newEntries;
       } else {
         return prev.filter((e) => e.nft_id !== entry.nft_id);
       }
@@ -376,7 +402,8 @@ const CardDetails = () => {
                       color="white"
                       fontWeight="bold"
                     >
-                      {totalPrice.toFixed(2)} {sellBookEntries[0]?.priceSymbol}
+                      {parseFloat(totalPrice).toFixed(2)}{" "}
+                      {sellBookEntries[0]?.priceSymbol}
                     </Text>
                   </Flex>
                   <Button

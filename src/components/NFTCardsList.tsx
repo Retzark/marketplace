@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Card } from "@/types/Card";
 import useFetchNFTMarketData from "@/hooks/useFetchNFTMarketData";
 import Loading from "@/components/Loading";
-import { Box, Flex, Grid, Icon, Image, Text } from "@chakra-ui/react";
-import { RiFireFill } from "react-icons/ri";
+import { Box, Grid, Image, Text } from "@chakra-ui/react";
 import useAppStore from "@/store/useAppStore";
 import useMarketStore from "@/store/useMarketStore";
 
@@ -13,8 +12,6 @@ interface NFTCardsListProps {
   selectedRarity?: string;
   selectedGameStats?: string;
 }
-
-const randomNames = ["Yue", "Yax", "Brix", "Krizator", "Nivlef"];
 
 const NFTCardsList: React.FC<NFTCardsListProps> = ({
   selectedFaction = "",
@@ -40,22 +37,22 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
 
         if (selectedFilter) {
           filtered = filtered.filter(
-            (item: Card) => item.grouping.foil === selectedFilter,
+            (item: Card) => item.grouping.foil === selectedFilter
           );
         }
         if (selectedFaction) {
           filtered = filtered.filter(
-            (item: Card) => item.grouping.faction === selectedFaction,
+            (item: Card) => item.grouping.faction === selectedFaction
           );
         }
         if (selectedRarity) {
           filtered = filtered.filter(
-            (item: Card) => item.grouping.rarity === selectedRarity,
+            (item: Card) => item.grouping.rarity === selectedRarity
           );
         }
         if (selectedGameStats) {
           filtered = filtered.filter(
-            (item: Card) => item.grouping.gameStats === selectedGameStats,
+            (item: Card) => item.grouping.gameStats === selectedGameStats
           );
         }
 
@@ -77,12 +74,12 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
             } catch (error) {
               console.error(
                 `Failed to fetch sell book entries for card ${card._id}:`,
-                error,
+                error
               );
               card.price = null; // or set to a default value if an error occurs
             }
             return card;
-          }),
+          })
         );
 
         setFilteredData(updatedFilteredData);
@@ -167,7 +164,7 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
           }}
           color="white"
         >
-          1,578,929 Total Cards
+          {currentItems.length} Total Cards
         </Text>
       </Box>
       <Box px={{ base: "10px", sm: "20px", md: "30px", lg: "40px" }}>
@@ -176,9 +173,9 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
             base: "repeat(2, 1fr)",
             sm: "repeat(3, 1fr)",
             md: "repeat(4, 1fr)",
-            lg: "repeat(4, 1fr)",
-            xl: "repeat(5, 1fr)",
-            "2xl": "repeat(5, 1fr)",
+            lg: "repeat(5, 1fr)",
+            xl: "repeat(6, 1fr)",
+            "2xl": "repeat(6, 1fr)",
           }}
           gap={{
             base: "4",
@@ -201,183 +198,31 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
                 onMouseLeave={() => handleMouseLeave()}
                 transition="transform 0.4s"
                 transform={hoveredIndex === index ? "scale(1.05)" : "scale(1)"}
-                boxShadow={hoveredIndex === index ? "0 0 65px -37px white" : ""}
+                boxShadow={hoveredIndex === index ? "0 0 60px -20px green" : ""}
               >
                 <Box position="relative" width="full" height="auto">
                   <Image
                     src={`https://cdn.tribaldex.com/packmanager/${settings.nft_symbol}/${card.grouping.edition}_${card.grouping.type}_${card.grouping.foil}.png`}
                     objectFit="cover"
                     alt={card.name}
-                    h="fit-content"
                     borderTopRightRadius="7px"
                     borderTopLeftRadius="7px"
                   />
 
-                  <Flex
-                    position="absolute"
-                    top="2"
-                    left="2"
-                    mt={2}
-                    justifyContent="space-between"
-                    alignItems="start"
-                    width={{
-                      base: "93%",
-                      xxs: "91%",
-                      xs: "90%",
-                      sm: "92%",
-                      md: "92%",
-                      lg: "94%",
-                      xl: "94%",
-                      "2xl": "94%",
-                    }}
-                  >
-                    <Flex
-                      px={{
-                        base: "1",
-                        sm: "1",
-                        md: "1",
-                        lg: "3",
-                        xl: "3",
-                        "2xl": "3",
-                      }}
-                      py={{
-                        base: "1",
-                        sm: "1",
-                        md: "1",
-                        lg: "2",
-                        xl: "2",
-                        "2xl": "2",
-                      }}
-                      bgColor="#282C34"
-                      borderRadius={{
-                        base: "7px",
-                        sm: "7px",
-                        md: "7px",
-                        lg: "10px",
-                        xl: "10px",
-                        "2xl": "10px",
-                      }}
-                      alignItems="center"
-                    ></Flex>
-
-                    <Flex flexDirection="column" gap="1" alignItems="end">
-                      {[3, 8].includes(index) && (
-                        <Flex
-                          px={{
-                            base: "1",
-                            sm: "1",
-                            md: "1",
-                            lg: "3",
-                            xl: "3",
-                            "2xl": "3",
-                          }}
-                          py={{
-                            base: "1",
-                            sm: "1",
-                            md: "1",
-                            lg: "2",
-                            xl: "2",
-                            "2xl": "2",
-                          }}
-                          bgColor="#005BE4"
-                          borderRadius={{
-                            base: "7px",
-                            sm: "7px",
-                            md: "7px",
-                            lg: "10px",
-                            xl: "10px",
-                            "2xl": "10px",
-                          }}
-                          alignItems="center"
-                          width="fit-content"
-                        >
-                          <Text
-                            display="flex"
-                            alignItems="center"
-                            fontFamily="CCElephantmenTall Regular"
-                            color="white"
-                            fontSize={{
-                              base: "8px",
-                              sm: "8px",
-                              md: "10px",
-                              lg: "14px",
-                              xl: "14px",
-                              "2xl": "14px",
-                            }}
-                            letterSpacing="0.5px"
-                          >
-                            <Image
-                              src="./images/limited-icon.svg"
-                              objectFit="contain"
-                              w={{
-                                base: "8px",
-                                sm: "8px",
-                                md: "10px",
-                                lg: "14px",
-                                xl: "14px",
-                                "2xl": "14px",
-                              }}
-                              mt="-1px"
-                            />
-                            &nbsp;LIMITED
-                          </Text>
-                        </Flex>
-                      )}
-                      {[1, 2, 3, 6, 8].includes(index) && (
-                        <Flex
-                          px={{
-                            base: "1",
-                            sm: "1",
-                            md: "1",
-                            lg: "3",
-                            xl: "3",
-                            "2xl": "3",
-                          }}
-                          py={{
-                            base: "1",
-                            sm: "1",
-                            md: "1",
-                            lg: "2",
-                            xl: "2",
-                            "2xl": "2",
-                          }}
-                          bgColor="#E40000"
-                          borderRadius={{
-                            base: "7px",
-                            sm: "7px",
-                            md: "7px",
-                            lg: "10px",
-                            xl: "10px",
-                            "2xl": "10px",
-                          }}
-                          alignItems="center"
-                          width="fit-content"
-                        >
-                          <Text
-                            display="flex"
-                            alignItems="center"
-                            fontFamily="CCElephantmenTall Regular"
-                            color="white"
-                            fontSize={{
-                              base: "8px",
-                              sm: "8px",
-                              md: "10px",
-                              lg: "14px",
-                              xl: "14px",
-                              "2xl": "14px",
-                            }}
-                            letterSpacing="0.5px"
-                          >
-                            <Icon as={RiFireFill} color="white" />
-                            &nbsp;HOT
-                          </Text>
-                        </Flex>
-                      )}
-                    </Flex>
-                  </Flex>
-
                   {/* Bottom overlay */}
-                  <Box position="absolute" bottom="2" left="2" mt={2}>
+                  <Box
+                    position="absolute"
+                    bottom="2"
+                    left={{
+                      base: "6.4px",
+                      sm: "6.4px",
+                      md: "2",
+                      lg: "2",
+                      xl: "2",
+                      "2xl": "2",
+                    }}
+                    mt={2}
+                  >
                     <Box
                       bgColor="rgba(58, 63, 73, 0.8)"
                       px="4"
@@ -406,9 +251,9 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
                   display="flex"
                   justifyContent="center"
                   p="2"
-                  textAlign="center"
                   bgColor="#282C34"
                   transition="all 0.4s ease-out"
+                  alignItems="center"
                 >
                   <Image
                     src="./images/ZARK-TOKEN_1.png"

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { Card, SellBookEntry } from "@/types"; // Adjust the import paths as necessary
 import useMarketStore from "@/store/useMarketStore";
@@ -12,101 +12,395 @@ import {
   Button,
   Divider,
   Flex,
-  Icon,
+  Grid,
   Image,
   Text,
 } from "@chakra-ui/react";
-import { RiFireFill } from "react-icons/ri";
 import useAppStore from "@/store/useAppStore";
 
 const Hero = () => (
-  <div className="relative w-full">
-    <div
-      className="relative flex justify-center text-white text-center bg-no-repeat bg-cover bg-center"
-      style={{
-        backgroundImage: `url('/images/marketplace-hero.webp')`,
-        height: "70vh",
+  <Box
+    position="relative"
+    width="full"
+    height={{
+      base: "415px",
+      sm: "415px",
+      md: "415px",
+      lg: "415px",
+      xl: "450px",
+      "2xl": "450px",
+    }}
+    overflow="hidden"
+  >
+    <Image
+      src="/images/marketplace-hero.webp" // Replace with your image path
+      alt="Blended Image"
+      objectFit="cover"
+      width="full"
+      height={{
+        base: "17vh",
+        sm: "22vh",
+        md: "40vh",
+        lg: "54vh",
+        xl: "76vh",
+        "2xl": "76vh",
       }}
-    ></div>
-  </div>
+    />
+    <Box
+      position="absolute"
+      bottom="0"
+      left="0"
+      width="full"
+      height="16%"
+      bgGradient={`linear(to-b, rgba(0,0,0,0), #090909)`}
+    />
+    <Box
+      display="flex"
+      position="absolute"
+      top="0"
+      left="0"
+      width="full"
+      height="full"
+      alignItems="center"
+      justifyContent="center"
+      pointerEvents="none" // This ensures the text doesn't interfere with any click events
+    ></Box>
+  </Box>
 );
 
 const SaleHistoryTable: React.FC<{ entries: SellBookEntry[] }> = ({
   entries,
 }) => {
   return (
-    <div className="w-full mb-8">
-      <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg p-4">
-        <h3 className="text-lg font-bold text-white mb-4">SALE HISTORY</h3>
-        <div className="flex flex-col space-y-4">
-          <div className="hidden md:block">
-            <table className="min-w-full bg-gray-900 border border-gray-700 rounded-lg shadow-md">
-              <thead>
-                <tr className="bg-gray-800">
-                  <th className="px-4 py-3 text-white text-left">BUYER</th>
-                  <th className="px-4 py-3 text-white text-left">SELLER</th>
-                  <th className="px-4 py-3 text-white text-left">
-                    DATE / PRICE
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {entries.map((entry, index) => (
-                  <tr
-                    key={index}
-                    className="text-white bg-gray-900"
-                    style={{ height: "60px" }}
+    <>
+      <Box bgColor="#282C34" borderRadius="lg" p="6">
+        <Text
+          mt="-6px"
+          fontFamily="Poppins"
+          fontSize="22px"
+          fontWeight="bold"
+          color="white"
+        >
+          SALE HISTORY
+        </Text>
+        <Box display="flex" mt="4">
+          <Box
+            w="100%"
+            bgColor="#3A3F49"
+            borderRadius="lg"
+            flexDirection="column"
+            p="2"
+            display={{
+              base: "none",
+              sm: "none",
+              md: "none",
+              lg: "flex",
+              xl: "flex",
+              "2xl": "flex",
+            }}
+          >
+            <Box
+              display="flex"
+              w="100%"
+              bgColor="#3A3F49"
+              borderRadius="lg"
+              alignItems="center"
+            >
+              <Box w="33.3%" p="5">
+                <Text
+                  fontFamily="CCElephantmenTall Regular"
+                  fontSize="20px"
+                  fontWeight="400"
+                  color="white"
+                >
+                  BUYER
+                </Text>
+              </Box>
+              <Box w="33.3%" p="5">
+                <Text
+                  fontFamily="CCElephantmenTall Regular"
+                  fontSize="20px"
+                  fontWeight="400"
+                  color="white"
+                >
+                  SELLER
+                </Text>
+              </Box>
+              <Box w="33.3%" p="5">
+                <Text
+                  fontFamily="CCElephantmenTall Regular"
+                  fontSize="20px"
+                  fontWeight="400"
+                  color="white"
+                >
+                  DATE / PRICE
+                </Text>
+              </Box>
+            </Box>
+
+            {entries.map((entry, index) => {
+              return (
+                <Fragment key={index}>
+                  <Box
+                    display="flex"
+                    w="100%"
+                    bgColor={index % 2 === 0 ? "#090909" : "transparent"}
+                    alignItems="center"
                   >
-                    <td className="border-t border-gray-700 px-4 py-3 text-left">
-                      @{entry.buyer} ({entry.buyerAddress})
-                    </td>
-                    <td className="border-t border-gray-700 px-4 py-3 text-left">
-                      @{entry.seller} ({entry.sellerAddress})
-                    </td>
-                    <td className="border-t border-gray-700 px-4 py-3 text-left">
-                      <div>
+                    <Box w="33.3%" p="5">
+                      <Text
+                        fontFamily="Poppins"
+                        fontSize="16px"
+                        fontWeight="400"
+                        color="white"
+                        display="flex"
+                        gap="2"
+                      >
+                        @{entry.buyer}
+                      </Text>
+                      <Text
+                        fontFamily="Poppins"
+                        fontSize="12px"
+                        fontWeight="400"
+                        color="white"
+                        display="flex"
+                        gap="2"
+                      >
+                        ({entry.buyerAddress})
+                      </Text>
+                    </Box>
+                    <Box w="33.3%" p="5">
+                      <Text
+                        fontFamily="Poppins"
+                        fontSize="16px"
+                        fontWeight="400"
+                        color="white"
+                        display="flex"
+                        gap="2"
+                      >
+                        @{entry.seller}
+                      </Text>
+                      <Text
+                        fontFamily="Poppins"
+                        fontSize="12px"
+                        fontWeight="400"
+                        color="white"
+                        display="flex"
+                        gap="2"
+                      >
+                        ({entry.sellerAddress})
+                      </Text>
+                    </Box>
+                    <Box w="33.3%" p="5">
+                      <Text
+                        fontFamily="Poppins"
+                        fontSize="16px"
+                        fontWeight="400"
+                        color="white"
+                        display="flex"
+                        gap="2"
+                      >
+                        <Image
+                          src="/images/ZARK-TOKEN_1.png"
+                          objectFit="contain"
+                          className="h-5"
+                        />
                         {entry.price} {entry.priceSymbol}
-                      </div>
-                      <div>{entry.date}</div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="block md:hidden">
-            {entries.map((entry, index) => (
-              <div
-                key={index}
-                className="bg-gray-900 border border-gray-700 rounded-lg shadow-md p-4 flex flex-col space-y-2"
-              >
-                <div className="flex justify-between text-white">
-                  <span className="font-bold">BUYER:</span>
-                  <span>
-                    @{entry.buyer} ({entry.buyerAddress})
-                  </span>
-                </div>
-                <div className="flex justify-between text-white">
-                  <span className="font-bold">SELLER:</span>
-                  <span>
-                    @{entry.seller} ({entry.sellerAddress})
-                  </span>
-                </div>
-                <div className="flex justify-between text-white">
-                  <span className="font-bold">DATE / PRICE:</span>
-                  <div>
-                    <div>
-                      {entry.price} {entry.priceSymbol}
-                    </div>
-                    <div>{entry.date}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
+                      </Text>
+                      <Text
+                        fontFamily="Poppins"
+                        fontSize="12px"
+                        fontWeight="400"
+                        color="white"
+                        display="flex"
+                        gap="2"
+                      >
+                        {entry.date}
+                      </Text>
+                    </Box>
+                  </Box>
+                </Fragment>
+              );
+            })}
+          </Box>
+          <Box
+            w="100%"
+            bgColor="#3A3F49"
+            borderRadius="lg"
+            flexDirection="column"
+            p="2"
+            display={{
+              base: "flex",
+              sm: "flex",
+              md: "flex",
+              lg: "none",
+              xl: "none",
+              "2xl": "none",
+            }}
+          >
+            {entries.map((entry, index) => {
+              return (
+                <Fragment key={entry.nft_id}>
+                  <Grid
+                    templateColumns={{
+                      base: "repeat(2, 1fr)",
+                      sm: "repeat(2, 1fr)",
+                      md: "repeat(3, 1fr)",
+                    }}
+                    gap="2"
+                    w="100%"
+                    p={{
+                      base: "1",
+                      sm: "1",
+                      md: "2",
+                    }}
+                  >
+                    <Box p="2">
+                      <Text
+                        fontFamily="Poppins"
+                        fontSize={{
+                          base: "12px",
+                          sm: "12px",
+                          md: "14px",
+                        }}
+                        fontWeight="600"
+                        color="white"
+                        display="flex"
+                        gap="2"
+                      >
+                        BUYER
+                      </Text>
+                      <Text
+                        fontFamily="Poppins"
+                        fontSize={{
+                          base: "12px",
+                          sm: "12px",
+                          md: "14px",
+                        }}
+                        fontWeight="400"
+                        color="white"
+                        display="flex"
+                        gap="2"
+                      >
+                        @{entry.buyer}
+                      </Text>
+                      <Text
+                        fontFamily="Poppins"
+                        fontSize={{
+                          base: "10px",
+                          sm: "10px",
+                          md: "12px",
+                        }}
+                        fontWeight="400"
+                        color="white"
+                        display="flex"
+                        gap="2"
+                      >
+                        ({entry.buyerAddress})
+                      </Text>
+                    </Box>
+                    <Box p="2">
+                      <Text
+                        fontFamily="Poppins"
+                        fontSize={{
+                          base: "12px",
+                          sm: "12px",
+                          md: "14px",
+                        }}
+                        fontWeight="600"
+                        color="white"
+                        display="flex"
+                        gap="2"
+                      >
+                        SELLER
+                      </Text>
+                      <Text
+                        fontFamily="Poppins"
+                        fontSize={{
+                          base: "12px",
+                          sm: "12px",
+                          md: "14px",
+                        }}
+                        fontWeight="400"
+                        color="white"
+                        display="flex"
+                        gap="2"
+                      >
+                        @{entry.seller}
+                      </Text>
+                      <Text
+                        fontFamily="Poppins"
+                        fontSize={{
+                          base: "10px",
+                          sm: "10px",
+                          md: "12px",
+                        }}
+                        fontWeight="400"
+                        color="white"
+                        display="flex"
+                        gap="2"
+                      >
+                        ({entry.sellerAddress})
+                      </Text>
+                    </Box>
+                    <Box p="2">
+                      <Text
+                        fontFamily="Poppins"
+                        fontSize={{
+                          base: "12px",
+                          sm: "12px",
+                          md: "14px",
+                        }}
+                        fontWeight="600"
+                        color="white"
+                        display="flex"
+                        gap="2"
+                      >
+                        DATE / PRICE
+                      </Text>
+                      <Text
+                        fontFamily="Poppins"
+                        fontSize={{
+                          base: "12px",
+                          sm: "12px",
+                          md: "14px",
+                        }}
+                        fontWeight="400"
+                        color="white"
+                        display="flex"
+                        gap="2"
+                      >
+                        <Image
+                          src="/images/ZARK-TOKEN_1.png"
+                          objectFit="contain"
+                          className="h-5"
+                        />
+                        {entry.price} {entry.priceSymbol}
+                      </Text>
+                      <Text
+                        fontFamily="Poppins"
+                        fontSize={{
+                          base: "10px",
+                          sm: "10px",
+                          md: "12px",
+                        }}
+                        fontWeight="400"
+                        color="white"
+                        display="flex"
+                        gap="2"
+                      >
+                        {entry.date}
+                      </Text>
+                    </Box>
+                  </Grid>
+                  {entries.length !== index + 1 && <Divider mb="2" />}
+                </Fragment>
+              );
+            })}
+          </Box>
+        </Box>
+      </Box>
+    </>
   );
 };
 
@@ -199,47 +493,18 @@ const CardDetails = () => {
   }, [id, card, fetchSellBook]);
 
   useEffect(() => {
-    // Calculate the initial total price based on the least priced item
-    if (sellBookEntries.length > 0) {
-      const leastPricedItem = sellBookEntries.reduce((minItem, currentItem) => {
-        return parseFloat(currentItem.price) < parseFloat(minItem.price)
-          ? currentItem
-          : minItem;
-      });
-
-      setTotalPrice(leastPricedItem.price);
-    }
+    // Calculate the total price based on the sellBookEntries
+    const total = sellBookEntries.reduce(
+      (sum, entry) => sum + parseFloat(entry.price),
+      0
+    );
+    setTotalPrice(total);
   }, [sellBookEntries]);
-
-  useEffect(() => {
-    // Calculate the total price based on the selected entries
-    if (selectedEntries.length > 0) {
-      const total = selectedEntries.reduce(
-        (sum, entry) => sum + parseFloat(entry.price),
-        0,
-      );
-      setTotalPrice(total);
-    } else if (sellBookEntries.length > 0) {
-      // Reset to least priced item if no entries are selected
-      const leastPricedItem = sellBookEntries.reduce((minItem, currentItem) => {
-        return parseFloat(currentItem.price) < parseFloat(minItem.price)
-          ? currentItem
-          : minItem;
-      });
-
-      setTotalPrice(leastPricedItem.price);
-    }
-  }, [selectedEntries, sellBookEntries]);
 
   const handleSelect = (entry: SellBookEntry, isSelected: boolean) => {
     setSelectedEntries((prev) => {
       if (isSelected) {
-        // Add entry if not already in the list
-        const newEntries = [...prev, entry].filter(
-          (value, index, self) =>
-            index === self.findIndex((e) => e.nft_id === value.nft_id),
-        );
-        return newEntries;
+        return [...prev, entry];
       } else {
         return prev.filter((e) => e.nft_id !== entry.nft_id);
       }
@@ -258,7 +523,7 @@ const CardDetails = () => {
     try {
       const filteredEntries = selectedEntries.filter(
         (entry, index, self) =>
-          index === self.findIndex((e) => e.nft_id === entry.nft_id),
+          index === self.findIndex((e) => e.nft_id === entry.nft_id)
       );
       await requestBuy({
         nfts: filteredEntries.map((entry) => entry.nft_id.toString()),
@@ -294,14 +559,32 @@ const CardDetails = () => {
           </div>
           <Box>
             <Box bgColor="#282C34" borderRadius="lg" p="6">
-              <Image
-                src={`https://cdn.tribaldex.com/packmanager/${settings.nft_symbol}/${fetchedCard.grouping.edition}_${fetchedCard.grouping.type}_${fetchedCard.grouping.foil}.png`}
-                objectFit="cover"
-                h="290px"
-                w="full"
-                borderRadius="lg"
-              />
-              <Box>
+              <Box display="flex" justifyContent="center">
+                <Image
+                  src={`https://cdn.tribaldex.com/packmanager/${settings.nft_symbol}/${fetchedCard.grouping.edition}_${fetchedCard.grouping.type}_${fetchedCard.grouping.foil}.png`}
+                  objectFit="cover"
+                  w="245px"
+                  borderRadius="lg"
+                  boxShadow="0 0 60px -40px white"
+                />
+              </Box>
+
+              <Box mt="2">
+                <Text
+                  as="h5"
+                  fontFamily="CCElephantmenTall Regular"
+                  fontSize={{
+                    base: "25px",
+                    sm: "25px",
+                    md: "25px",
+                    lg: "28px",
+                    xl: "32px",
+                    "2xl": "32px",
+                  }}
+                  color="white"
+                >
+                  {fetchedCard.name}
+                </Text>
                 <Flex gap="2" flexWrap="wrap">
                   <Box
                     bgColor="#3A3F49"
@@ -318,18 +601,31 @@ const CardDetails = () => {
                       src="/images/legendary-badge.svg"
                       objectFit="contain"
                       alt="EGY ICON"
-                      width="16px"
-                      height="16px"
+                      w={{
+                        base: "12px",
+                        sm: "12px",
+                        md: "12px",
+                        lg: "14px",
+                        xl: "16px",
+                        "2xl": "16px",
+                      }}
                     />
                     <Text
                       fontFamily="CCElephantmenTall Regular"
-                      fontSize="16px"
+                      fontSize={{
+                        base: "12px",
+                        sm: "12px",
+                        md: "12px",
+                        lg: "14px",
+                        xl: "16px",
+                        "2xl": "16px",
+                      }}
                       color="#FF4D4D"
                     >
                       LEGENDARY
                     </Text>
                   </Box>
-                  <Box
+                  {/* <Box
                     bgColor="#E40000"
                     px="4"
                     py="2"
@@ -374,7 +670,7 @@ const CardDetails = () => {
                     >
                       LIMITED
                     </Text>
-                  </Box>
+                  </Box> */}
                 </Flex>
 
                 <Divider borderColor="#3A3F49" my="4" />
@@ -382,28 +678,47 @@ const CardDetails = () => {
                   <Text
                     as="h5"
                     fontFamily="Poppins"
-                    fontSize="16px"
+                    fontSize={{
+                      base: "12px",
+                      sm: "12px",
+                      md: "12px",
+                      lg: "14px",
+                      xl: "16px",
+                      "2xl": "16px",
+                    }}
                     color="white"
                     fontWeight="300"
                   >
-                    PRICE
+                    TOTAL PRICE
                   </Text>
-                  <Flex alignItems="center" gap="2">
+                  <Flex alignItems="center" gap="2" mt="2">
                     <Image
                       src="/images/ZARK-TOKEN_1.png"
                       objectFit="contain"
                       alt="EGY ICON"
-                      width="32px"
-                      height="32px"
+                      w={{
+                        base: "25px",
+                        sm: "25px",
+                        md: "25px",
+                        lg: "28px",
+                        xl: "32px",
+                        "2xl": "32px",
+                      }}
                     />
                     <Text
                       fontFamily="Poppins"
-                      fontSize="32px"
+                      fontSize={{
+                        base: "25px",
+                        sm: "25px",
+                        md: "25px",
+                        lg: "28px",
+                        xl: "32px",
+                        "2xl": "32px",
+                      }}
                       color="white"
                       fontWeight="bold"
                     >
-                      {parseFloat(totalPrice).toFixed(2)}{" "}
-                      {sellBookEntries[0]?.priceSymbol}
+                      {totalPrice.toFixed(2)} {sellBookEntries[0]?.priceSymbol}
                     </Text>
                   </Flex>
                   <Button
@@ -412,10 +727,17 @@ const CardDetails = () => {
                     p="6"
                     bgColor="#12BFA0"
                     fontFamily="CCElephantmenTall Regular"
-                    fontSize="24px"
+                    fontSize={{
+                      base: "20px",
+                      sm: "20px",
+                      md: "20px",
+                      lg: "20px",
+                      xl: "24px",
+                      "2xl": "24px",
+                    }}
                     color="white"
                     fontWeight="400"
-                    gap="4"
+                    gap="2"
                     _hover={{
                       bgColor: "#12BFA0",
                       opacity: "0.8",
@@ -426,9 +748,15 @@ const CardDetails = () => {
                     <Image
                       src="/images/buy-now.svg"
                       objectFit="contain"
-                      alt="EGY ICON"
-                      width="24px"
-                      height="24px"
+                      alt="buy now"
+                      w={{
+                        base: "20px",
+                        sm: "20px",
+                        md: "20px",
+                        lg: "20px",
+                        xl: "24px",
+                        "2xl": "24px",
+                      }}
                     />
                     BUY NOW
                   </Button>

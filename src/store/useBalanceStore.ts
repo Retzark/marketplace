@@ -7,12 +7,19 @@ import useUserStore from "@/store/userStore";
 
 interface BalanceState {
   balance: number;
+  isFetchingBalance: boolean;
+  setFetchingBalance: (value: boolean) => void;
   fetchBalance: () => void;
 }
 
 const useBalanceStore = create<BalanceState>((set) => ({
   balance: 0,
+  isFetchingBalance: false,
+  setFetchingBalance: (value: boolean) => {
+    set(() => ({ isFetchingBalance: value }));
+  },
   fetchBalance: async () => {
+    set(() => ({ isFetchingBalance: true }));
     const { settings, settingsReady } = useAppStore.getState();
     const user = useUserStore.getState().user;
 
@@ -50,6 +57,8 @@ const useBalanceStore = create<BalanceState>((set) => ({
       console.log("API Response:", response);
     } catch (e) {
       console.error("Failed to fetch or process data:", e);
+    } finally {
+      set(() => ({ isFetchingBalance: false }));
     }
   },
 }));

@@ -14,99 +14,393 @@ import {
   Text,
   useDisclosure,
   Spinner,
+  Image,
 } from "@chakra-ui/react";
 import useAppStore from "@/store/useAppStore";
 import Swal from "sweetalert2";
 import SellModal from "@/components/modals/SellModal";
 
 const Hero = () => (
-  <div className="relative w-full">
-    <div
-      className="relative flex justify-center text-white text-center bg-no-repeat bg-cover bg-center"
-      style={{
-        backgroundImage: `url('/images/marketplace-hero.webp')`,
-        height: "70vh",
+  <Box
+    position="relative"
+    width="full"
+    height={{
+      base: "415px",
+      sm: "415px",
+      md: "415px",
+      lg: "415px",
+      xl: "450px",
+      "2xl": "450px",
+    }}
+    overflow="hidden"
+  >
+    <Image
+      src="/images/marketplace-hero.webp" // Replace with your image path
+      alt="Blended Image"
+      objectFit="cover"
+      width="full"
+      height={{
+        base: "17vh",
+        sm: "22vh",
+        md: "40vh",
+        lg: "54vh",
+        xl: "76vh",
+        "2xl": "76vh",
       }}
-    ></div>
-  </div>
+    />
+    <Box
+      position="absolute"
+      bottom="0"
+      left="0"
+      width="full"
+      height="16%"
+      bgGradient={`linear(to-b, rgba(0,0,0,0), #090909)`}
+    />
+    <Box
+      display="flex"
+      position="absolute"
+      top="0"
+      left="0"
+      width="full"
+      height="full"
+      alignItems="center"
+      justifyContent="center"
+      pointerEvents="none" // This ensures the text doesn't interfere with any click events
+    ></Box>
+  </Box>
 );
 
 const SaleHistoryTable: React.FC<{ entries: SellBookEntry[] }> = ({
   entries,
 }) => {
   return (
-    <div className="w-full mb-8">
-      <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg p-4">
-        <h3 className="text-lg font-bold text-white mb-4">SALE HISTORY</h3>
-        <div className="flex flex-col space-y-4">
-          <div className="hidden md:block">
-            <table className="min-w-full bg-gray-900 border border-gray-700 rounded-lg shadow-md">
-              <thead>
-                <tr className="bg-gray-800">
-                  <th className="px-4 py-3 text-white text-left">BUYER</th>
-                  <th className="px-4 py-3 text-white text-left">SELLER</th>
-                  <th className="px-4 py-3 text-white text-left">
-                    DATE / PRICE
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {entries.map((entry, index) => (
-                  <tr
-                    key={index}
-                    className="text-white bg-gray-900"
-                    style={{ height: "60px" }}
-                  >
-                    <td className="border-t border-gray-700 px-4 py-3 text-left">
-                      @{entry.buyer} ({entry.buyerAddress})
-                    </td>
-                    <td className="border-t border-gray-700 px-4 py-3 text-left">
-                      @{entry.seller} ({entry.sellerAddress})
-                    </td>
-                    <td className="border-t border-gray-700 px-4 py-3 text-left">
-                      <div>
-                        {entry.price} {entry.priceSymbol}
-                      </div>
-                      <div>{entry.date}</div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="block md:hidden">
-            {entries.map((entry, index) => (
-              <div
-                key={index}
-                className="bg-gray-900 border border-gray-700 rounded-lg shadow-md p-4 flex flex-col space-y-2"
+    <Box bgColor="#282C34" borderRadius="lg" p="6">
+      <Text
+        mt="-6px"
+        fontFamily="Poppins"
+        fontSize="22px"
+        fontWeight="bold"
+        color="white"
+      >
+        SALE HISTORY
+      </Text>
+      <Box display="flex" mt="4">
+        <Box
+          w="100%"
+          bgColor="#3A3F49"
+          borderRadius="lg"
+          flexDirection="column"
+          p="2"
+          display={{
+            base: "none",
+            sm: "none",
+            md: "none",
+            lg: "flex",
+            xl: "flex",
+            "2xl": "flex",
+          }}
+        >
+          <Box
+            display="flex"
+            w="100%"
+            bgColor="#3A3F49"
+            borderRadius="lg"
+            alignItems="center"
+          >
+            <Box w="33.3%" p="5">
+              <Text
+                fontFamily="CCElephantmenTall Regular"
+                fontSize="20px"
+                fontWeight="400"
+                color="white"
               >
-                <div className="flex justify-between text-white">
-                  <span className="font-bold">BUYER:</span>
-                  <span>
-                    @{entry.buyer} ({entry.buyerAddress})
-                  </span>
-                </div>
-                <div className="flex justify-between text-white">
-                  <span className="font-bold">SELLER:</span>
-                  <span>
-                    @{entry.seller} ({entry.sellerAddress})
-                  </span>
-                </div>
-                <div className="flex justify-between text-white">
-                  <span className="font-bold">DATE / PRICE:</span>
-                  <div>
-                    <div>
+                BUYER
+              </Text>
+            </Box>
+            <Box w="33.3%" p="5">
+              <Text
+                fontFamily="CCElephantmenTall Regular"
+                fontSize="20px"
+                fontWeight="400"
+                color="white"
+              >
+                SELLER
+              </Text>
+            </Box>
+            <Box w="33.3%" p="5">
+              <Text
+                fontFamily="CCElephantmenTall Regular"
+                fontSize="20px"
+                fontWeight="400"
+                color="white"
+              >
+                DATE / PRICE
+              </Text>
+            </Box>
+          </Box>
+
+          {entries.map((entry, index) => {
+            return (
+              <Fragment key={index}>
+                <Box
+                  display="flex"
+                  w="100%"
+                  bgColor={index % 2 === 0 ? "#090909" : "transparent"}
+                  alignItems="center"
+                >
+                  <Box w="33.3%" p="5">
+                    <Text
+                      fontFamily="Poppins"
+                      fontSize="16px"
+                      fontWeight="400"
+                      color="white"
+                      display="flex"
+                      gap="2"
+                    >
+                      @{entry.buyer}
+                    </Text>
+                    <Text
+                      fontFamily="Poppins"
+                      fontSize="12px"
+                      fontWeight="400"
+                      color="white"
+                      display="flex"
+                      gap="2"
+                    >
+                      ({entry.buyerAddress})
+                    </Text>
+                  </Box>
+                  <Box w="33.3%" p="5">
+                    <Text
+                      fontFamily="Poppins"
+                      fontSize="16px"
+                      fontWeight="400"
+                      color="white"
+                      display="flex"
+                      gap="2"
+                    >
+                      @{entry.seller}
+                    </Text>
+                    <Text
+                      fontFamily="Poppins"
+                      fontSize="12px"
+                      fontWeight="400"
+                      color="white"
+                      display="flex"
+                      gap="2"
+                    >
+                      ({entry.sellerAddress})
+                    </Text>
+                  </Box>
+                  <Box w="33.3%" p="5">
+                    <Text
+                      fontFamily="Poppins"
+                      fontSize="16px"
+                      fontWeight="400"
+                      color="white"
+                      display="flex"
+                      gap="2"
+                    >
+                      <Image
+                        src="/images/ZARK-TOKEN_1.png"
+                        objectFit="contain"
+                        className="h-5"
+                      />
                       {entry.price} {entry.priceSymbol}
-                    </div>
-                    <div>{entry.date}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
+                    </Text>
+                    <Text
+                      fontFamily="Poppins"
+                      fontSize="12px"
+                      fontWeight="400"
+                      color="white"
+                      display="flex"
+                      gap="2"
+                    >
+                      {entry.date}
+                    </Text>
+                  </Box>
+                </Box>
+              </Fragment>
+            );
+          })}
+        </Box>
+        <Box
+          w="100%"
+          bgColor="#3A3F49"
+          borderRadius="lg"
+          flexDirection="column"
+          p="2"
+          display={{
+            base: "flex",
+            sm: "flex",
+            md: "flex",
+            lg: "none",
+            xl: "none",
+            "2xl": "none",
+          }}
+        >
+          {entries.map((entry, index) => {
+            return (
+              <Fragment key={entry.nft_id}>
+                <Grid
+                  templateColumns={{
+                    base: "repeat(2, 1fr)",
+                    sm: "repeat(2, 1fr)",
+                    md: "repeat(3, 1fr)",
+                  }}
+                  gap="2"
+                  w="100%"
+                  p={{
+                    base: "1",
+                    sm: "1",
+                    md: "2",
+                  }}
+                >
+                  <Box p="2">
+                    <Text
+                      fontFamily="Poppins"
+                      fontSize={{
+                        base: "12px",
+                        sm: "12px",
+                        md: "14px",
+                      }}
+                      fontWeight="600"
+                      color="white"
+                      display="flex"
+                      gap="2"
+                    >
+                      BUYER
+                    </Text>
+                    <Text
+                      fontFamily="Poppins"
+                      fontSize={{
+                        base: "12px",
+                        sm: "12px",
+                        md: "14px",
+                      }}
+                      fontWeight="400"
+                      color="white"
+                      display="flex"
+                      gap="2"
+                    >
+                      @{entry.buyer}
+                    </Text>
+                    <Text
+                      fontFamily="Poppins"
+                      fontSize={{
+                        base: "10px",
+                        sm: "10px",
+                        md: "12px",
+                      }}
+                      fontWeight="400"
+                      color="white"
+                      display="flex"
+                      gap="2"
+                    >
+                      ({entry.buyerAddress})
+                    </Text>
+                  </Box>
+                  <Box p="2">
+                    <Text
+                      fontFamily="Poppins"
+                      fontSize={{
+                        base: "12px",
+                        sm: "12px",
+                        md: "14px",
+                      }}
+                      fontWeight="600"
+                      color="white"
+                      display="flex"
+                      gap="2"
+                    >
+                      SELLER
+                    </Text>
+                    <Text
+                      fontFamily="Poppins"
+                      fontSize={{
+                        base: "12px",
+                        sm: "12px",
+                        md: "14px",
+                      }}
+                      fontWeight="400"
+                      color="white"
+                      display="flex"
+                      gap="2"
+                    >
+                      @{entry.seller}
+                    </Text>
+                    <Text
+                      fontFamily="Poppins"
+                      fontSize={{
+                        base: "10px",
+                        sm: "10px",
+                        md: "12px",
+                      }}
+                      fontWeight="400"
+                      color="white"
+                      display="flex"
+                      gap="2"
+                    >
+                      ({entry.sellerAddress})
+                    </Text>
+                  </Box>
+                  <Box p="2">
+                    <Text
+                      fontFamily="Poppins"
+                      fontSize={{
+                        base: "12px",
+                        sm: "12px",
+                        md: "14px",
+                      }}
+                      fontWeight="600"
+                      color="white"
+                      display="flex"
+                      gap="2"
+                    >
+                      DATE / PRICE
+                    </Text>
+                    <Text
+                      fontFamily="Poppins"
+                      fontSize={{
+                        base: "12px",
+                        sm: "12px",
+                        md: "14px",
+                      }}
+                      fontWeight="400"
+                      color="white"
+                      display="flex"
+                      gap="2"
+                    >
+                      <Image
+                        src="/images/ZARK-TOKEN_1.png"
+                        objectFit="contain"
+                        className="h-5"
+                      />
+                      {entry.price} {entry.priceSymbol}
+                    </Text>
+                    <Text
+                      fontFamily="Poppins"
+                      fontSize={{
+                        base: "10px",
+                        sm: "10px",
+                        md: "12px",
+                      }}
+                      fontWeight="400"
+                      color="white"
+                      display="flex"
+                      gap="2"
+                    >
+                      {entry.date}
+                    </Text>
+                  </Box>
+                </Grid>
+                {entries.length !== index + 1 && <Divider mb="2" />}
+              </Fragment>
+            );
+          })}
+        </Box>
+      </Box>
+    </Box>
   );
 };
 
@@ -163,7 +457,7 @@ const CollectionCardDetail = () => {
   const handleModalSubmit = async (
     nftId: number,
     price: string,
-    priceSymbol: string,
+    priceSymbol: string
   ) => {
     setIsSubmitting(true);
     try {
@@ -201,7 +495,7 @@ const CollectionCardDetail = () => {
         await fetchCollection(); // Fetch the collection data
         const { card: fetchedCard, sellBookEntries } = await fetchCardDetails(
           id,
-          card,
+          card
         );
         setFetchedCard(fetchedCard);
         setSellBookEntries(sellBookEntries);
@@ -218,7 +512,7 @@ const CollectionCardDetail = () => {
   }, [id, card, fetchCardDetails, fetchCollection]);
 
   const filteredData = data.filter(
-    (item) => fetchedCard && item.type === fetchedCard.grouping.type,
+    (item) => fetchedCard && item.type === fetchedCard.grouping.type
   );
 
   useEffect(() => {
@@ -401,7 +695,11 @@ const CollectionCardDetail = () => {
                 return (
                   <Fragment key={item.nft_id}>
                     <Grid
-                      templateColumns="repeat(2, 1fr)"
+                      templateColumns={{
+                        base: "repeat(2, 1fr)",
+                        sm: "repeat(2, 1fr)",
+                        md: "repeat(4, 1fr)",
+                      }}
                       gap="2"
                       w="100%"
                       p="2"
@@ -432,11 +730,50 @@ const CollectionCardDetail = () => {
                           fontWeight="600"
                           color="white"
                         >
-                          Action
+                          ACCOUNT
                         </Text>
-                        <Button
+                        <Text
                           mt="2"
-                          w="full"
+                          fontFamily="Poppins"
+                          fontSize="10px"
+                          fontWeight="400"
+                          color="white"
+                        >
+                          @{item.account}
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Text
+                          fontFamily="Poppins"
+                          fontSize="12px"
+                          fontWeight="600"
+                          color="white"
+                        >
+                          NAME
+                        </Text>
+                        <Text
+                          mt="2"
+                          fontFamily="Poppins"
+                          fontSize="10px"
+                          fontWeight="400"
+                          color="white"
+                        >
+                          {item.name}
+                        </Text>
+                      </Box>
+                      <Box
+                        display="flex"
+                        justifyContent="center"
+                        alignItems={{ base: "end", sm: "end", md: "start" }}
+                      >
+                        <Button
+                          size="xs"
+                          mt="2"
+                          w={{
+                            base: "100%",
+                            sm: "100%",
+                            md: "50%",
+                          }}
                           onClick={() => handleSell(item.nft_id)}
                           bgColor="green.500"
                           color="white"

@@ -24,7 +24,7 @@ const ListingsTable: React.FC<ListingsTableProps> = ({
 }) => {
   const [selectAll, setSelectAll] = useState(false);
   const [selectedEntries, setSelectedEntries] = useState<Set<number>>(
-    new Set(),
+    new Set()
   );
 
   useEffect(() => {
@@ -80,7 +80,7 @@ const ListingsTable: React.FC<ListingsTableProps> = ({
             <Loading />
           </div>
         ) : (
-          <Flex mt="4">
+          <Box display="flex" mt="4">
             <Box
               w="100%"
               bgColor="#3A3F49"
@@ -96,13 +96,14 @@ const ListingsTable: React.FC<ListingsTableProps> = ({
                 "2xl": "flex",
               }}
             >
-              <Flex
+              <Box
+                display="flex"
                 w="100%"
                 bgColor="#3A3F49"
                 borderRadius="lg"
                 alignItems="center"
               >
-                <Flex w="10%" p="5" justifyContent="center">
+                <Box display="flex" w="10%" p="5" justifyContent="center">
                   <Checkbox
                     size="lg"
                     bgColor="white"
@@ -111,7 +112,7 @@ const ListingsTable: React.FC<ListingsTableProps> = ({
                     onChange={(e) => setSelectAll(e.target.checked)}
                     className="form-checkbox h-5 w-5 text-green-500 border-gray-300 rounded focus:ring-0 focus:ring-offset-0"
                   />
-                </Flex>
+                </Box>
                 <Box w="22.5%" p="5">
                   <Text
                     fontFamily="CCElephantmenTall Regular"
@@ -152,17 +153,18 @@ const ListingsTable: React.FC<ListingsTableProps> = ({
                     SELLER
                   </Text>
                 </Box>
-              </Flex>
+              </Box>
 
               {entries.map((entry, index) => {
                 return (
                   <Fragment key={entry.nft_id}>
-                    <Flex
+                    <Box
+                      display="flex"
                       w="100%"
                       bgColor={index % 2 === 0 ? "#090909" : "transparent"}
                       alignItems="center"
                     >
-                      <Flex w="10%" p="5" justifyContent="center">
+                      <Box display="flex" w="10%" p="5" justifyContent="center">
                         <Checkbox
                           bgColor="white"
                           size="lg"
@@ -171,7 +173,7 @@ const ListingsTable: React.FC<ListingsTableProps> = ({
                           onChange={() => handleEntryCheckboxChange(entry)}
                           className="form-checkbox h-5 w-5 text-green-500 border-gray-300 rounded focus:ring-0 focus:ring-offset-0"
                         />
-                      </Flex>
+                      </Box>
                       <Box w="22.5%" p="5">
                         <Text
                           fontFamily="Poppins"
@@ -223,7 +225,7 @@ const ListingsTable: React.FC<ListingsTableProps> = ({
                           @{entry.account}
                         </Text>
                       </Box>
-                    </Flex>
+                    </Box>
                   </Fragment>
                 );
               })}
@@ -246,7 +248,7 @@ const ListingsTable: React.FC<ListingsTableProps> = ({
               {entries.map((entry, index) => {
                 return (
                   <Fragment key={entry.nft_id}>
-                    <Flex px="3" py="1">
+                    <Box display="flex" px="3" py="1">
                       <Checkbox
                         size="md"
                         bgColor="white"
@@ -255,7 +257,7 @@ const ListingsTable: React.FC<ListingsTableProps> = ({
                         onChange={() => handleEntryCheckboxChange(entry)}
                         className="form-checkbox  text-green-500 border-gray-300 rounded focus:ring-0 focus:ring-offset-0"
                       />
-                    </Flex>
+                    </Box>
                     <Grid
                       templateColumns={{
                         base: "repeat(2, 1fr)",
@@ -419,7 +421,7 @@ const ListingsTable: React.FC<ListingsTableProps> = ({
                 );
               })}
             </Box>
-          </Flex>
+          </Box>
         )}
       </Box>
     </>

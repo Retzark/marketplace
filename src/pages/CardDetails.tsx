@@ -493,18 +493,47 @@ const CardDetails = () => {
   }, [id, card, fetchSellBook]);
 
   useEffect(() => {
-    // Calculate the total price based on the sellBookEntries
-    const total = sellBookEntries.reduce(
-      (sum, entry) => sum + parseFloat(entry.price),
-      0
-    );
-    setTotalPrice(total);
+    // Calculate the initial total price based on the least priced item
+    if (sellBookEntries.length > 0) {
+      const leastPricedItem = sellBookEntries.reduce((minItem, currentItem) => {
+        return parseFloat(currentItem.price) < parseFloat(minItem.price)
+          ? currentItem
+          : minItem;
+      });
+
+      setTotalPrice(leastPricedItem.price);
+    }
   }, [sellBookEntries]);
+
+  useEffect(() => {
+    // Calculate the total price based on the selected entries
+    if (selectedEntries.length > 0) {
+      const total = selectedEntries.reduce(
+        (sum, entry) => sum + parseFloat(entry.price),
+        0,
+      );
+      setTotalPrice(total);
+    } else if (sellBookEntries.length > 0) {
+      // Reset to least priced item if no entries are selected
+      const leastPricedItem = sellBookEntries.reduce((minItem, currentItem) => {
+        return parseFloat(currentItem.price) < parseFloat(minItem.price)
+          ? currentItem
+          : minItem;
+      });
+
+      setTotalPrice(leastPricedItem.price);
+    }
+  }, [selectedEntries, sellBookEntries]);
 
   const handleSelect = (entry: SellBookEntry, isSelected: boolean) => {
     setSelectedEntries((prev) => {
       if (isSelected) {
-        return [...prev, entry];
+        // Add entry if not already in the list
+        const newEntries = [...prev, entry].filter(
+          (value, index, self) =>
+            index === self.findIndex((e) => e.nft_id === value.nft_id),
+        );
+        return newEntries;
       } else {
         return prev.filter((e) => e.nft_id !== entry.nft_id);
       }
@@ -523,7 +552,7 @@ const CardDetails = () => {
     try {
       const filteredEntries = selectedEntries.filter(
         (entry, index, self) =>
-          index === self.findIndex((e) => e.nft_id === entry.nft_id)
+          index === self.findIndex((e) => e.nft_id === entry.nft_id),
       );
       await requestBuy({
         nfts: filteredEntries.map((entry) => entry.nft_id.toString()),
@@ -689,7 +718,7 @@ const CardDetails = () => {
                     color="white"
                     fontWeight="300"
                   >
-                    TOTAL PRICE
+                    PRICE
                   </Text>
                   <Flex alignItems="center" gap="2" mt="2">
                     <Image
@@ -718,7 +747,8 @@ const CardDetails = () => {
                       color="white"
                       fontWeight="bold"
                     >
-                      {totalPrice.toFixed(2)} {sellBookEntries[0]?.priceSymbol}
+                      {parseFloat(totalPrice).toFixed(2)}{" "}
+                      {sellBookEntries[0]?.priceSymbol}
                     </Text>
                   </Flex>
                   <Button

@@ -6,12 +6,15 @@ import Loading from "@/components/Loading";
 import { Box, Grid, Image, Text } from "@chakra-ui/react";
 import useAppStore from "@/store/useAppStore";
 import useMarketStore from "@/store/useMarketStore";
+import Pagination from "./Pagination";
 
 interface NFTCardsListProps {
   selectedFaction?: string;
   selectedRarity?: string;
   selectedGameStats?: string;
 }
+
+const PAGE_SIZE = 18;
 
 const NFTCardsList: React.FC<NFTCardsListProps> = ({
   selectedFaction = "",
@@ -22,7 +25,6 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
   const [filteredData, setFilteredData] = useState<Card[]>([]);
   const [selectedFilter] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10); // Set the number of items per page
   const { fetchSellBook } = useMarketStore();
 
   const navigate = useNavigate();
@@ -104,8 +106,8 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
   };
 
   // Calculate the indices for the current page
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const indexOfLastItem = currentPage * PAGE_SIZE;
+  const indexOfFirstItem = indexOfLastItem - PAGE_SIZE;
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -119,7 +121,7 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
   };
 
   const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(filteredData.length / itemsPerPage); i++) {
+  for (let i = 1; i <= Math.ceil(filteredData.length / PAGE_SIZE); i++) {
     pageNumbers.push(i);
   }
 
@@ -291,34 +293,13 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
           ))}
         </Grid>
       </Box>
-      <Box className="flex justify-center mt-20 mb-20" bgColor="#090909">
-        <nav className="inline-flex rounded-md shadow">
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="px-4 py-2 border border-gray-800 bg-gray-800 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
-          >
-            Previous
-          </button>
-          {pageNumbers.map((number) => (
-            <button
-              key={number}
-              onClick={() => handlePageChange(number)}
-              className={`px-4 py-2 border border-gray-800 bg-gray-800 text-sm font-medium text-white ${
-                currentPage === number ? "bg-primary" : "hover:bg-gray-700"
-              }`}
-            >
-              {number}
-            </button>
-          ))}
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === pageNumbers.length}
-            className="px-4 py-2 border border-gray-800 bg-gray-800 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
-          >
-            Next
-          </button>
-        </nav>
+      <Box mt="75px">
+        <Pagination
+          currentPage={currentPage}
+          totalItems={filteredData.length}
+          pageSize={PAGE_SIZE}
+          onPageChange={handlePageChange}
+        />
       </Box>
     </Box>
   );

@@ -4,12 +4,12 @@ import useFetchCollectionData from "@/hooks/useFetchCollectionData";
 import useAppStore from "@/store/useAppStore";
 import CardItem from "@/components/CardItem";
 import Pagination from "@/components/Pagination";
-import { Box, Divider, Grid, Select } from "@chakra-ui/react";
+import { Box, Grid, Select } from "@chakra-ui/react";
 import Loading from "./Loading";
 
 const PAGE_SIZE = 18;
 
-const CollectionCardsList = () => {
+const CollectionCardsList = ({ username: string }) => {
   const { data, isLoading, error } = useFetchCollectionData();
   const [filteredData, setFilteredData] = useState<
     { card: Card; count: number }[]
@@ -36,7 +36,7 @@ const CollectionCardsList = () => {
       const filtered = Object.values(cardCountMap);
       if (selectedFilter) {
         setFilteredData(
-          filtered.filter((item) => item.card.foil === selectedFilter)
+          filtered.filter((item) => item.card.foil === selectedFilter),
         );
       } else {
         setFilteredData(filtered);
@@ -74,6 +74,7 @@ const CollectionCardsList = () => {
         w="100%"
         px={{ base: "10px", sm: "20px", md: "30px", lg: "40px" }}
         mb="4"
+        mt="5"
       >
         <Select
           w="fit-content"

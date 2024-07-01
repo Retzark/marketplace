@@ -72,6 +72,21 @@ const BuyPacksModal: React.FC<BuyPacksModalProps> = ({
     });
   };
 
+  const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (/^\d*$/.test(value)) {
+      setQuantity(parseInt(value, 10) || 0);
+    }
+  };
+
+  const incrementQuantity = () => {
+    setQuantity((prevQuantity) => Math.min(prevQuantity + 1, 2000));
+  };
+
+  const decrementQuantity = () => {
+    setQuantity((prevQuantity) => Math.max(prevQuantity - 1, 1));
+  };
+
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-75 overflow-y-auto h-full w-full flex items-center justify-center">
       <div className="relative mx-auto p-5 border w-11/12 md:w-2/3 lg:w-1/2 shadow-lg rounded-md bg-gray-900">
@@ -105,7 +120,9 @@ const BuyPacksModal: React.FC<BuyPacksModalProps> = ({
                 <div className="cards text-white">
                   {pack.cards} cards inside
                 </div>
-                <div className="price text-white">${pack.price * quantity}</div>
+                <div className="price text-white">
+                  ${pack.price * (quantity || 0)}
+                </div>
                 <div className="available text-white">
                   Available {pack.remaining.toLocaleString()} of{" "}
                   {pack.quantity.toLocaleString()}
@@ -115,14 +132,30 @@ const BuyPacksModal: React.FC<BuyPacksModalProps> = ({
           </div>
         </div>
         <div className="flex justify-center mt-5 mb-3">
-          <input
-            type="number"
-            value={quantity}
-            onChange={(e) => setQuantity(parseInt(e.target.value, 10))}
-            className="block w-48 p-2 text-lg text-center border rounded mx-auto bg-gray-800 text-white"
-            min={1}
-            max={2000}
-          />
+          <div className="flex items-center">
+            <button
+              onClick={decrementQuantity}
+              className="bg-gray-700 text-white px-3 py-3 rounded-l"
+              disabled={quantity <= 1}
+            >
+              -
+            </button>
+            <input
+              type="number"
+              value={quantity}
+              onChange={handleQuantityChange}
+              className="block w-20 p-2 text-lg text-center border-t border-b bg-gray-800 text-white"
+              min={1}
+              max={2000}
+            />
+            <button
+              onClick={incrementQuantity}
+              className="bg-gray-700 text-white px-3 py-3 rounded-r"
+              disabled={quantity >= 2000}
+            >
+              +
+            </button>
+          </div>
         </div>
         <div className="mt-3 flex justify-center items-center">
           <div className="cryptoPay text-white">

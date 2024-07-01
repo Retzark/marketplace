@@ -67,6 +67,10 @@ const Pagination: React.FC<PaginationProps> = ({
             bgColor="transparent"
             border="none"
             color="white"
+            _hover={{
+              bgColor: "transparent",
+              color: "white",
+            }}
           >
             ...
           </Button>
@@ -112,10 +116,13 @@ const Pagination: React.FC<PaginationProps> = ({
               "2xl": "12px",
             }}
             key="ellipsis2"
-            disabled
             bgColor="transparent"
             border="none"
             color="white"
+            _hover={{
+              bgColor: "transparent",
+              color: "white",
+            }}
           >
             ...
           </Button>

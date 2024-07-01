@@ -32,7 +32,7 @@ const BuyCard: React.FC<BuyCardProps> = ({
     }
     try {
       const endpoint = "contracts";
-      const symbols = ["ZARK"];
+      const symbols = [settings.currency];
       const query = {
         account: user?.username,
         symbol: { $in: symbols },

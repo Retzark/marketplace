@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Login from "@/components/modals/Login";
 import UserMenu from "@/components/UserMenu";
 import { NavLink, useLocation } from "react-router-dom";
-import { Box } from "@chakra-ui/react";
+import { Box, Text, Badge, Image } from "@chakra-ui/react";
 import useUserStore from "@/store/userStore";
+import useBalanceStore from "@/store/useBalanceStore";
 
 interface MenuButtonProps {
   isOpen: boolean;
@@ -137,6 +138,13 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const user = useUserStore((state) => state.user);
+  const { balance, fetchData } = useBalanceStore();
+
+  useEffect(() => {
+    if (user) {
+      fetchData();
+    }
+  }, [user, fetchData]);
 
   return (
     <Box className="bg-[#0B0B0B] w-[100%] h-[65px] fixed z-10">
@@ -174,7 +182,32 @@ const Navbar = () => {
               />
             </Box>
           </Box>
-          <UserMenu />
+          <Box display="flex" alignItems="center">
+            {user && (
+              <Box
+                fontFamily="CCElephantmenTall Regular"
+                bgColor="#3A3F49"
+                px="4"
+                py="2"
+                borderRadius="10px"
+                display="flex"
+                gap="2"
+                className="mr-4 text-white"
+                width="fit-content"
+                alignItems="center"
+              >
+                {" "}
+                <Image
+                  src="/images/ZARK-TOKEN_1.png"
+                  objectFit="contain"
+                  w="18px"
+                  mr="1"
+                />
+                <Text>{balance.toLocaleString()}</Text>
+              </Box>
+            )}
+            <UserMenu />
+          </Box>
         </Box>
       </Box>
       {isMobileMenuOpen && (

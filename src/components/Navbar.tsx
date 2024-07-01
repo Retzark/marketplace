@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Login from "@/components/modals/Login";
 import UserMenu from "@/components/UserMenu";
 import { NavLink, useLocation } from "react-router-dom";
-import { Box, Text, Badge, Image } from "@chakra-ui/react";
+import { Box, Text, Image } from "@chakra-ui/react";
 import useUserStore from "@/store/userStore";
 import useBalanceStore from "@/store/useBalanceStore";
 
@@ -138,7 +138,7 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const user = useUserStore((state) => state.user);
-  const { balance, fetchData } = useBalanceStore();
+  const { tokenBalance, fetchData } = useBalanceStore();
 
   useEffect(() => {
     if (user) {
@@ -203,7 +203,7 @@ const Navbar = () => {
                   w="18px"
                   mr="1"
                 />
-                <Text>{balance.toLocaleString()}</Text>
+                <Text>{tokenBalance.toLocaleString()}</Text>
               </Box>
             )}
             <UserMenu />

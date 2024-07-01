@@ -11,12 +11,10 @@ import {
 import useAppStore from "@/store/useAppStore";
 import useTransactionStore from "@/store/useTransactionStore";
 import OpenPack from "@/components/modals/OpenPack";
-import ViewCards from "@/components/modals/ViewCards";
 import TransferPack from "@/components/modals/TransferPack";
 import useBalanceStore from "@/store/useBalanceStore";
 import { CardFlipContainer } from "@/components";
 import { BiTransferAlt } from "react-icons/bi";
-import { Global } from "@emotion/react";
 
 const ONE = 1;
 const SIX = 6;
@@ -39,7 +37,7 @@ const Open = () => {
       cards: state.cards,
       setCards: state.setCards,
       removeCardByIndex: state.removeCardByIndex,
-    })
+    }),
   );
 
   const handleCloseModal = () => {

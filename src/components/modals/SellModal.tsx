@@ -15,6 +15,7 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import Swal from "sweetalert2";
+import useAppStore from "@/store/useAppStore";
 
 interface SellModalProps {
   isOpen: boolean;
@@ -30,6 +31,7 @@ const SellModal: React.FC<SellModalProps> = ({
   onSubmit,
 }) => {
   const [price, setPrice] = useState("");
+  const { currency } = useAppStore.getState().settings;
 
   const handleSubmit = () => {
     const priceValue = parseFloat(price);
@@ -43,7 +45,7 @@ const SellModal: React.FC<SellModalProps> = ({
       return;
     }
     if (nftId !== null) {
-      onSubmit(nftId, price, settings.currency);
+      onSubmit(nftId, price, currency);
       onClose();
     }
   };

@@ -6,6 +6,7 @@ import useUserStore from "@/store/userStore";
 
 interface BalanceState {
   balance: number;
+  tokenBalance: number;
   isFetchingBalance: boolean;
   setFetchingBalance: (value: boolean) => void;
   fetchBalance: () => void;
@@ -14,6 +15,7 @@ interface BalanceState {
 
 const useBalanceStore = create<BalanceState>((set) => ({
   balance: 0,
+  tokenBalance: 0,
   isFetchingBalance: false,
   setFetchingBalance: (value: boolean) => {
     set(() => ({ isFetchingBalance: value }));
@@ -79,7 +81,7 @@ const useBalanceStore = create<BalanceState>((set) => ({
         },
       };
       const response = await sidechainApi.call(endpoint, request);
-      set({ balance: Math.floor(response[0].balance) });
+      set({ tokenBalance: Math.floor(response[0].balance) });
     } catch (e) {
       console.error("Failed to fetch or process data:", e);
     }

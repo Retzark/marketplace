@@ -1,17 +1,29 @@
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import usePacksStore from "@/store/usePacksStore";
 import useTransactionStore from "@/store/useTransactionStore";
 import useAppStore from "@/store/useAppStore";
+import { ChakraDialog } from "../chakra";
+import {
+  Box,
+  Button,
+  Divider,
+  FormControl,
+  FormLabel,
+  Input,
+  Text,
+} from "@chakra-ui/react";
 
 interface OpenPackProps {
   isOpen: boolean;
   onClose: () => void;
   onCardsOpened: (cards: any) => void;
   setIsOpenPackModalOpen: (value: boolean) => void;
+  selectedQty: number;
 }
 
 const OpenPack: React.FC<OpenPackProps> = ({
   isOpen,
+  selectedQty,
   onClose,
   onCardsOpened,
   setIsOpenPackModalOpen,
@@ -23,6 +35,7 @@ const OpenPack: React.FC<OpenPackProps> = ({
   const fetchAndValidateTransaction = useTransactionStore(
     (state) => state.fetchAndValidateTransaction
   );
+
   const { settings, settingsReady, error, fetchSettings } = useAppStore(
     (state) => ({
       settings: state.settings,
@@ -31,6 +44,10 @@ const OpenPack: React.FC<OpenPackProps> = ({
       fetchSettings: state.fetchSettings,
     })
   );
+
+  useEffect(() => {
+    setNumber(selectedQty);
+  }, [selectedQty]);
 
   if (!isOpen) return null;
 
@@ -69,49 +86,77 @@ const OpenPack: React.FC<OpenPackProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-75 flex justify-center items-center z-50">
-      <div className="bg-white w-full max-w-md mx-auto rounded-lg shadow-xl overflow-hidden">
-        <div className="p-5">
-          <h2 className="text-xl font-semibold text-gray-800 mb-2">
-            Enter Number of Packs
-          </h2>
-          <form onSubmit={handleSubmit}>
-            <label
-              htmlFor="numberInput"
-              className="block text-sm font-medium text-gray-700"
+    <>
+      <ChakraDialog
+        title="Enter Number of Packs"
+        txtSubmit="Submit"
+        isOpen={isOpen}
+        hideFooter={true}
+        bgColor={"#282C34"}
+        labelColor={"white"}
+        onClose={() => {
+          setIsOpenPackModalOpen(false);
+        }}
+        onSubmit={() => {}}
+      >
+        <form onSubmit={handleSubmit}>
+          <FormControl>
+            <FormLabel
+              fontFamily="Poppins"
+              fontWeight="semibold"
+              fontSize="14px"
+              fontStyle="normal"
+              alignItems="center"
+              display="inline-flex"
+              color="white"
             >
-              Number of Packs:
-            </label>
-            <input
+              Number of Packs:&nbsp;
+              <Text as="span" color="red">
+                *
+              </Text>
+            </FormLabel>
+            <Input
               type="number"
-              id="numberInput"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              value={number}
-              onChange={handleChange}
               min="1"
+              id="numberInput"
+              background="#3A3F49"
+              color="white"
+              fontSize="14px"
+              borderColor="transparent"
+              placeholder="Enter quantity ..."
+              defaultValue={selectedQty}
+              onChange={handleChange}
               disabled={loading}
             />
-            <div className="mt-4 flex justify-end space-x-3">
-              <button
-                type="button"
-                onClick={onClose}
-                className="py-2 px-4 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
-                disabled={loading}
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700"
-                disabled={!isValid || loading}
-              >
-                {loading ? "Opening..." : "Submit"}
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+          </FormControl>
+          <Divider my="4" />
+          <Box display="flex" justifyContent="end" gap="2" mb="2">
+            <Button
+              bgColor="#A5112C"
+              color="white"
+              _hover={{
+                bgColor: "#930C24",
+              }}
+              isDisabled={loading}
+              onClick={onClose}
+            >
+              Cancel
+            </Button>
+            <Button
+              bgColor="#12BFA0"
+              color="white"
+              _hover={{
+                bgColor: "#0d856f",
+              }}
+              type="submit"
+              isDisabled={!isValid || loading}
+            >
+              {loading ? "Opening..." : "Submit"}
+            </Button>
+          </Box>
+        </form>
+      </ChakraDialog>
+    </>
   );
 };
 

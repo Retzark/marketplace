@@ -181,8 +181,8 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
             base: "4",
             sm: "4",
             md: "4",
-            lg: "4",
-            xl: "4",
+            lg: "2",
+            xl: "2",
             "2xl": "50px",
           }}
         >
@@ -234,10 +234,10 @@ const NFTCardsList: React.FC<NFTCardsListProps> = ({
                         fontSize={{
                           base: "12px",
                           sm: "12px",
-                          md: "14px",
-                          lg: "18px",
-                          xl: "18px",
-                          "2xl": "20px",
+                          md: "12px",
+                          lg: "14px",
+                          xl: "16px",
+                          "2xl": "18px",
                         }}
                         color="white"
                       >

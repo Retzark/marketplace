@@ -130,7 +130,7 @@ const Open = () => {
         bgImage="url('/images/open-pack-image.webp')"
         bgSize="cover"
         bgPosition="center"
-        height="93vh"
+        minH="91vh"
       >
         {!showViewCardsModal && (
           <Box display="flex" flexDirection="column" alignItems="center">

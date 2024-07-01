@@ -49,6 +49,7 @@ const CardPackOpener: FC<ViewCardsProps> = ({
     Array(cards.length).fill(false)
   );
   const [isBusy, setIsBusy] = useState<boolean>(false);
+  const [isReady, setIsReady] = useState<boolean>(false);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [fetchedCards, setFetchedCards] = useState<FetchedCard[]>([]);
 
@@ -66,6 +67,7 @@ const CardPackOpener: FC<ViewCardsProps> = ({
       try {
         const data = await fetchCardsData();
         setFetchedCards(data);
+        setIsReady(true);
       } catch (error) {
         console.error(error);
       }
@@ -236,7 +238,6 @@ const CardPackOpener: FC<ViewCardsProps> = ({
           cursor: "pointer",
           transition: "transform 0.4s",
         }}
-        transition="transform 0.4s"
         borderRadius="7px"
         pt="6"
       >
@@ -270,11 +271,11 @@ const CardPackOpener: FC<ViewCardsProps> = ({
             position="absolute"
             width="100%"
             height="100%"
-            display="flex"
             alignItems="center"
             justifyContent="center"
             borderRadius="7px"
             sx={{ backgroundColor: "transparent" }}
+            display={isFlipped[index] ? "none" : "flex"}
           >
             <Image
               src="./images/card-back.png"
@@ -283,6 +284,7 @@ const CardPackOpener: FC<ViewCardsProps> = ({
               width="100%"
               height="100%"
               borderRadius="7px"
+              draggable="false"
             />
           </Box>
           <Box
@@ -308,6 +310,7 @@ const CardPackOpener: FC<ViewCardsProps> = ({
               width="100%"
               height="100%"
               borderRadius="7px"
+              draggable="false"
               className={showContrast[index] ? "contrast" : ""}
             />
           </Box>
@@ -351,7 +354,7 @@ const CardPackOpener: FC<ViewCardsProps> = ({
           }
 
           @keyframes expandCircle {
-            100% { opacity: 0; transform: scale(6); }
+            100% { opacity: 0; transform: scale(5); }
           }
           
           @keyframes glow {
@@ -370,6 +373,17 @@ const CardPackOpener: FC<ViewCardsProps> = ({
             100% {
               background-position: 200% center;
             }
+          }
+
+          @keyframes fadeIn {
+            to {
+              opacity: 1;
+            }
+          }
+
+          .fade-in {
+            opacity: 0;
+            animation: fadeIn 1s forwards;
           }
 
           .shine {
@@ -394,9 +408,8 @@ const CardPackOpener: FC<ViewCardsProps> = ({
         `}
       />
       <Box py="10px" p="0px !important" position="absolute" width="100%">
-        {cardList.length ? (
+        {cardList.length > 0 && isReady ? (
           <Box
-            className="flex flex-wrap justify-center"
             gap="6"
             top="40px"
             left="1px"
@@ -411,6 +424,11 @@ const CardPackOpener: FC<ViewCardsProps> = ({
               "2xl": "10",
             }}
             pb="150px !important"
+            className={
+              isReady
+                ? "fade-in flex flex-wrap justify-center"
+                : "flex flex-wrap justify-center"
+            }
           >
             {mappedCards}
           </Box>
@@ -467,7 +485,7 @@ const CardPackOpener: FC<ViewCardsProps> = ({
               cursor: "not-allowed",
               transform: "scale(1)",
             }}
-            isDisabled={isBusy || isFlipped.includes(true)}
+            isDisabled={isBusy || isFlipped.includes(true) || !isReady}
             onClick={handleOpenPack}
           >
             <Image

@@ -117,6 +117,23 @@ const NavigationLinks: React.FC<NavigationLinksProps> = ({
       </NavLink>
     )}
 
+    {isUserLoggedIn && username && (
+      <NavLink
+        to={`/open`}
+        aria-current={({ isActive }) => (isActive ? "page" : undefined)}
+      >
+        <Box
+          as="span"
+          className="uppercase"
+          fontFamily="Poppins"
+          fontWeight="400"
+          color={useIsActive(`/open`) ? "#15C1A2" : "white"}
+        >
+          Open
+        </Box>
+      </NavLink>
+    )}
+
     <NavLink
       to="/marketplace"
       aria-current={({ isActive }) => (isActive ? "page" : undefined)}

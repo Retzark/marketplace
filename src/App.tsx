@@ -4,9 +4,18 @@ import AppRoutes from "@/routes";
 import useInitializeSettings from "@/hooks/useInitializeSettings";
 import Loading from "@/components/Loading";
 import { Box, Flex } from "@chakra-ui/react";
+import { useEffect } from "react";
+import useBalanceStore from "@/store/useBalanceStore";
 
 export default function App() {
   const settingsReady = useInitializeSettings();
+  const { fetchData } = useBalanceStore();
+
+  useEffect(() => {
+    if (settingsReady) {
+      fetchData();
+    }
+  }, [settingsReady, fetchData]);
 
   if (!settingsReady) {
     return (

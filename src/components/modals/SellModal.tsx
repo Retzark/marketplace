@@ -43,7 +43,7 @@ const SellModal: React.FC<SellModalProps> = ({
       return;
     }
     if (nftId !== null) {
-      onSubmit(nftId, price, "ZARK");
+      onSubmit(nftId, price, settings.currency);
       onClose();
     }
   };
